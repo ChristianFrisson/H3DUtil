@@ -33,6 +33,21 @@
 using namespace H3DUtil;
 using namespace ArithmeticTypes;
 
+Matrix4d::Matrix4d( const Vec3d& position, 
+                    const Rotationd& rotation, 
+                    const Vec3d& scale ) {
+  *this=
+    Matrix4d ( 1, 0, 0, position.x, 
+               0, 1, 0, position.y, 
+               0, 0, 1, position.z,
+               0, 0, 0, 1 ) * 
+      Matrix4d ( rotation ) * 
+        Matrix4d ( scale.x, 0, 0, 0, 
+                   0, scale.y, 0, 0, 
+                   0, 0, scale.z, 0,
+                   0, 0, 0, 1 );
+}
+
 /// Constructor. From Rotation object.
 Matrix4d::Matrix4d( const Rotationd &r ) {
   H3DDouble cosa = H3DCos( r.angle );

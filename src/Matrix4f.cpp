@@ -33,6 +33,21 @@
 using namespace H3DUtil;
 using namespace ArithmeticTypes;
 
+Matrix4f::Matrix4f( const Vec3f& position, 
+                    const Rotation& rotation, 
+                    const Vec3f& scale ) {
+  *this=
+    Matrix4f ( 1, 0, 0, position.x, 
+               0, 1, 0, position.y, 
+               0, 0, 1, position.z,
+               0, 0, 0, 1 ) * 
+      Matrix4f ( rotation ) * 
+        Matrix4f ( scale.x, 0, 0, 0, 
+                   0, scale.y, 0, 0, 
+                   0, 0, scale.z, 0,
+                   0, 0, 0, 1 );
+}
+
 /// Constructor. From Rotation object.
 Matrix4f::Matrix4f( const Rotation &r ) {
   H3DFloat cosa = H3DCos( r.angle );

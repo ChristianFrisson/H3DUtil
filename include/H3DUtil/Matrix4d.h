@@ -36,13 +36,13 @@
 #include <H3DUtil/TemplateOperators.h>
 #include <H3DUtil/Exception.h>
 #include <H3DUtil/Matrix3d.h>
+#include <H3DUtil/Rotationd.h>
 
 namespace H3DUtil {
   namespace ArithmeticTypes {
     class Quaternion;
     class Rotation;
     class Quaterniond;
-    class Rotationd;
     class Matrix4f;
 
     /// Representation of a 4x4 matrix.
@@ -70,7 +70,16 @@ namespace H3DUtil {
         m[2][0] = m20; m[2][1] = m21; m[2][2] = m22; m[2][3] = m23; 
         m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33; 
       }
-				
+			
+      /// Constructor. 
+      ///
+      /// Creates a transformation matrix from position, rotation 
+      /// and scale parameters.
+      ///
+      explicit Matrix4d( const Vec3d& position, 
+                         const Rotationd& rotation= Rotationd(), 
+                         const Vec3d& scale= Vec3d(1,1,1) );
+
       /// Constructor. From Rotation object.
       explicit Matrix4d( const Rotation &r );
 
