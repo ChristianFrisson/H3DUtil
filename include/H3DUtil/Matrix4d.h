@@ -71,12 +71,16 @@ namespace H3DUtil {
         m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33; 
       }
 			
-      /// Constructor. 
+      /// Transformation constructor. 
       ///
-      /// Creates a transformation matrix from position, rotation 
+      /// Creates a transformation matrix from translation, rotation 
       /// and scale parameters.
       ///
-      explicit Matrix4d( const Vec3d& position, 
+      /// \param translation A Vec3d describing the translation.
+      /// \param rotation A Rotationd describing the rotation (optional).
+      /// \param scale A Vec3d describing the scale (optional).
+      ///
+      explicit Matrix4d( const Vec3d& translation, 
                          const Rotationd& rotation= Rotationd(), 
                          const Vec3d& scale= Vec3d(1,1,1) );
 

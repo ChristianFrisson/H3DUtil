@@ -33,13 +33,13 @@
 using namespace H3DUtil;
 using namespace ArithmeticTypes;
 
-Matrix4f::Matrix4f( const Vec3f& position, 
+Matrix4f::Matrix4f( const Vec3f& translation, 
                     const Rotation& rotation, 
                     const Vec3f& scale ) {
   *this=
-    Matrix4f ( 1, 0, 0, position.x, 
-               0, 1, 0, position.y, 
-               0, 0, 1, position.z,
+    Matrix4f ( 1, 0, 0, translation.x, 
+               0, 1, 0, translation.y, 
+               0, 0, 1, translation.z,
                0, 0, 0, 1 ) * 
       Matrix4f ( rotation ) * 
         Matrix4f ( scale.x, 0, 0, 0, 
