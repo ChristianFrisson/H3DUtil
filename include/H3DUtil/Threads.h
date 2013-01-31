@@ -32,9 +32,12 @@
 
 #include <H3DUtil/H3DUtil.h>
 #include <list>
+#include <unordered_map>
 #include <vector>
 #include <string>
+#include <algorithm>
 #include <pthread.h>
+
 
 #ifdef WIN32
 #define DEFAULT_THREAD_PRIORITY THREAD_PRIORITY_NORMAL
@@ -113,12 +116,28 @@ namespace H3DUtil {
     pthread_cond_t cond; 
   };
 
- 
   /// The abstract base class for threads.
   class H3DUTIL_API ThreadBase {
   public:
+    /// Constructor
+    ThreadBase():
+      name( "Unnamed" ) {
+      current_threads.push_back( this );
+    }
+
+
     /// Destructor.
-    virtual ~ThreadBase() {}
+    virtual ~ThreadBase() {
+   
+      std::vector< ThreadBase *>::iterator i = std::find( current_threads.begin(), current_threads.end(), this ); 
+      if( i != current_threads.end() ) {
+        current_threads.erase( i );
+      }
+
+#ifdef THREAD_LOCK_DEBUG
+      thread_lock_info.erase( getThreadId() );
+#endif
+    }
 
     /// Used to specify thread priority in a platform independent way.
     enum Priority {
@@ -132,6 +151,9 @@ namespace H3DUtil {
 
     /// Returns the id of the thread this function is called in.
     static ThreadId getCurrentThreadId();
+
+    /// Returns the thread this function is called in.
+    static ThreadBase *getCurrentThread();
 
     /// Returns the id of the main thread.
     static ThreadId getMainThreadId() {
@@ -148,12 +170,65 @@ namespace H3DUtil {
     /// thread, specified by id, as it appears in the Visual Studio debugger.
     static void setThreadName( ThreadId id, const std::string &name );
 
+#ifdef THREAD_LOCK_DEBUG
+    struct ThreadLockInfo {
+      ThreadLockInfo():
+        total_run_time( 0 ), 
+        total_lock_time( 0 ),
+        period_start_time( -1 ),
+        period_lock_time( 0 ){
+      }
+    
+      ThreadBase *thread;
+      double total_lock_time;
+      double total_run_time;
+      double period_start_time;
+      double period_lock_time;
+    };
+  
+
+        struct equal_to_pthread
+                : public std::binary_function<ThreadId, ThreadId, bool>
+        {       // functor for operator==
+        bool operator()(const ThreadId& _Left, const ThreadId& _Right) const
+                {       // apply operator== to operands
+                return pthread_equal( _Left, _Right ) != 0;
+                }
+        };
+
+struct hash_pthread
+                : public std::unary_function<ThreadId, size_t>
+        {       // functor for operator==
+        bool operator()(const ThreadId& _Left) const
+                {       // apply operator== to operands
+                return _Left.x;
+                }
+        };
+    typedef std::unordered_map< ThreadId, ThreadLockInfo, hash_pthread, equal_to_pthread > ThreadLockInfoMap;
+    static ThreadLockInfoMap thread_lock_info;
+#endif
+    /// The threads currently in use.
+    static std::vector< ThreadBase * > current_threads;
+
+    // Returns the thread with the given id, if such an instance exists. Returns NULL if not.
+    // A return of NULL means that no thread by that id has been created with the threadBase
+    // class, but such a thread might still exist on the system and been created by other means.
+    static ThreadBase *getThreadById( ThreadId id );
+
     /// Only for Windows Visual Studio users. Sets the name of the 
     /// thread as it appears in the Visual Studio debugger.
     void setThreadName( const std::string &name );
+
+    /// Only for Windows Visual Studio users. Gets the name of the 
+    /// thread as it appears in the Visual Studio debugger.
+    const std::string &getThreadName();
+
   protected:
     /// the id of the thread.
     ThreadId thread_id;
+
+    /// The name of the thread.
+    std::string name;
     
     /// The id of the main thread.
     static ThreadId main_thread_id;

@@ -53,6 +53,11 @@ using namespace std;
 using namespace H3DUtil;
 using namespace std;
 
+#ifdef THREAD_LOCK_DEBUG
+ ThreadBase::ThreadLockInfoMap ThreadBase::thread_lock_info;
+#endif
+
+vector<ThreadBase *> ThreadBase::current_threads;
 /// Constructor.
 MutexLock::MutexLock() {
   pthread_mutex_init( &mutex, NULL );
@@ -65,7 +70,19 @@ MutexLock::~MutexLock() {
 
 /// Locks the mutex.
 void MutexLock::lock() {
+#ifdef THREAD_LOCK_DEBUG
+  TimeStamp before;
+#endif
+  
   pthread_mutex_lock( &mutex );
+
+#ifdef THREAD_LOCK_DEBUG
+  double t = TimeStamp() - before;
+  ThreadBase::ThreadId thread_id = ThreadBase::getCurrentThreadId();
+  ThreadBase::ThreadLockInfo &info = ThreadBase::thread_lock_info[thread_id];
+  info.total_lock_time += t;
+  info.period_lock_time += t;
+#endif
 }
 
 /// Unlocks the mutex.
@@ -91,7 +108,19 @@ ConditionLock::~ConditionLock() {
 
 /// Wait for the conditional to get a signal.
 void ConditionLock::wait() {
+ #ifdef THREAD_LOCK_DEBUG
+  TimeStamp before;
+#endif
+
   pthread_cond_wait( &cond, &mutex );
+
+#ifdef THREAD_LOCK_DEBUG
+  double t = TimeStamp() - before;
+  ThreadBase::ThreadId thread_id = ThreadBase::getCurrentThreadId();
+  ThreadBase::ThreadLockInfo &info = ThreadBase::thread_lock_info[thread_id];
+  info.total_lock_time += t;
+  info.period_lock_time += t;
+#endif
 }
 
 // Wait for the conditional to get a signal, but only wait a
@@ -191,6 +220,13 @@ void *PeriodicThread::thread_func( void * _data ) {
 #endif
 
   while( thread->thread_func_is_running ) {
+#ifdef THREAD_LOCK_DEBUG
+    TimeStamp current_time;
+    ThreadBase::ThreadLockInfo &info = ThreadBase::thread_lock_info[thread->getThreadId()];
+    if( info.period_start_time != -1 ) {
+      info.total_run_time += current_time - info.period_start_time;
+    }
+#endif
     if( thread->frequency > 0 ) {
 #ifdef WIN32
       if (WaitForSingleObject(hTimer, INFINITE) != WAIT_OBJECT_0)
@@ -213,6 +249,11 @@ void *PeriodicThread::thread_func( void * _data ) {
       last_time = TimeStamp();
 #endif
     }
+
+#ifdef THREAD_LOCK_DEBUG
+    info.period_start_time = TimeStamp();
+#endif
+
     vector< PeriodicThread::CallbackList::iterator > to_remove;
     thread->callback_lock.lock();
     for( PeriodicThread::CallbackList::iterator i = thread->callbacks.begin();
@@ -629,6 +670,28 @@ ThreadBase::ThreadId ThreadBase::getCurrentThreadId() {
   return pthread_self();
 } 
 
+ThreadBase *ThreadBase::getThreadById( ThreadId id ) {
+  for( size_t i = 0; i < current_threads.size(); i++ ) {
+    ThreadBase *thread = current_threads[i];
+    if( pthread_equal( thread->getThreadId(), id ) ) {
+      return thread;
+    }
+  }
+  return NULL;
+}
+
+ThreadBase *ThreadBase::getCurrentThread() {
+  ThreadBase::ThreadId id = getCurrentThreadId();
+  for( std::vector< ThreadBase *>::iterator i = current_threads.begin();
+       i != current_threads.end(); i++ ) {
+    if( pthread_equal( id, (*i)->getCurrentThreadId() ) != 0 ) {
+      return *i;
+    }
+  }
+  
+  return NULL;
+} 
+
 #ifdef _MSC_VER
 #define MS_VC_EXCEPTION 0x406D1388
 
@@ -664,11 +727,14 @@ void ThreadBase::setThreadName( ThreadId thread_id, const string &name ) {
 
 }
 
-void ThreadBase::setThreadName( const string &name ) {
-  ThreadBase::setThreadName( thread_id, name );
+void ThreadBase::setThreadName( const string &_name ) {
+  name = _name;
+  ThreadBase::setThreadName( thread_id, _name );
 }
 
-
+const std::string &ThreadBase::getThreadName() {
+  return name;
+}
 /// Returns true if the call was made from the main thread.
 bool ThreadBase::inMainThread() {
   return pthread_equal( main_thread_id, getCurrentThreadId() ) != 0;
