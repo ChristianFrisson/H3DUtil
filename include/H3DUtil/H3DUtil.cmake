@@ -110,6 +110,9 @@
 #endif
 
 #ifdef H3D_WINDOWS
+#if defined(__MINGW32__) || defined(HAVE_LONG_LONG)
+#define _int64 long long
+#endif
 #define H3DUTIL_INT64 _int64
 #else
 #if defined(__GNUC__) || defined(HAVE_LONG_LONG)

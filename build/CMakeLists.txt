@@ -204,8 +204,10 @@ IF( MSVC )
     SET( H3DUTIL_COMPILE_FLAGS "${H3DUTIL_COMPILE_FLAGS} /MP" )
   ENDIF( ${MSVC_VERSION} GREATER 1499 )
 ELSEIF(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-  #used to link in dynamic library load functions. Needed by some examples in HAPI
-  SET_TARGET_PROPERTIES( H3DUtil PROPERTIES LINK_FLAGS "-ldl" )
+  IF(NOT MINGW)
+    #used to link in dynamic library load functions. Needed by some examples in HAPI
+    SET_TARGET_PROPERTIES( H3DUtil PROPERTIES LINK_FLAGS "-ldl" )
+  ENDIF(NOT MINGW)
 ENDIF( MSVC )
 
 # set compile flags.
