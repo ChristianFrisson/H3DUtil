@@ -1,5 +1,12 @@
 Changes for version 1.2
 
+- CMake updates to configure build for MinGW toolchain.
+- New constructors to Matrix4f(d) to construct matrix from position,
+ rotation and scale parameters.
+- Fixes to make a proper debian package.
+- New constructors for 4 component constructs to use their 3 component version
+ plus a single value for the 4th component.
+- Fixed bugs with Dicom image loading.
 - Fixed a bug in assignment operator of AutoRefVector that would cause a crash
 if NULL was added to the vector .
 - Fixed a bug that could result in thread locking when a PeriodicThread was 
