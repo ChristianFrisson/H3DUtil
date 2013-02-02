@@ -138,7 +138,16 @@ INCLUDE_DIRECTORIES( ${H3DUtil_SOURCE_DIR}/../include )
 
 # check all available libraries
 
-IF(WIN32)
+SET( DEFAULT_BIN_INSTALL "bin" )
+SET( DEFAULT_LIB_INSTALL "lib" )
+
+IF( WIN32 )
+  SET( DEFAULT_BIN_INSTALL "bin32" )
+  SET( DEFAULT_LIB_INSTALL "lib32" )
+  IF( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+    SET( DEFAULT_BIN_INSTALL "bin64" )
+    SET( DEFAULT_LIB_INSTALL "lib64" )
+  ENDIF( CMAKE_SIZEOF_VOID_P EQUAL 8 )
   SET(requiredLibs ${requiredLibs} winmm.lib )
 ENDIF(WIN32)
 
@@ -217,9 +226,9 @@ SET_TARGET_PROPERTIES( H3DUtil PROPERTIES COMPILE_FLAGS "${H3DUTIL_COMPILE_FLAGS
 CONFIGURE_FILE( ${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DUtil.cmake ${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DUtil.h )
 
 INSTALL( TARGETS H3DUtil 
-         LIBRARY DESTINATION lib COMPONENT H3DUtil_cpack_runtime
-         RUNTIME DESTINATION bin COMPONENT H3DUtil_cpack_runtime
-         ARCHIVE DESTINATION lib COMPONENT H3DUtil_cpack_libraries )
+         LIBRARY DESTINATION ${DEFAULT_LIB_INSTALL} COMPONENT H3DUtil_cpack_runtime
+         RUNTIME DESTINATION ${DEFAULT_BIN_INSTALL} COMPONENT H3DUtil_cpack_runtime
+         ARCHIVE DESTINATION ${DEFAULT_LIB_INSTALL} COMPONENT H3DUtil_cpack_libraries )
 
 IF( NOT ( WIN32 OR GENERATE_CPACK_PROJECT ) )
   # Install header files on non-windows system (e.g. Unix).

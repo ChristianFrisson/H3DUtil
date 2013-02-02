@@ -254,6 +254,25 @@ IF( GENERATE_CPACK_PROJECT )
            DESTINATION H3DUtil/build/modules
            COMPONENT H3DUtil_cpack_sources )
 
+  # Add a cache variable H3DUtil_DOCS_DIRECTORY used to indicate where the H3DUtil docs are.
+  IF( NOT DEFINED H3DUtil_DOCS_DIRECTORY )
+    SET( H3DUtil_DOCS_DIRECTORY_DEFAULT "" )
+    IF( H3D_USE_DEPENDENCIES_ONLY )
+      SET( H3DUtil_DOCS_DIRECTORY_DEFAULT "${H3DUtil_SOURCE_DIR}/../../doc" )
+    ELSEIF( TARGET HAPI )
+      SET( H3DUtil_DOCS_DIRECTORY_DEFAULT "${HAPI_DOCS_DIRECTORY}" )
+    ENDIF( H3D_USE_DEPENDENCIES_ONLY )
+    SET( H3DUtil_DOCS_DIRECTORY "${H3DUtil_DOCS_DIRECTORY_DEFAULT}" CACHE PATH "Set this to the directory containing the documentation of H3DUtil." )
+    MARK_AS_ADVANCED(H3DUtil_DOCS_DIRECTORY)
+  ENDIF( NOT DEFINED H3DUtil_DOCS_DIRECTORY )
+  
+  IF( EXISTS ${H3DUtil_DOCS_DIRECTORY} )
+    INSTALL( DIRECTORY ${H3DUtil_DOCS_DIRECTORY}/H3DUtil
+             DESTINATION doc
+             COMPONENT H3DUtil_cpack_headers
+             REGEX "(/.svn)|(/CVS)" EXCLUDE )
+  ENDIF( EXISTS ${H3DUtil_DOCS_DIRECTORY} )
+
   # setting names and dependencies between components and also grouping them.
   set(CPACK_COMPONENT_H3DUTIL_CPACK_RUNTIME_DISPLAY_NAME "Runtime")
   set(CPACK_COMPONENT_H3DUTIL_CPACK_RUNTIME_DESCRIPTION "The runtime libraries (dlls) for H3DUtil.")
