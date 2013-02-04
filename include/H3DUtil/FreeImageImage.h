@@ -43,6 +43,7 @@
 
 
 struct FIBITMAP;
+struct FreeImageIO;
 
 namespace H3DUtil {
 
@@ -85,6 +86,8 @@ namespace H3DUtil {
         
     /// Returns a pointer to the raw image data. 
     virtual void *getImageData();
+    
+    static FreeImageIO* getIStreamIO ();
 
   protected:
     FIBITMAP * bitmap;

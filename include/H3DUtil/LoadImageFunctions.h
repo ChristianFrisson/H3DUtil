@@ -44,6 +44,8 @@ namespace H3DUtil {
   /// \returns A pointer to and Image class containing the data
   /// of the loaded url.
   H3DUTIL_API Image *loadFreeImage( const string &url );
+
+  H3DUTIL_API Image *loadFreeImage( istream &is );
 #endif
 
 #ifdef HAVE_TEEM

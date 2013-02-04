@@ -100,4 +100,48 @@ unsigned int FreeImageImage::width() {
   return FreeImage_GetWidth( bitmap );
 }
 
+unsigned DLL_CALLCONV
+_ReadProc(void *buffer, unsigned size, unsigned count, fi_handle handle) {
+  istream& is= *static_cast<istream*>(handle);
+
+  streampos a= is.tellg();
+  is.read ( static_cast<char*>(buffer), size*count );
+  streampos b= is.tellg();
+
+  return static_cast<unsigned int>(b-a);
+}
+
+inline int DLL_CALLCONV
+_SeekProc(fi_handle handle, long offset, int origin) {
+  istream& is= *static_cast<istream*>(handle);
+  switch ( origin ) {
+  case SEEK_SET:
+    is.seekg ( offset );
+    break;
+  case SEEK_CUR:
+    is.seekg ( offset,ios_base::cur );
+    break;
+  case SEEK_END:
+    is.seekg ( offset,ios_base::end );
+    break;
+  }
+ 
+  return -1;
+}
+ 
+inline long DLL_CALLCONV
+_TellProc(fi_handle handle) {
+  istream& is= *static_cast<istream*>(handle);
+  return static_cast<long>(is.tellg());
+}
+
+FreeImageIO* FreeImageImage::getIStreamIO () {
+  static FreeImageIO io;
+  io.read_proc= _ReadProc;
+  io.write_proc= NULL;
+  io.seek_proc= _SeekProc;
+  io.tell_proc= _TellProc;
+  return &io;
+}
+
 #endif

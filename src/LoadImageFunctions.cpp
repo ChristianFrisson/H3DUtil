@@ -70,6 +70,80 @@
 using namespace H3DUtil;
 
 #ifdef HAVE_FREEIMAGE
+Image *loadFreeImageInternal( FIBITMAP* bm, const string& url= "" ) {
+  // Take care of the case of 32 bit RGB images( alpha ignored ) that seems to
+  // happen once in a while with png images
+  if( FreeImage_GetColorType( bm ) == FIC_RGB && FreeImage_GetBPP( bm ) == 32 ) {
+    FIBITMAP *old = bm;
+    bm = FreeImage_ConvertTo24Bits( bm );
+    FreeImage_Unload( old );
+  }
+
+  FREE_IMAGE_COLOR_TYPE t = FreeImage_GetColorType( bm );
+  switch( t ) {
+  case FIC_PALETTE: {
+    // We have a palatted image. Convert to RGB or RGBA.
+    RGBQUAD *palette = FreeImage_GetPalette( bm );
+    BYTE *transparency_table = FreeImage_GetTransparencyTable( bm );
+    bool is_transparent = FreeImage_GetTransparencyCount( bm ) > 0;
+
+    Image::PixelType pixel_type = is_transparent ? Image::RGBA : Image::RGB;
+    Image::PixelComponentType pixel_component_type = Image::UNSIGNED;
+    unsigned int width =  FreeImage_GetWidth( bm );
+    unsigned int height =  FreeImage_GetHeight( bm );
+    unsigned int depth =  1;
+    unsigned int bytes_per_pixel = is_transparent ? 4 : 3;
+    unsigned int size = width * height * depth * bytes_per_pixel;
+
+    // build the new pixel data
+    unsigned char *data = new unsigned char[ size ];
+    for( unsigned int y = 0; y < height; y++ ) {
+      for( unsigned int x = 0; x < width; x++ ) {
+        unsigned int i = (x + y * width) * bytes_per_pixel;
+        BYTE index;
+        FreeImage_GetPixelIndex( bm, x, y, &index );
+        data[ i ] = palette[index].rgbRed;
+        data[ i + 1 ] = palette[index].rgbGreen;
+        data[ i + 2 ] = palette[index].rgbBlue;
+        if( is_transparent ) {
+          data[ i + 3 ] = transparency_table[index];
+        }
+      }
+    }
+
+    return new PixelImage( width,
+                            height,
+                            depth,
+                            bytes_per_pixel * 8,
+                            pixel_type,
+                            pixel_component_type,
+                            data,
+                            false,
+                            Vec3f( 1, 1, 1 ) );
+
+  }
+  case FIC_MINISBLACK: 
+  case FIC_MINISWHITE:
+  case FIC_RGB:
+  case FIC_RGBALPHA: break;
+  default: {
+    Console(3) << "Warning: UnsupportedFreeImageColorType " << t << ". ";
+    if ( url.empty() ) {
+      Console(3) << "Cannot load file from stream." << endl;
+    } else {
+      Console(3) << "File " << url << " can not be loaded. "
+                 << "File name might be the name of a downloaded temporary file. "
+                 << endl;
+    }
+
+    FreeImage_Unload( bm );
+    return NULL;
+  }
+  }
+
+  return new FreeImageImage( bm );
+}
+
 Image *H3DUtil::loadFreeImage( const string &url ) {
   FREE_IMAGE_FORMAT format = FreeImage_GetFileType( url.c_str() );
   if( format == FIF_UNKNOWN ) {
@@ -78,77 +152,24 @@ Image *H3DUtil::loadFreeImage( const string &url ) {
 
   if( format != FIF_UNKNOWN && FreeImage_FIFSupportsReading( format ) ) { 
     FIBITMAP *bm = FreeImage_Load( format, url.c_str() );
-
-    if( bm ) {
-      // Take care of the case of 32 bit RGB images( alpha ignored ) that seems to
-      // happen once in a while with png images
-      if( FreeImage_GetColorType( bm ) == FIC_RGB && FreeImage_GetBPP( bm ) == 32 ) {
-        FIBITMAP *old = bm;
-        bm = FreeImage_ConvertTo24Bits( bm );
-        FreeImage_Unload( old );
-      }
-
-      FREE_IMAGE_COLOR_TYPE t = FreeImage_GetColorType( bm );
-      switch( t ) {
-      case FIC_PALETTE: {
-        // We have a palatted image. Convert to RGB or RGBA.
-        RGBQUAD *palette = FreeImage_GetPalette( bm );
-        BYTE *transparency_table = FreeImage_GetTransparencyTable( bm );
-        bool is_transparent = FreeImage_GetTransparencyCount( bm ) > 0;
-
-        Image::PixelType pixel_type = is_transparent ? Image::RGBA : Image::RGB;
-        Image::PixelComponentType pixel_component_type = Image::UNSIGNED;
-        unsigned int width =  FreeImage_GetWidth( bm );
-        unsigned int height =  FreeImage_GetHeight( bm );
-        unsigned int depth =  1;
-        unsigned int bytes_per_pixel = is_transparent ? 4 : 3;
-        unsigned int size = width * height * depth * bytes_per_pixel;
-
-        // build the new pixel data
-        unsigned char *data = new unsigned char[ size ];
-        for( unsigned int y = 0; y < height; y++ ) {
-          for( unsigned int x = 0; x < width; x++ ) {
-            unsigned int i = (x + y * width) * bytes_per_pixel;
-            BYTE index;
-            FreeImage_GetPixelIndex( bm, x, y, &index );
-            data[ i ] = palette[index].rgbRed;
-            data[ i + 1 ] = palette[index].rgbGreen;
-            data[ i + 2 ] = palette[index].rgbBlue;
-            if( is_transparent ) {
-              data[ i + 3 ] = transparency_table[index];
-            }
-          }
-        }
-
-        return new PixelImage( width,
-                               height,
-                               depth,
-                               bytes_per_pixel * 8,
-                               pixel_type,
-                               pixel_component_type,
-                               data,
-                               false,
-                               Vec3f( 1, 1, 1 ) );
-
-      }
-      case FIC_MINISBLACK: 
-      case FIC_MINISWHITE:
-      case FIC_RGB:
-      case FIC_RGBALPHA: break;
-      default: {
-        Console(3) << "Warning: UnsupportedFreeImageColorType " << t
-             << ". File " << url << " can not be loaded. "
-             << "File name might be the name of a downloaded temporary file. "
-             << endl;
-
-        FreeImage_Unload( bm );
-        return NULL;
-      }
-      }
-
-      return new FreeImageImage( bm );
-    } 
+    if ( bm ) {
+      return loadFreeImageInternal ( bm, url );
+    }
   }
+
+  return NULL;
+}
+
+Image *H3DUtil::loadFreeImage( istream &is ) {
+  FREE_IMAGE_FORMAT format = FreeImage_GetFileTypeFromHandle ( FreeImageImage::getIStreamIO(), static_cast<fi_handle>(&is) );
+
+  if( format != FIF_UNKNOWN && FreeImage_FIFSupportsReading( format ) ) { 
+    FIBITMAP *bm = FreeImage_LoadFromHandle( format, FreeImageImage::getIStreamIO(), static_cast<fi_handle>(&is) );
+    if ( bm ) {
+      return loadFreeImageInternal ( bm );
+    }
+  }
+
   return NULL;
 }
 #endif
