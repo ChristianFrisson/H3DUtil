@@ -32,12 +32,12 @@
 
 #include <H3DUtil/H3DUtil.h>
 #include <list>
-#if defined(_MSC_VER) && _MSC_FULL_VER < 150030729
 #ifdef THREAD_LOCK_DEBUG
+#if defined(_MSC_VER) && _MSC_FULL_VER < 150030729
 #undef THREAD_LOCK_DEBUG
-#endif
 #else
 #include <unordered_map>
+#endif
 #endif
 #include <vector>
 #include <string>
