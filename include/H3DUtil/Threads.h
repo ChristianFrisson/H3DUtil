@@ -79,6 +79,38 @@ namespace H3DUtil {
     pthread_mutex_t mutex;
   };
 
+	/// Read-write lock that allows only one writing thread or one or
+  /// more reading threads on the same lock.
+  class H3DUTIL_API ReadWriteLock {
+  public:
+    /// Constructor.
+    ReadWriteLock();
+    
+    /// Destructor.
+    ~ReadWriteLock();
+    
+    /// Applies a read lock. If already write locked, waits until it
+    /// is unlocked and then locks it.
+    void readLock();
+    
+    /// Applies a write lock. If already read or write locked, waits
+    /// until it is unlocked and then locks it.
+    void writeLock();
+    
+    /// Applies a read lock if it is not already write locked.
+    bool tryReadLock();
+    
+    /// Applies a write lock if it is not already read or write
+    /// locked.
+    bool tryWriteLock();
+    
+    /// Unlocks first any write locks and then read locks.
+    void unlock();
+    
+  protected:
+    pthread_rwlock_t rwlock;
+  };
+
 
   /// The ConditionLock is a little more advanced version of MutexLock in that
   /// it can wait for an arbitrary action in the other thread.

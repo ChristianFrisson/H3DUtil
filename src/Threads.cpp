@@ -58,17 +58,17 @@ using namespace std;
 #endif
 
 vector<ThreadBase *> ThreadBase::current_threads;
-/// Constructor.
+// Constructor.
 MutexLock::MutexLock() {
   pthread_mutex_init( &mutex, NULL );
 }
  
-/// Destructor.
+// Destructor.
 MutexLock::~MutexLock() {
   pthread_mutex_destroy( &mutex );
 }
 
-/// Locks the mutex.
+// Locks the mutex.
 void MutexLock::lock() {
 #ifdef THREAD_LOCK_DEBUG
   TimeStamp before;
@@ -85,28 +85,55 @@ void MutexLock::lock() {
 #endif
 }
 
-/// Unlocks the mutex.
+// Unlocks the mutex.
 void MutexLock::unlock() {
   pthread_mutex_unlock( &mutex );
 }
 
-/// Try to lock the mutex, if the lock is not available false is returned.
+// Try to lock the mutex, if the lock is not available false is returned.
 bool MutexLock::tryLock() {
   return pthread_mutex_trylock( &mutex ) != EBUSY;
 }
 
+ReadWriteLock::ReadWriteLock() {
+  pthread_rwlock_init( &rwlock, NULL );
+}
 
-/// Constructor.
+ReadWriteLock::~ReadWriteLock() {
+  pthread_rwlock_destroy(&rwlock);
+}
+
+void ReadWriteLock::readLock() {
+  pthread_rwlock_rdlock(&rwlock);
+}
+
+void ReadWriteLock::writeLock() {
+  pthread_rwlock_wrlock(&rwlock);
+}
+
+bool ReadWriteLock::tryReadLock() {
+  return pthread_rwlock_tryrdlock(&rwlock) != EBUSY;
+}
+
+bool ReadWriteLock::tryWriteLock() {
+  return pthread_rwlock_trywrlock(&rwlock) != EBUSY;
+}
+
+void ReadWriteLock::unlock() {
+  pthread_rwlock_unlock(&rwlock);
+}
+
+// Constructor.
 ConditionLock::ConditionLock() {
   pthread_cond_init( &cond, NULL );
 }
     
-/// Destructor.
+// Destructor.
 ConditionLock::~ConditionLock() {
   pthread_cond_destroy( &cond );
 }
 
-/// Wait for the conditional to get a signal.
+// Wait for the conditional to get a signal.
 void ConditionLock::wait() {
  #ifdef THREAD_LOCK_DEBUG
   TimeStamp before;
@@ -158,12 +185,12 @@ bool ConditionLock::timedWait( unsigned int millisecs ) {
   return pthread_cond_timedwait( &cond, &mutex, &time ) != ETIMEDOUT;
 }
 
-/// Wakes up at least one thread blocked on this condition lock.
+// Wakes up at least one thread blocked on this condition lock.
 void ConditionLock::signal() {
   pthread_cond_signal( &cond ); 
 }
 
-/// This wakes up all of the threads blocked on the condition lock.
+// This wakes up all of the threads blocked on the condition lock.
 void ConditionLock::broadcast() {
   pthread_cond_broadcast( &cond );
 }
@@ -554,7 +581,7 @@ bool PeriodicThread::removeAsynchronousCallback( int callback_handle ) {
   return false;
 }
 
-/// Remove all callbacks.
+// Remove all callbacks.
 void PeriodicThread::clearAllCallbacks() {
   callback_lock.lock();
   callbacks_added_lock.lock();
@@ -735,7 +762,7 @@ void ThreadBase::setThreadName( const string &_name ) {
 const std::string &ThreadBase::getThreadName() {
   return name;
 }
-/// Returns true if the call was made from the main thread.
+// Returns true if the call was made from the main thread.
 bool ThreadBase::inMainThread() {
   return pthread_equal( main_thread_id, getCurrentThreadId() ) != 0;
 } 
