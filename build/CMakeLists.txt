@@ -185,8 +185,10 @@ IF( MSVC )
 
   # change the name depending on compiler to be able to tell them apart
   # since they are not compatible with each other. 
+	# H3DUtil can not link incrementally on vc8 for some reason. We shut of incremental linking for
+	# all visual studio versions.
   SET_TARGET_PROPERTIES( H3DUtil PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_vc${H3D_MSVC_VERSION}
-                                            LINK_FLAGS_DEBUG " /NODEFAULTLIB:msvcrt" )
+                                            LINK_FLAGS_DEBUG " /NODEFAULTLIB:msvcrt /INCREMENTAL:NO" )
 
   # Treat wchar_t as built in type for all visual studio versions.
   # This is default for every version above 7 ( so far ) but we still set it for all.
