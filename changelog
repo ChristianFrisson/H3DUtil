@@ -1,4 +1,4 @@
-Changes for version 1.2
+Changes for version 1.2.0:
 
 - CMake updates to configure build for MinGW toolchain.
 - New constructors to Matrix4f(d) to construct matrix from position,
