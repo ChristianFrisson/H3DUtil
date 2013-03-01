@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 /// \mainpage H3DUtil Documentation
-/// Copyright 2004, <a href="http://www.sensegraphics.com">SenseGraphics AB</a>
+/// Copyright 2004 - 2013, <a href="http://www.sensegraphics.com">SenseGraphics AB</a>
 
 #ifndef __H3DUTIL_H__
 #define __H3DUTIL_H__
