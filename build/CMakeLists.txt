@@ -12,6 +12,7 @@ IF("${isSystemDir}" STREQUAL "-1")
    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 ENDIF("${isSystemDir}" STREQUAL "-1")
 
+INCLUDE_DIRECTORIES( ${H3DUtil_SOURCE_DIR}/../include )
 
 # set the install directory to the H3D directory on Windows
 IF( WIN32 AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND NOT H3D_CMAKE_INSTALL_PREFIX_ALREADY_SET )
@@ -133,8 +134,6 @@ IF( MSVC )
                         ARGS ${H3DUtil_SOURCE_DIR}/../ ${CMAKE_CURRENT_BINARY_DIR}/H3DUtil.rc ${CMAKE_CURRENT_BINARY_DIR}/H3DUtil.rc )
   ENDIF( SubWCRev )
 ENDIF(MSVC)
-
-INCLUDE_DIRECTORIES( ${H3DUtil_SOURCE_DIR}/../include )
 
 # check all available libraries
 
