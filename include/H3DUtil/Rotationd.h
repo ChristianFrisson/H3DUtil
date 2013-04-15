@@ -34,7 +34,6 @@
 #include <H3DUtil/H3DBasicTypes.h>
 #include <H3DUtil/H3DMath.h>
 #include <H3DUtil/Vec3d.h>
-#include <H3DUtil/Vec3f.h>
 #include <H3DUtil/Rotation.h>
 #include <H3DUtil/TemplateOperators.h>
 
