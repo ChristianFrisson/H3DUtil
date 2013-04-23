@@ -110,7 +110,11 @@ IF( MSVC )
   MARK_AS_ADVANCED( SubWCRev )
 
   IF( SubWCRev )
-    SET( H3DUTIL_SVN_VERSION "$WCREV$" )
+		EXECUTE_PROCESS( COMMAND ${SubWCRev} ${H3DUtil_SOURCE_DIR}/../
+										 RESULT_VARIABLE H3DUtil_is_working_copy )
+		IF( ${H3DUtil_is_working_copy} EQUAL 0 )
+		  SET( H3DUTIL_SVN_VERSION "$WCREV$" )
+		ENDIF( ${H3DUtil_is_working_copy} EQUAL 0 )
   ENDIF( SubWCRev )
 
   # autogenerate H3DUtil.rc depending on the version
@@ -125,7 +129,7 @@ IF( MSVC )
                       "H3DUTIL_Output_Name"
                       "$(TargetFileName)" )
 
-  IF( SubWCRev )
+  IF( SubWCRev AND ${H3DUtil_is_working_copy} EQUAL 0 )
     # Update SVN revision in file.
     EXECUTE_PROCESS( COMMAND ${SubWCRev} ${H3DUtil_SOURCE_DIR}/../ ${CMAKE_CURRENT_BINARY_DIR}/H3DUtil.rc ${CMAKE_CURRENT_BINARY_DIR}/H3DUtil.rc )
 
@@ -133,7 +137,7 @@ IF( MSVC )
                         PRE_BUILD 
                         COMMAND ${SubWCRev} 
                         ARGS ${H3DUtil_SOURCE_DIR}/../ ${CMAKE_CURRENT_BINARY_DIR}/H3DUtil.rc ${CMAKE_CURRENT_BINARY_DIR}/H3DUtil.rc )
-  ENDIF( SubWCRev )
+  ENDIF( SubWCRev AND ${H3DUtil_is_working_copy} EQUAL 0 )
 ENDIF(MSVC)
 
 # check all available libraries
