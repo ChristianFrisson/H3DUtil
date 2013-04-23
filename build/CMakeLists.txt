@@ -12,6 +12,13 @@ IF("${isSystemDir}" STREQUAL "-1")
    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 ENDIF("${isSystemDir}" STREQUAL "-1")
 
+
+# Add the directory to INCLUDE_DIRECTORIES before any other statement to make sure that this header file is found first.
+# This assumes that we always use "#include <path/include_header.h>" in our code even if the file is actually found in
+# the same directory as the file that contains the include statement.
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR}/include )
+SET( H3DUTIL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include ${H3DUtil_SOURCE_DIR}/../include CACHE INTERNAL "Set to internal to propagate change" )
+
 INCLUDE_DIRECTORIES( ${H3DUtil_SOURCE_DIR}/../include )
 
 # set the install directory to the H3D directory on Windows
@@ -229,7 +236,15 @@ ENDIF( MSVC )
 SET_TARGET_PROPERTIES( H3DUtil PROPERTIES COMPILE_FLAGS "${H3DUTIL_COMPILE_FLAGS}"  )
 
 # autogenerate H3DUtil.h depending on the libraries available.
-CONFIGURE_FILE( ${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DUtil.cmake ${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DUtil.h )
+IF( EXISTS ${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DUtil.h )
+  FILE( REMOVE ${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DUtil.h )
+ENDIF( EXISTS ${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DUtil.h )
+CONFIGURE_FILE( ${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DUtil.cmake ${CMAKE_CURRENT_BINARY_DIR}/include/H3DUtil/H3DUtil.h )
+
+IF( NOT GENERATE_CPACK_PROJECT )
+  INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/include/H3DUtil/H3DUtil.h
+           DESTINATION ${H3DUtil_SOURCE_DIR}/../include/H3DUtil )
+ENDIF( NOT GENERATE_CPACK_PROJECT )
 
 INSTALL( TARGETS H3DUtil 
          LIBRARY DESTINATION ${DEFAULT_LIB_INSTALL} COMPONENT H3DUtil_cpack_runtime
