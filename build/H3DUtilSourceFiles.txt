@@ -9,7 +9,6 @@ SET( H3DUTIL_HEADERS "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/AutoPtrVector.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/FreeImageImage.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DBasicTypes.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DMath.h"
-                     "${CMAKE_CURRENT_BINARY_DIR}/include/H3DUtil/H3DUtil.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/Image.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/LinAlgTypes.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/LoadImageFunctions.h"
@@ -34,6 +33,12 @@ SET( H3DUTIL_HEADERS "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/AutoPtrVector.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/Vec4d.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/Vec4f.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/ReadWriteH3DTypes.h" )
+
+IF( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/H3DAPI/HAPI/H3DUtil )
+  SET( H3DUTIL_HEADERS ${H3DUTIL_HEADERS} "${CMAKE_CURRENT_BINARY_DIR}/H3DAPI/HAPI/H3DUtil/include/H3DUtil/H3DUtil.h" )
+ELSE( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/H3DAPI/HAPI/H3DUtil )
+  SET( H3DUTIL_HEADERS ${H3DUTIL_HEADERS} "${CMAKE_CURRENT_BINARY_DIR}/include/H3DUtil/H3DUtil.h" )
+ENDIF( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/H3DAPI/HAPI/H3DUtil )
 
 SET( H3DUTIL_SRCS "${H3DUtil_SOURCE_DIR}/../src/Console.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/DicomImage.cpp"
