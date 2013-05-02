@@ -33,30 +33,28 @@
 #include <vector>
 #include <algorithm>
 
-using namespace std;
-
 namespace H3DUtil {
   /// This class is similar to the AutoRef class in the vector elements
   /// are Node * or pointers to subclasses of Node. Reference counting 
   /// will be upheld on all nodes in the vector.
   /// 
   template< class NodeClass >
-  class AutoRefVector : private vector<NodeClass*> {
+  class AutoRefVector : private std::vector<NodeClass*> {
   public:
     /// The type of the Node, NodeClass, stored in the vector.
-    typedef typename vector<NodeClass*>::value_type value_type;
+    typedef typename std::vector<NodeClass*>::value_type value_type;
     /// Pointer to NodeClass.
-    typedef typename vector<NodeClass*>::pointer pointer;
+    typedef typename std::vector<NodeClass*>::pointer pointer;
     /// Const reference to NodeClass.
-    typedef typename vector<NodeClass*>::const_reference const_reference;
+    typedef typename std::vector<NodeClass*>::const_reference const_reference;
     /// An unsigned integral type.
-    typedef typename vector<NodeClass*>::size_type size_type;
+    typedef typename std::vector<NodeClass*>::size_type size_type;
     /// A signed integral type.
-    typedef typename vector<NodeClass*>::difference_type difference_type; 
+    typedef typename std::vector<NodeClass*>::difference_type difference_type; 
 	 /// Const iterator used to iterate through a vector.
-    typedef typename vector<NodeClass*>::const_iterator const_iterator;
+    typedef typename std::vector<NodeClass*>::const_iterator const_iterator;
     /// Iterator used to iterate backwards through a vector.
-    typedef typename vector<NodeClass*>::const_reverse_iterator 
+    typedef typename std::vector<NodeClass*>::const_reverse_iterator 
     const_reverse_iterator;
 
     /// Creates an empty vector.
@@ -64,13 +62,13 @@ namespace H3DUtil {
 
     /// Copy constructor from a vector class.
     inline AutoRefVector( const vector<NodeClass *> &v ) : 
-      vector<NodeClass*>( v ) {
+      std::vector<NodeClass*>( v ) {
       refAll();
     }
 
     /// Copy constructor
     inline AutoRefVector( const AutoRefVector<NodeClass> &v ) : 
-      vector<NodeClass*>( v ) {
+      std::vector<NodeClass*>( v ) {
       refAll();
     }
 
@@ -88,7 +86,7 @@ namespace H3DUtil {
     &operator=( const AutoRefVector<NodeClass> &v ) {
       if( this != &v ) {
         unrefAll();      
-        vector<NodeClass*>::operator=( v );
+        std::vector<NodeClass*>::operator=( v );
         refAll();
       }
       return *this;
@@ -104,7 +102,7 @@ namespace H3DUtil {
            i++ ) 
         if(*i) (*i)->ref();
       unrefAll();
-      vector<NodeClass*>::operator=( v );
+      std::vector<NodeClass*>::operator=( v );
       refAll();
 
       // remove the temporary references.
@@ -117,50 +115,50 @@ namespace H3DUtil {
 
     /// Returns a const_iterator pointing to the beginning of the vector.
     inline const_iterator begin() const { 
-      return vector<NodeClass*>::begin();
+      return std::vector<NodeClass*>::begin();
     }
       
     /// Returns a const_iterator pointing to the end of the vector.
-    inline const_iterator end() const { return vector<NodeClass*>::end(); }
+    inline const_iterator end() const { return std::vector<NodeClass*>::end(); }
 
         
     /// Returns a const_reverse_iterator pointing to the beginning of the
     /// reversed vector.
     inline const_reverse_iterator rbegin() const { 
-      return vector<NodeClass*>::rbegin();
+      return std::vector<NodeClass*>::rbegin();
     }
       
     /// Returns a const_reverse_iterator pointing to the end of the reversed 
     /// vector.
     inline const_reverse_iterator rend() const { 
-      return vector<NodeClass*>::rend(); 
+      return std::vector<NodeClass*>::rend(); 
     }
 
     /// Returns the size of the vector.
     inline size_type size() const { 
-      return vector<NodeClass*>::size(); 
+      return std::vector<NodeClass*>::size(); 
     }
 
     /// Returns the largest possible size of the vector.
     inline size_type max_size() const {
-      return vector<NodeClass*>::max_size();
+      return std::vector<NodeClass*>::max_size();
     }
         
     /// Number of elements for which memory has been allocated. capacity() 
     /// is always greater than or equal to size().
     inline size_type capacity() const { 
-      return vector<NodeClass*>::capacity(); 
+      return std::vector<NodeClass*>::capacity(); 
     }
         
     /// Swaps the contents of two vectors.
     inline void swap( AutoRefVector<NodeClass> &x ) {
-      vector<NodeClass*>::swap( x );
+      std::vector<NodeClass*>::swap( x );
     }
 
     /// Swaps the contents of two vectors.
-    inline void swap( vector<NodeClass*> &x ) {
+    inline void swap( std::vector<NodeClass*> &x ) {
       unrefAll();
-      vector<NodeClass*>::swap( x );
+      std::vector<NodeClass*>::swap( x );
       refAll();
     }
         
@@ -171,42 +169,42 @@ namespace H3DUtil {
     /// equal to s; otherwise, capacity() is unchanged. In either case, 
     /// size() is unchanged.
     /// 
-    inline void reserve( size_t s ) { vector<NodeClass*>::reserve( s ); }
+    inline void reserve( size_t s ) { std::vector<NodeClass*>::reserve( s ); }
 
     /// Inserts or erases elements at the end such that the size becomes n.
     inline virtual void resize( size_t n, NodeClass * t = NULL ) {
       if( size() > n ) {
         for( size_t i = n; i < size(); i++ )
-          unref( vector<NodeClass*>::operator[]( i ) );
+          unref( std::vector<NodeClass*>::operator[]( i ) );
       }
-      vector<NodeClass*>::resize( n, t );
+      std::vector<NodeClass*>::resize( n, t );
     }
 
     /// true if the vector's size is 0.
-    inline bool empty() const { return vector<NodeClass*>::empty(); }
+    inline bool empty() const { return std::vector<NodeClass*>::empty(); }
 
     /// Returns the n'th element. We return a const_reference so that
     /// the values of the vector only can be changed using member 
     /// functions. To change the value of a specific index use
     /// the set( index, value ) function.
     inline const_reference operator[](size_type n) const {
-      return vector<NodeClass*>::operator[]( n );
+      return std::vector<NodeClass*>::operator[]( n );
     }
 
     /// Set value at index i to v.
     inline void set( size_type i, const value_type &v ) {
-      if( v != vector<NodeClass*>::operator[]( i ) ) {
-        unref( vector<NodeClass*>::operator[]( i ) );
+      if( v != std::vector<NodeClass*>::operator[]( i ) ) {
+        unref( std::vector<NodeClass*>::operator[]( i ) );
         ref( v );
-        vector<NodeClass*>::operator[]( i ) = v;
+        std::vector<NodeClass*>::operator[]( i ) = v;
       }
     }
 
     /// Returns the first element.
-    inline const_reference front() const { return vector<NodeClass*>::front();}
+    inline const_reference front() const { return std::vector<NodeClass*>::front();}
 
     /// Returns the last element.
-    inline const_reference back() const { return vector<NodeClass*>::back(); }
+    inline const_reference back() const { return std::vector<NodeClass*>::back(); }
 
     /// Inserts a new element at the end.
     inline void push_back( const value_type &x ) {
@@ -223,18 +221,18 @@ namespace H3DUtil {
     /// Erases all of the elements.
     inline void clear() {
       unrefAll();
-      vector<NodeClass*>::clear();
+      std::vector<NodeClass*>::clear();
     }
 
     /// Erase the first element equal to a.
     inline virtual void erase( NodeClass *a ) {
       typename vector<NodeClass * >::iterator i = 
-        std::find( vector<NodeClass*>::begin(), 
-                   vector<NodeClass*>::end(), 
+        std::find( std::vector<NodeClass*>::begin(), 
+                   std::vector<NodeClass*>::end(), 
                    a );
       if( i != end() ) {
         unref( *i );
-        vector<NodeClass*>::erase( i );
+        std::vector<NodeClass*>::erase( i );
       } 
     }
 
@@ -250,7 +248,7 @@ namespace H3DUtil {
       // nop if pos is outside range.
       if( pos >= size() ) return;
 
-      unref( vector<NodeClass*>::operator[]( pos ) );
+      unref( std::vector<NodeClass*>::operator[]( pos ) );
       vector< NodeClass*>::erase( vector< NodeClass*>::begin() + pos );
     }
 
@@ -273,15 +271,15 @@ namespace H3DUtil {
 
     /// Call ref () on all values in the vector.
     inline void refAll() const {
-      for( const_iterator i = vector<NodeClass*>::begin(); 
-           i != vector<NodeClass*>::end(); ++i ) 
+      for( const_iterator i = std::vector<NodeClass*>::begin(); 
+           i != std::vector<NodeClass*>::end(); ++i ) 
         ref( *i );
     }
 
     /// Call unref () on all values in the vector.
     inline void unrefAll() const {
-      for( const_iterator i = vector<NodeClass*>::begin(); 
-           i != vector<NodeClass*>::end(); ++i ) 
+      for( const_iterator i = std::vector<NodeClass*>::begin(); 
+           i != std::vector<NodeClass*>::end(); ++i ) 
         unref( *i );
     }
   };
