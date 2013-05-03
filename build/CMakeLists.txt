@@ -70,6 +70,13 @@ SET(requiredLibs)
 
 SET(CMAKE_MODULE_PATH ${H3DUtil_SOURCE_DIR}/modules )
 
+FIND_PACKAGE(SofaHelper)
+IF(SOFAHELPER_FOUND)
+  SET(HAVE_SOFAHELPER 1)
+  INCLUDE_DIRECTORIES(${SOFAHELPER_INCLUDE_DIR})
+  SET(optionalLibs ${optionalLibs} ${SOFAHELPER_LIBRARIES} )
+ENDIF(SOFAHELPER_FOUND)
+
 FIND_PACKAGE(FreeImage)
 IF(FREEIMAGE_FOUND)
   SET(HAVE_FREEIMAGE 1)
@@ -165,6 +172,10 @@ ENDIF(WIN32)
 
 # make sure symbols are exported.
 SET( H3DUTIL_COMPILE_FLAGS "-DH3DUTIL_EXPORTS" )
+
+SET( ENABLE_THREAD_LOCK_DEBUG "OFF" CACHE BOOL "switcher to control the thread lock debug collection" )
+
+SET( ENABLE_PROFILER "OFF" CACHE BOOL "switcher to control the profiler")
 
 # add the libraries needed for linking
 TARGET_LINK_LIBRARIES( H3DUtil ${requiredLibs} ${optionalLibs} )

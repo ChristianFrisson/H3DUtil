@@ -33,6 +33,22 @@
 #ifndef __H3DUTIL_H__
 #define __H3DUTIL_H__
 
+/// Undef if you do not have sofa helper component(http://www.sofa-framework.org/) installed. 
+/// Required for support for time profiling.
+#cmakedefine HAVE_SOFAHELPER
+#cmakedefine ENABLE_PROFILER
+
+#ifdef HAVE_SOFAHELPER
+#ifdef ENABLE_PROFILER
+#define HAVE_PROFILER
+#endif
+#endif
+
+#cmakedefine ENABLE_THREAD_LOCK_DEBUG
+#ifdef ENABLE_THREAD_LOCK_DEBUG
+#define THREAD_LOCK_DEBUG
+#endif
+
 /// Undef if you do not have zlib(http://www.zlib.net/) installed. 
 /// Required for support for parsing zipped files.
 #cmakedefine HAVE_ZLIB
