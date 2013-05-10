@@ -51,6 +51,18 @@ IF( CMAKE_CL_64 )
 ELSE( CMAKE_CL_64 )
   SET( LIB "lib32" )
 ENDIF( CMAKE_CL_64 )
+IF ( SOFA_DELAY_FIND_LIBS )
+    # Assume it will be build before it is used by this project
+    IF( WIN32 )
+      SET( SOFAHELPER_LIBRARY ${SOFA_INSTALL_DIR}/lib/SofaHelper${SOFA_LIBRARY_POSTFIX} CACHE FILE "Sofa helper library" )
+      SET( SOFAHELPER_DEBUG_LIBRARY ${SOFA_INSTALL_DIR}/lib/SofaHelper${SOFA_LIBRARY_POSTFIX}d.lib CACHE FILE "Sofa helper debug library" )
+    ELSEIF ( UNIX )
+      SET( SOFAHELPER_LIBRARY ${SOFA_INSTALL_DIR}/lib/libSofaHelper${SOFA_LIBRARY_POSTFIX}.so CACHE FILE "Sofa helper library" )
+      SET( SOFAHELPER_DEBUG_LIBRARY ${SOFA_INSTALL_DIR}/lib/libSofaHelper${SOFA_LIBRARY_POSTFIX}d.so CACHE FILE "Sofa helper debug library" )
+    ENDIF ()
+	MARK_AS_ADVANCED(SOFAHELPER_LIBRARY)
+	MARK_AS_ADVANCED(SOFAHELPER_DEBUG_LIBRARY)
+ELSE ()
 FIND_LIBRARY(SOFAHELPER_LIBRARY    NAMES   SofaHelper${SOFA_LIBRARY_POSTFIX}
                                     PATHS   ${SOFA_INSTALL_DIR}/lib
 											$ENV{H3D_EXTERNAL_ROOT}/${LIB}
@@ -68,6 +80,9 @@ FIND_LIBRARY(SOFAHELPER_DEBUG_LIBRARY  NAMES   SofaHelper${SOFA_LIBRARY_POSTFIX}
                                         DOC     "Path to SofaHelper${SOFA_LIBRARY_POSTFIX}d library.")
 
 MARK_AS_ADVANCED(SOFAHELPER_DEBUG_LIBRARY)
+ENDIF()
+
+
 
 # Copy the results to the output variables.
 IF(SOFAHELPER_INCLUDE_DIR AND SOFAHELPER_LIBRARY)
