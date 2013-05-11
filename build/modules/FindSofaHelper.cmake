@@ -54,7 +54,7 @@ ENDIF( CMAKE_CL_64 )
 IF ( SOFA_DELAY_FIND_LIBS )
     # Assume it will be build before it is used by this project
     IF( WIN32 )
-      SET( SOFAHELPER_LIBRARY ${SOFA_INSTALL_DIR}/lib/SofaHelper${SOFA_LIBRARY_POSTFIX} CACHE FILE "Sofa helper library" )
+      SET( SOFAHELPER_LIBRARY ${SOFA_INSTALL_DIR}/lib/SofaHelper${SOFA_LIBRARY_POSTFIX}.lib CACHE FILE "Sofa helper library" )
       SET( SOFAHELPER_DEBUG_LIBRARY ${SOFA_INSTALL_DIR}/lib/SofaHelper${SOFA_LIBRARY_POSTFIX}d.lib CACHE FILE "Sofa helper debug library" )
     ELSEIF ( UNIX )
       SET( SOFAHELPER_LIBRARY ${SOFA_INSTALL_DIR}/lib/libSofaHelper${SOFA_LIBRARY_POSTFIX}.so CACHE FILE "Sofa helper library" )
