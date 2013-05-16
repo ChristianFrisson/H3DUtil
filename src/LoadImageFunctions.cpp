@@ -172,6 +172,34 @@ Image *H3DUtil::loadFreeImage( istream &is ) {
 
   return NULL;
 }
+
+bool H3DUtil::saveFreeImagePNG( const string &url,
+                                Image& image ) {
+  FIBITMAP *free_image = FreeImage_Allocate(image.width(),image.height(),image.bitsPerPixel());
+  RGBQUAD pixelcolor;
+  RGBA c;
+
+  // Transfer values from the image
+  for( int x = 0; x < image.width(); x++ ) {
+    for( int y = 0; y < image.height(); y++ ) {
+      c= image.getPixel ( x, y );
+      pixelcolor.rgbRed = c.r*255;
+      pixelcolor.rgbGreen = c.g*255;
+      pixelcolor.rgbBlue = c.b*255;
+      pixelcolor.rgbReserved = c.a*255;
+      FreeImage_SetPixelColor(free_image,x,y,&pixelcolor);
+    }
+  }
+
+  if( FreeImage_Save(FIF_PNG,free_image,url.c_str(),0) ) {
+    FreeImage_Unload(free_image);
+    return true;
+  } else {
+    FreeImage_Unload(free_image);
+    return false;
+  }
+}
+
 #endif
 
 Image *H3DUtil::loadRawImage( const string &url,

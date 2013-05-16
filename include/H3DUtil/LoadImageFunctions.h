@@ -46,6 +46,14 @@ namespace H3DUtil {
   H3DUTIL_API Image *loadFreeImage( const string &url );
 
   H3DUTIL_API Image *loadFreeImage( istream &is );
+
+  /// \ingroup ImageLoaderFunctions
+  /// Saves an image as a PNG file using FreeImage.
+  /// \param url The filename to save to.
+  /// \param image The image to save.
+  /// \returns 0 on success.
+  H3DUTIL_API bool saveFreeImagePNG( const string &url,
+                                     Image& image );
 #endif
 
 #ifdef HAVE_TEEM
