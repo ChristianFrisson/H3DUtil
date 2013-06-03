@@ -1,45 +1,58 @@
 # - Find sofa helper library
 # Find the native PTHREAD headers and libraries.
-#
+# This module depends on the SOFA_INSTALL_DIR, if SOFA_DELAY_FIND_LIBS is not set then
+# the user have to specify the SOFA_INSTALL_DIR
 #  SOFAHELPER_INCLUDE_DIR -  where to find helper.h, AdvancedTimer.h etc.
 #  SOFAHELPER_LIBRARIES    - List of libraries when using sofa helper component.
 #  SOFAHELPER_FOUND        - True if sofa helper found.
+#  SOFA_DELAY_FIND_LIBS - If defined then if libraries are not found
+#                         use the default local location of the libraries and
+#                         report success. E.g., If Sofa is being build as part
+#                         of the same build as the dependent package.
+# 
 
 GET_FILENAME_COMPONENT(module_file_path ${CMAKE_CURRENT_LIST_FILE} PATH )
 
+IF( WIN32 )
 SET( SOFA_LIBRARY_POSTFIX "_1_0" )
+ENDIF( WIN32 )
 
 IF ( NOT SOFA_DELAY_FIND_LIBS )
   IF( H3D_USE_DEPENDENCIES_ONLY AND WIN32 )
-    SET(SOFA_INSTALL_DIR "${EXTERNAL_INCLUDE_DIR}/sofa" CACHE PATH "Path to root of SOFA installation" )
+    SET(SOFA_INSTALL_DIR "${EXTERNAL_INCLUDE_DIR}/sofahelper" CACHE PATH "Path to root of SOFA helper" )
   ELSE( H3D_USE_DEPENDENCIES_ONLY AND WIN32 )
     IF( DEFINED ENV{SOFA_ROOT} )
       SET(SOFA_INSTALL_DIR "$ENV{SOFA_ROOT}" CACHE PATH "Path to root of SOFA installation" )
     ELSE( DEFINED ENV{SOFA_ROOT} )
       IF( DEFINED ENV{H3D_EXTERNAL_ROOT} )
-        SET(SOFA_INSTALL_DIR "$ENV{H3D_EXTERNAL_ROOT}/include/sofa" CACHE PATH "Path to root of SOFA installation" )
+        SET(SOFA_INSTALL_DIR "$ENV{H3D_EXTERNAL_ROOT}/include/sofahelper" CACHE PATH "Path to root of SOFA helper" )
       ELSE( DEFINED ENV{H3D_EXTERNAL_ROOT} )
         IF ( DEFINED ENV{H3D_ROOT} )
-          SET(SOFA_INSTALL_DIR "$ENV{H3D_ROOT}/../External/include/sofa" CACHE PATH "Path to root of SOFA installation" )
+          SET(SOFA_INSTALL_DIR "$ENV{H3D_ROOT}/../External/include/sofahelper" CACHE PATH "Path to root of SOFA helper" )
         ELSE ( DEFINED ENV{H3D_ROOT} )
           SET(SOFA_INSTALL_DIR "NOTFOUND" CACHE PATH "Path to root of SOFA installation" )
         ENDIF ( DEFINED ENV{H3D_ROOT} )
       ENDIF( DEFINED ENV{H3D_EXTERNAL_ROOT} )
     ENDIF( DEFINED ENV{SOFA_ROOT} )
   ENDIF( H3D_USE_DEPENDENCIES_ONLY AND WIN32 )
+ELSE() 
+  IF (NOT SOFA_INSTALL_DIR)
+    MESSAGE(SEND_ERROR "SOFA_DELAY_FIND_LIBS is defined, but no SOFA_INSTALL_DIR is set")
+  ENDIF()
+  MESSAGE(STATUS "SOFA_DELAY_FIND_LIBS is defined, use locally build sofa helper instead")
 ENDIF ()
 
 # Look for the header file.
 FIND_PATH(SOFAHELPER_INCLUDE_DIR   NAMES   sofa/helper/AdvancedTimer.h
                                     PATHS   ${SOFA_INSTALL_DIR}/framework
-											$ENV{H3D_EXTERNAL_ROOT}/include
+                                            $ENV{H3D_EXTERNAL_ROOT}/include
                                             $ENV{H3D_EXTERNAL_ROOT}/include/sofahelper/framework
                                             $ENV{H3D_ROOT}/../External/include  
                                             $ENV{H3D_ROOT}/../External/include/sofahelper/framework
                                             ../../External/include
-                                            ../../External/include/sofa/framework
+                                            ../../External/include/sofahelper/framework
                                             ${module_file_path}/../../../External/include
-                                            ${module_file_path}/../../../External/include/sofa
+                                            ${module_file_path}/../../../External/include/sofahelper
                                     DOC     "Path in which the file AdvancedTimer.h is located." )
                                     
 MARK_AS_ADVANCED(SOFAHELPER_INCLUDE_DIR)
@@ -56,28 +69,32 @@ IF ( SOFA_DELAY_FIND_LIBS )
     IF( WIN32 )
       SET( SOFAHELPER_LIBRARY ${SOFA_INSTALL_DIR}/lib/SofaHelper${SOFA_LIBRARY_POSTFIX}.lib CACHE FILE "Sofa helper library" )
       SET( SOFAHELPER_DEBUG_LIBRARY ${SOFA_INSTALL_DIR}/lib/SofaHelper${SOFA_LIBRARY_POSTFIX}d.lib CACHE FILE "Sofa helper debug library" )
+    ELSEIF ( APPLE )
+      SET( SOFAHELPER_LIBRARY ${SOFA_INSTALL_DIR}/lib/libSofaHelper${SOFA_LIBRARY_POSTFIX}.dylib CACHE FILE "Sofa helper library" )
+      SET( SOFAHELPER_DEBUG_LIBRARY ${SOFA_INSTALL_DIR}/lib/libSofaHelper${SOFA_LIBRARY_POSTFIX}d.dylib CACHE FILE "Sofa helper debug library" )
     ELSEIF ( UNIX )
       SET( SOFAHELPER_LIBRARY ${SOFA_INSTALL_DIR}/lib/libSofaHelper${SOFA_LIBRARY_POSTFIX}.so CACHE FILE "Sofa helper library" )
       SET( SOFAHELPER_DEBUG_LIBRARY ${SOFA_INSTALL_DIR}/lib/libSofaHelper${SOFA_LIBRARY_POSTFIX}d.so CACHE FILE "Sofa helper debug library" )
     ENDIF ()
-	MARK_AS_ADVANCED(SOFAHELPER_LIBRARY)
-	MARK_AS_ADVANCED(SOFAHELPER_DEBUG_LIBRARY)
+  MARK_AS_ADVANCED(SOFAHELPER_LIBRARY)
+  MARK_AS_ADVANCED(SOFAHELPER_DEBUG_LIBRARY)
 ELSE ()
-FIND_LIBRARY(SOFAHELPER_LIBRARY    NAMES   SofaHelper${SOFA_LIBRARY_POSTFIX}
+  # use precompiled lib to work
+FIND_LIBRARY(SOFAHELPER_LIBRARY    NAMES   SofaHelper${SOFA_LIBRARY_POSTFIX}2
                                     PATHS   ${SOFA_INSTALL_DIR}/lib
-											$ENV{H3D_EXTERNAL_ROOT}/${LIB}
+                                            $ENV{H3D_EXTERNAL_ROOT}/${LIB}
                                             $ENV{H3D_ROOT}/../External/${LIB}
                                             ../../External/${LIB}
                                             ${module_file_path}/../../../External/${LIB}
-                                    DOC     "Path to SofaHelper${SOFA_LIBRARY_POSTFIX} library." )
+                                    DOC     "Path to SofaHelper${SOFA_LIBRARY_POSTFIX}2 library." )
 MARK_AS_ADVANCED(SOFAHELPER_LIBRARY)
-FIND_LIBRARY(SOFAHELPER_DEBUG_LIBRARY  NAMES   SofaHelper${SOFA_LIBRARY_POSTFIX}d
+FIND_LIBRARY(SOFAHELPER_DEBUG_LIBRARY  NAMES   SofaHelper${SOFA_LIBRARY_POSTFIX}d2
                                         PATHS   ${SOFA_INSTALL_DIR}/lib
-												$ENV{H3D_EXTERNAL_ROOT}/${LIB}
+                                                $ENV{H3D_EXTERNAL_ROOT}/${LIB}
                                                 $ENV{H3D_ROOT}/../External/${LIB}
                                                 ../../External/${LIB}
                                                 ${module_file_path}/../../../External/${LIB}
-                                        DOC     "Path to SofaHelper${SOFA_LIBRARY_POSTFIX}d library.")
+                                        DOC     "Path to SofaHelper${SOFA_LIBRARY_POSTFIX}d2 library.")
 
 MARK_AS_ADVANCED(SOFAHELPER_DEBUG_LIBRARY)
 ENDIF()
@@ -89,7 +106,6 @@ IF(SOFAHELPER_INCLUDE_DIR AND SOFAHELPER_LIBRARY)
   SET(SOFAHELPER_FOUND 1)
   SET(SOFAHELPER_INCLUDE_DIR ${SOFAHELPER_INCLUDE_DIR})
   IF(SOFAHELPER_DEBUG_LIBRARY)
-    MESSAGE(STATUS "debug library found")
     SET(SOFAHELPER_LIBRARIES 
         optimized   ${SOFAHELPER_LIBRARY}
         debug       ${SOFAHELPER_DEBUG_LIBRARY})
