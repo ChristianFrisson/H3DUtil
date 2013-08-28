@@ -33,16 +33,10 @@
 #ifndef __H3DUTIL_H__
 #define __H3DUTIL_H__
 
-/// Undef if you do not have sofa helper component(http://www.sofa-framework.org/) installed. 
+/// Undef if you do not have sofa helper component(http://www.sofa-framework.org/) installed
+/// even if you set ENABLE_PROFILER to true
 /// Required for support for time profiling.
-#cmakedefine HAVE_SOFAHELPER
-#cmakedefine ENABLE_PROFILER
-
-#ifdef HAVE_SOFAHELPER
-#ifdef ENABLE_PROFILER
-#define HAVE_PROFILER
-#endif
-#endif
+#cmakedefine HAVE_PROFILER
 
 #cmakedefine ENABLE_THREAD_LOCK_DEBUG
 #ifdef ENABLE_THREAD_LOCK_DEBUG
