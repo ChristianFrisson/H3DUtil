@@ -201,7 +201,7 @@ namespace H3DUtil {
          m1[1][0]==m2[1][0] && m1[1][1]==m2[1][1] && m1[1][2]==m2[1][2] && 
          m1[2][0]==m2[2][0] && m1[2][1]==m2[2][1] && m1[2][2]==m2[2][2] 
          );
-     }
+    }
 
     /// Function for printing a Matrix3d to an ostream.
 	  H3DUTIL_API ostream& operator<<( ostream &os, const Matrix3d &m );

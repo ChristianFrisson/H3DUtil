@@ -435,6 +435,12 @@ PeriodicThread::~PeriodicThread() {
   
   if( !pthread_equal( this_thread, thread_id ) ) {
     callback_lock.lock();
+		callbacks_added_lock.lock();
+		// No need to free ids here since they are local to the PeriodicThread
+		// and this is the PeriodicThread destructor.
+		callbacks_added.clear();
+		callbacks.clear();
+		callbacks_added_lock.unlock();
     exitThread();
     callback_lock.signal();
     callback_lock.unlock();
