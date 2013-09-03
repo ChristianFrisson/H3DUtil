@@ -251,7 +251,7 @@ IF( GENERATE_CPACK_PROJECT )
                  ${H3DUtil_SOURCE_DIR}/modules/FindH3DZLIB.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindMd5sum.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindPTHREAD.cmake
-                 ${H3DUtil_SOURCE_DIR}/modules/FindTEEM.cmake
+                 ${H3DUtil_SOURCE_DIR}/modules/FindH3DTEEM.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/StripAndAddLibraryDirectories.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/UseDebian.cmake
            DESTINATION H3DUtil/build/modules
