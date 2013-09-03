@@ -77,9 +77,9 @@ void Image::getSample( void *value,
     H3DFloat cy = H3DCeil( py );
     H3DFloat cz = H3DCeil( pz );
     
-    if( cx >= width() ) cx--;
-    if( cy >= height() ) cy--;
-    if( cz >= depth() ) cz--;
+    if( cx >= width() ) --cx;
+    if( cy >= height() ) --cy;
+    if( cz >= depth() ) --cz;
     
     H3DFloat xd = px - fx;
     H3DFloat yd = py - fy;
@@ -722,7 +722,7 @@ namespace ImageInternals {
 			    float bias ) {
     A *d = (A*) orig_data;
     
-    for (unsigned int i = 0; i < nr_elements; i++) {
+    for (unsigned int i = 0; i < nr_elements; ++i) {
       normalized_data[i] = 
 	(d[ i ] / FloatType( numeric_limits<A >::max() ) ) * scale + bias;
       if( normalized_data[i] < 0 ) normalized_data[i] = 0;

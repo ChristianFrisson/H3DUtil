@@ -99,7 +99,7 @@ namespace H3DUtil {
       // they are not accidentally removed in unrefAll()
       for( typename vector< NodeClass * >::const_iterator i = v.begin();
            i != v.end();
-           i++ ) 
+           ++i ) 
         if(*i) (*i)->ref();
       unrefAll();
       std::vector<NodeClass*>::operator=( v );
@@ -108,7 +108,7 @@ namespace H3DUtil {
       // remove the temporary references.
       for( typename vector< NodeClass * >::const_iterator i = v.begin();
            i != v.end();
-           i++ ) 
+           ++i ) 
         if(*i) (*i)->unref();
       return *this;
     }
@@ -174,7 +174,7 @@ namespace H3DUtil {
     /// Inserts or erases elements at the end such that the size becomes n.
     inline virtual void resize( size_t n, NodeClass * t = NULL ) {
       if( size() > n ) {
-        for( size_t i = n; i < size(); i++ )
+        for( size_t i = n; i < size(); ++i )
           unref( std::vector<NodeClass*>::operator[]( i ) );
       }
       std::vector<NodeClass*>::resize( n, t );

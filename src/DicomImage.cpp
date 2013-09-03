@@ -81,7 +81,7 @@ H3DUtil::DicomImage::DicomImage( const string &url ):
                                  dir_records );
     vector< string > urls( dir_records->card() );
     dir_file_info.resize( dir_records->card() );
-    for( unsigned int i = 0; i < dir_records->card(); i++ ) {
+    for( unsigned int i = 0; i < dir_records->card(); ++i ) {
       DcmItem *item = dir_records->getItem( i );
       OFString filename;
       item->findAndGetOFString( DCM_ReferencedFileID, filename, 2 );
@@ -131,7 +131,7 @@ void H3DUtil::DicomImage::loadImage( const string &url ) {
   }
   unsigned int frame_size = image->getOutputDataSize();
   image_data = new unsigned char[ frame_size * d ];
-  for( unsigned int i = 0; i < d; i++ ) {
+  for( unsigned int i = 0; i < d; ++i ) {
     
     
     image->getOutputData( &image_data[ i * frame_size ], 
@@ -233,7 +233,7 @@ void H3DUtil::DicomImage::loadImage( const vector< string > &urls ) {
                           frame_size, 
                           bits_per_component, 0 ); 
     delete image;
-    for( unsigned int i = 1; i < urls.size(); i++ ) {
+    for( unsigned int i = 1; i < urls.size(); ++i ) {
       image = new ::DicomImage( urls[i].c_str() );
       if (image->getStatus() != EIS_Normal) 
         throw CouldNotLoadDicomImage( urls[i],

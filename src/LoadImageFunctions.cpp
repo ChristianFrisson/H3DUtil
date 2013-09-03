@@ -97,8 +97,8 @@ Image *loadFreeImageInternal( FIBITMAP* bm, const string& url= "" ) {
 
     // build the new pixel data
     unsigned char *data = new unsigned char[ size ];
-    for( unsigned int y = 0; y < height; y++ ) {
-      for( unsigned int x = 0; x < width; x++ ) {
+    for( unsigned int y = 0; y < height; ++y ) {
+      for( unsigned int x = 0; x < width; ++x ) {
         unsigned int i = (x + y * width) * bytes_per_pixel;
         BYTE index;
         FreeImage_GetPixelIndex( bm, x, y, &index );
@@ -180,8 +180,8 @@ bool H3DUtil::saveFreeImagePNG( const string &url,
   RGBA c;
 
   // Transfer values from the image
-  for( int x = 0; x < image.width(); x++ ) {
-    for( int y = 0; y < image.height(); y++ ) {
+  for( int x = 0; x < image.width(); ++x ) {
+    for( int y = 0; y < image.height(); ++y ) {
       c= image.getPixel ( x, y );
       pixelcolor.rgbRed = c.r*255;
       pixelcolor.rgbGreen = c.g*255;
@@ -500,7 +500,7 @@ int H3DUtil::saveImageAsNrrdFile( const string &filename,
   }
 
   int bytes_per_component =  bits_per_pixel / (nr_components * 8);
-  if( bits_per_pixel % (nr_components * 8) > 0 ) bytes_per_component++;
+  if( bits_per_pixel % (nr_components * 8) > 0 ) ++bytes_per_component;
 
   // save the type
   if( component_type == Image::SIGNED ) {
@@ -577,7 +577,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
        new unsigned char[ width * height * bytes_per_pixel ];
      
      unsigned char * slice_data = (unsigned char *)slice_2d->getImageData();
-     for( unsigned int row = 0; row < height; row++ ) {
+     for( unsigned int row = 0; row < height; ++row ) {
        memcpy( data + row*width* bytes_per_pixel, 
                slice_data + (height - row - 1 ) * width * bytes_per_pixel,
                width * bytes_per_pixel );
@@ -694,7 +694,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
     // Iterate through filename and get the two first valid ones and try
     // to read information from them. If information is read from two, then
     // break. This could perhaps be coupled with the other for loop.
-    for( unsigned int i = 0; i < filenames.size(); i++ ) {
+    for( unsigned int i = 0; i < filenames.size(); ++i ) {
       DcmFileFormat fileformat;
       if( fileformat.loadFile(filenames[i].c_str()).good() ) {
         OFString string_value;
@@ -717,7 +717,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
           if( locale_string.length() < 7 || locale_string.substr( 0, 7 ) != "English" ) {
             H3DFloat test_data_comma( atof( "0,2" ) );
             if( test_data_comma > 0.1 ) {
-              for( unsigned int j = 0; j < string_value.size(); j++ ) {
+              for( unsigned int j = 0; j < string_value.size(); ++j ) {
                 if( string_value[j] == '.' )
                   string_value[j] = ',';
               }
@@ -733,7 +733,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
                 DCM_ImageOrientationPatient, string_value2 );
               if( res2 == EC_Normal ) {
                 size_t start_pos = 0;
-                for( unsigned int j = 0; j < 6; j++ ) {
+                for( unsigned int j = 0; j < 6; ++j ) {
                   size_t pos = string_value2.find( "\\", start_pos, 2 );
                   patient_orn[j] = (H3DFloat)( atof( string_value2.substr(
                     start_pos, pos - start_pos ).c_str() ) );
@@ -743,7 +743,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
                   // Sort in reverse alphabetical order.
                   vector< string > tmp_filenames;
                   tmp_filenames.reserve( filenames.size() );
-                  for( int j = (int)filenames.size() - 1; j >= 0; j-- )
+                  for( int j = (int)filenames.size() - 1; j >= 0; --j )
                     tmp_filenames.push_back( filenames[j] );
                   filenames = tmp_filenames;
                 }
@@ -773,7 +773,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
     // use ImagePositionPatient if available to set pixel_size z.
     // If it does not exist SliceThickness is used.
     if( second_patient_pos_set ) {
-      H3DFloat slice_distance = H3DAbs(patient_pos1 - patient_pos2);
+      H3DFloat slice_distance( H3DAbs(patient_pos1 - patient_pos2) );
       pixel_size.z = slice_distance * 1e-3; // to metres
     }
 
@@ -802,13 +802,13 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
         // dicom data is specified from topleft corner. we have to convert it
         // so it is specified from the bottomleft corner
         unsigned char * slice_data = (unsigned char *)slice_2d->getImageData();
-        for( unsigned int row = 0; row < height; row++ ) {
+        for( unsigned int row = 0; row < height; ++row ) {
           memcpy( data + (width * height * depth  + row*width)*
                          bytes_per_pixel,
                   slice_data + (height - row - 1 ) * width * bytes_per_pixel,
                   width * bytes_per_pixel );
         }
-        depth++;
+        ++depth;
       }
     }
    

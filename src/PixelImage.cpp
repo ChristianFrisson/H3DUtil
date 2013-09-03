@@ -108,11 +108,11 @@ PixelImage::PixelImage( Image *image,
       H3DFloat y_step = 1.0f / new_height;
       H3DFloat x_step = 1.0f / new_width;
       
-      for( unsigned int z = 0; z < new_depth; z++ ) {
+      for( unsigned int z = 0; z < new_depth; ++z ) {
         H3DFloat dt = (z_step / 2) + z_step *z;
-        for( unsigned int y = 0; y < new_height; y++ ) {
+        for( unsigned int y = 0; y < new_height; ++y ) {
           H3DFloat ht =  (y_step / 2) + y_step *y;
-          for( unsigned int x = 0; x < new_width; x++ ) {
+          for( unsigned int x = 0; x < new_width; ++x ) {
             H3DFloat wt =  (x_step / 2) + x_step *x; 
             image->getSample( data + 
                               ( ( z * new_height + y ) * new_width + x ) * 

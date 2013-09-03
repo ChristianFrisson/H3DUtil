@@ -93,7 +93,7 @@ namespace H3DUtil {
     /// Erases all of the elements.
     inline void clear() {
       for( typename vector<PtrType*>::iterator i = this->begin(); 
-           i != this->end(); i++ ) 
+           i != this->end(); ++i ) 
         delete (*i);
       vector<PtrType*>::clear();
     }

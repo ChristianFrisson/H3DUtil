@@ -54,13 +54,13 @@ namespace H3DUtil {
   /// If i is a power of two, i is returned. Otherwise the first
   /// power of two greater that i is returned.
   inline unsigned int nextPowerOfTwo( unsigned int i ) {
-    i--;
+    --i;
     i |= i >> 16;
     i |= i >> 8;
     i |= i >> 4;
     i |= i >> 2;
     i |= i >> 1;
-    i++;
+    ++i;
     return i;
   }
 

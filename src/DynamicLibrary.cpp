@@ -38,7 +38,7 @@ using namespace H3DUtil;
 
 string convertSlashToBackslash( string tmp_string ) {
   string return_string = "";
-  for( unsigned int i = 0; i < tmp_string.size(); i++ ) {
+  for( unsigned int i = 0; i < tmp_string.size(); ++i ) {
     if( tmp_string[i] == '/' ) {
       return_string += "\\";
     } else {

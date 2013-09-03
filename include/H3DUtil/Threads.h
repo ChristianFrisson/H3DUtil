@@ -458,7 +458,7 @@ struct hash_pthread
         // for one.
         if( callbacks.size() == 0 ) callback_lock.signal();
         
-        for( InputIterator i = begin; i != end; i++ ) {
+        for( InputIterator i = begin; i != end; ++i ) {
           int cb_id = genCallbackId();
           // add the new callback
           callbacks.push_back( make_pair( cb_id, *i ) );
@@ -466,7 +466,7 @@ struct hash_pthread
         callback_lock.unlock();
       } else {
         callbacks_added_lock.lock();
-        for( InputIterator i = begin; i != end; i++ ) {
+        for( InputIterator i = begin; i != end; ++i ) {
           int cb_id = genCallbackId();
           // add the new callback
           callbacks_added.push_back( make_pair( cb_id, *i ) );
@@ -517,7 +517,7 @@ struct hash_pthread
     inline void transferCallbackList() {
       callbacks_added_lock.lock();
       for( CallbackList::iterator i = callbacks_added.begin();
-           i != callbacks_added.end(); i++ )
+           i != callbacks_added.end(); ++i )
         callbacks.push_back( *i );
       callbacks_added.clear();
       callbacks_added_lock.unlock();

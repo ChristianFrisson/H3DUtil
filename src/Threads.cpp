@@ -284,7 +284,7 @@ void *PeriodicThread::thread_func( void * _data ) {
     vector< PeriodicThread::CallbackList::iterator > to_remove;
     thread->callback_lock.lock();
     for( PeriodicThread::CallbackList::iterator i = thread->callbacks.begin();
-         i != thread->callbacks.end(); i++ ) {
+         i != thread->callbacks.end(); ++i ) {
       PeriodicThread::CallbackCode c = ( (*i).second ).first(
         ( (*i).second ).second );
       if( c == PeriodicThread::CALLBACK_DONE ) {
@@ -296,7 +296,7 @@ void *PeriodicThread::thread_func( void * _data ) {
     // remove all callbacks that returned CALLBACK_DONE.
     for( vector< PeriodicThread::CallbackList::iterator >::iterator i = 
            to_remove.begin();
-         i != to_remove.end(); i++ ) {
+         i != to_remove.end(); ++i ) {
       thread->free_ids.push_back( (*(*i) ).first );
       thread->callbacks.erase( *i );
     }
@@ -558,7 +558,7 @@ bool PeriodicThread::removeAsynchronousCallback( int callback_handle ) {
   // in callbacks_added, therefore lock both locks and then go through
   // both lists.
   for( CallbackList::iterator i = callbacks_added.begin();
-       i != callbacks_added.end(); i++ ) {
+       i != callbacks_added.end(); ++i ) {
   if( (*i).first == callback_handle ) {
       // Add callback_handle integer to the free_ids list in order
       // to reuse id later.
@@ -571,7 +571,7 @@ bool PeriodicThread::removeAsynchronousCallback( int callback_handle ) {
   }
 
   for( CallbackList::iterator i = callbacks.begin();
-       i != callbacks.end(); i++ ) {
+       i != callbacks.end(); ++i ) {
     if( (*i).first == callback_handle ) {
       // Add callback_handle integer to the free_ids list in order
       // to reuse id later.
@@ -598,7 +598,7 @@ void PeriodicThread::clearAllCallbacks() {
   // All the ids should be added to the free_ids list in
   // order to be reused later.
   for( CallbackList::iterator i = callbacks_added.begin();
-       i != callbacks_added.end(); i++ ) {
+       i != callbacks_added.end(); ++i ) {
     free_ids.push_back( (*i).first );
   }
   callbacks_added.clear();
@@ -606,7 +606,7 @@ void PeriodicThread::clearAllCallbacks() {
   // All the ids should be added to the free_ids list in
   // order to be reused later.
   for( CallbackList::iterator i = callbacks.begin();
-       i != callbacks.end(); i++ ) {
+       i != callbacks.end(); ++i ) {
     free_ids.push_back( (*i).first );
   }
   callbacks.clear();
@@ -638,7 +638,7 @@ HapticThreadBase::~HapticThreadBase() {
 bool HapticThreadBase::inHapticThread() {
   PeriodicThread::ThreadId id = PeriodicThread::getCurrentThreadId();
   for( vector< HapticThreadBase *>::iterator i = threads.begin();
-       i != threads.end(); i++ ) {
+       i != threads.end(); ++i ) {
     ThreadBase *thread = dynamic_cast< ThreadBase * >( *i );
     if( thread && pthread_equal( thread->getThreadId(), id ) )
       return true;
@@ -648,7 +648,7 @@ bool HapticThreadBase::inHapticThread() {
 
 PeriodicThreadBase::CallbackCode HapticThreadBase::sync_haptics( void * ) {
   sg_lock.lock();
-  haptic_threads_left--;
+  --haptic_threads_left;
   if( haptic_threads_left == 0 ) {
     sg_lock.signal();
     sg_lock.wait();
@@ -671,7 +671,7 @@ void HapticThreadBase::synchronousHapticCB(
   // add empty callbacks in order to make sure that the haptics threads 
   // have released the callback_lock since last call to sync_haptics.
   for( vector< HapticThreadBase *>::iterator i = threads.begin();
-       i != threads.end(); i++ ) {
+       i != threads.end(); ++i ) {
     PeriodicThreadBase *thread = dynamic_cast< PeriodicThreadBase * >( *i );
     if( thread ) {
       thread->asynchronousCallback( ThreadsInternal::doNothing, NULL );
@@ -682,7 +682,7 @@ void HapticThreadBase::synchronousHapticCB(
   haptic_threads_left = (int) threads.size();
   if( haptic_threads_left > 0 ) {
     for( vector< HapticThreadBase *>::iterator i = threads.begin();
-         i != threads.end(); i++ ) {
+         i != threads.end(); ++i ) {
       PeriodicThreadBase *thread = dynamic_cast< PeriodicThreadBase * >( *i );
       if( thread ) {
         thread->asynchronousCallback( sync_haptics, NULL );
@@ -704,7 +704,7 @@ ThreadBase::ThreadId ThreadBase::getCurrentThreadId() {
 } 
 
 ThreadBase *ThreadBase::getThreadById( ThreadId id ) {
-  for( size_t i = 0; i < current_threads.size(); i++ ) {
+  for( size_t i = 0; i < current_threads.size(); ++i ) {
     ThreadBase *thread = current_threads[i];
     if( pthread_equal( thread->getThreadId(), id ) ) {
       return thread;
@@ -716,7 +716,7 @@ ThreadBase *ThreadBase::getThreadById( ThreadId id ) {
 ThreadBase *ThreadBase::getCurrentThread() {
   ThreadBase::ThreadId id = getCurrentThreadId();
   for( std::vector< ThreadBase *>::iterator i = current_threads.begin();
-       i != current_threads.end(); i++ ) {
+       i != current_threads.end(); ++i ) {
     if( pthread_equal( id, (*i)->getCurrentThreadId() ) != 0 ) {
       return *i;
     }

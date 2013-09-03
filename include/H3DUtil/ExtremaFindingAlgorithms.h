@@ -83,7 +83,7 @@ namespace H3DUtil {
         unsigned int nr_iterations = 0;
 
         // initialize the y with the function values for the starting points
-        for( int i = 0; i < mpts; i++ ) {
+        for( int i = 0; i < mpts; ++i ) {
           y[i] = func( p[i], user_data );
         }
 
@@ -93,7 +93,7 @@ namespace H3DUtil {
           // find highest, lowest and next-highest point
           ilo = 0;
           ihi = y[1] > y[2] ? (inhi=2,1) : (inhi = 1,2);
-          for( int i = 0; i < mpts; i++ ) {
+          for( int i = 0; i < mpts; ++i ) {
             if( y[i] <= y[ilo] ) ilo = i;
             if( y[i] > y[ihi] ) {
               inhi = ihi;
@@ -121,9 +121,9 @@ namespace H3DUtil {
             OutputType ysave = y[ihi];
             ytry = amotry<InputType, OutputType, NR_DIMS>( p, y, psum, func, ihi, 0.5, user_data );
             if( ytry >= ysave ) {
-              for( int i = 0; i < mpts; i++ ) {
+              for( int i = 0; i < mpts; ++i ) {
                 if( i != ilo ) {
-                  for( int j = 0; j < NR_DIMS; j++ ) {
+                  for( int j = 0; j < NR_DIMS; ++j ) {
                     p[i][j] = psum[j]=0.5*(p[i][j]+p[ilo][j]);
                   }
                   y[i] = (*func)(psum, user_data);
@@ -132,7 +132,7 @@ namespace H3DUtil {
               get_psum< InputType, OutputType >( psum, p, sum, mpts );
             }
           }
-          nr_iterations++;
+          ++nr_iterations;
         }
       }
 
@@ -142,9 +142,9 @@ namespace H3DUtil {
       template< class InputType,
                 class OutputType >
       static inline void get_psum( InputType &psum, InputType *p, OutputType &sum, int mpts ) {
-        for( int j = 0; j < 2; j++ ) {
+        for( int j = 0; j < 2; ++j ) {
           sum = 0.0;
-          for( int i = 0; i < mpts; i++ ) sum += p[i][j];
+          for( int i = 0; i < mpts; ++i ) sum += p[i][j];
           psum[j] = sum;
         }
       }
@@ -164,12 +164,12 @@ namespace H3DUtil {
         OutputType fac1 = (1.0 - fac ) / NR_DIMS; //fads
         OutputType fac2 = fac1 - fac;
 
-        for( int j = 0; j < NR_DIMS; j++ ) 
+        for( int j = 0; j < NR_DIMS; ++j ) 
           ptry[j] = psum[j]*fac1 - p[ihi][j]*fac2;
         OutputType ytry = (*func)(ptry, user_data );
         if( ytry < y[ihi] ) {
           y[ihi] = ytry;
-          for( int j = 0; j < NR_DIMS; j++ ) {
+          for( int j = 0; j < NR_DIMS; ++j ) {
             psum[j] += ptry[j] - p[ihi][j];
             p[ihi][j] = ptry[j];
           }

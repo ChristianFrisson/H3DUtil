@@ -187,7 +187,7 @@ namespace H3DUtil {
       assert( byte_rem == 0 );
 
       if( byte_rem != 0 ) {
-        bytes_per_pixel++;
+        ++bytes_per_pixel;
       }
       
       unsigned char *data = (unsigned char *) getImageData();
@@ -204,7 +204,7 @@ namespace H3DUtil {
       unsigned int bytes_per_pixel = bitsPerPixel() / 8;
       assert( byte_rem == 0 );
       if( byte_rem != 0 )
-        bytes_per_pixel++;
+        ++bytes_per_pixel;
 
       unsigned char *data = (unsigned char *)getImageData();
       memcpy( &data[ ( ( z * height() + y ) * width() + x ) * bytes_per_pixel ],

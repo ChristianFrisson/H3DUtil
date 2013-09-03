@@ -68,7 +68,7 @@ void RefCountedClass::ref() {
     ref_count_lock_pointer->lock();
 		locked = true;
 	}
-  ref_count++;
+  ++ref_count;
 #ifdef REF_COUNT_DEBUG
   Console(1) << "Ref " << getName() << " " << this << ": " 
     << ref_count << endl;
@@ -83,7 +83,7 @@ void RefCountedClass::ref() {
 void RefCountedClass::unref() {
   if( ref_count_lock_pointer )
     ref_count_lock_pointer->lock();
-  ref_count--;
+  --ref_count;
 #ifdef REF_COUNT_DEBUG
   Console(1) << "Unref " << getName() << " " << this << ": " 
     << ref_count << endl;
