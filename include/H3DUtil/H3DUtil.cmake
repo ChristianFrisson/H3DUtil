@@ -38,10 +38,7 @@
 /// Required for support for time profiling.
 #cmakedefine HAVE_PROFILER
 
-#cmakedefine ENABLE_THREAD_LOCK_DEBUG
-#ifdef ENABLE_THREAD_LOCK_DEBUG
-#define THREAD_LOCK_DEBUG
-#endif
+#cmakedefine THREAD_LOCK_DEBUG
 
 /// Undef if you do not have zlib(http://www.zlib.net/) installed. 
 /// Required for support for parsing zipped files.
