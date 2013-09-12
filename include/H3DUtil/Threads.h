@@ -239,7 +239,7 @@ struct hash_pthread
         {       // functor for operator==
         bool operator()(const ThreadId& _Left) const
                 {       // apply operator== to operands
-                return _Left.x;
+                return _Left.x!=0;
                 }
         };
     typedef std::unordered_map< ThreadId, ThreadLockInfo, hash_pthread, equal_to_pthread > ThreadLockInfoMap;
