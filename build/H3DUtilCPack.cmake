@@ -53,16 +53,19 @@ IF( GENERATE_CPACK_PROJECT )
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/FreeImage/
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/zlib/
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/dcmtk/
-                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/teem/ )
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/teem/
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/Bzip2/ )
       SET( EXTERNAL_INCLUDE_INSTALL_PATHS External/include/pthread
                                           External/include/FreeImage
                                           External/include/zlib
                                           External/include/dcmtk
-                                          External/include/teem )
+                                          External/include/teem
+                                          External/include/Bzip2 )
       SET( EXTERNAL_LIBRARIES ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/pthreadVC2.lib
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/FreeImage.lib
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/zlib.lib
-                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/teem.lib )
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/teem.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/libbz2.lib )
       SET( DCM_NAME_LIST ofstd dcmjpeg ijg8 ijg12 ijg16 dcmdata dcmimgle dcmimage )
       FOREACH( library_name ${DCM_NAME_LIST} )
         SET( EXTERNAL_STATIC_LIBRARIES ${EXTERNAL_STATIC_LIBRARIES}
@@ -78,7 +81,8 @@ IF( GENERATE_CPACK_PROJECT )
       SET( EXTERNAL_BINARIES ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/pthreadVC2.dll
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/FreeImage.dll
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/zlib1.dll
-                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/teem.dll )
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/teem.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/libbz2.dll )
 
     ELSEIF( NOT DEFINED HAPI_CPACK_EXTERNAL_ROOT )
       MESSAGE( WARNING "H3DUtil_CPACK_EXTERNAL_ROOT must be set to the External directory used by H3DUtil in order to package properly." )
@@ -235,6 +239,7 @@ IF( GENERATE_CPACK_PROJECT )
 
   INSTALL( FILES ${H3DUtil_SOURCE_DIR}/../changelog
                  ${H3DUtil_SOURCE_DIR}/../LICENSE
+                 ${H3DUtil_SOURCE_DIR}/../ReadMe
            DESTINATION H3DUtil
            COMPONENT H3DUtil_cpack_sources )
 
@@ -248,10 +253,12 @@ IF( GENERATE_CPACK_PROJECT )
 
   INSTALL( FILES ${H3DUtil_SOURCE_DIR}/modules/FindDCMTK.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindFreeImage.cmake
+                 ${H3DUtil_SOURCE_DIR}/modules/FindH3DBZip2.cmake
+                 ${H3DUtil_SOURCE_DIR}/modules/FindH3DTEEM.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindH3DZLIB.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindMd5sum.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindPTHREAD.cmake
-                 ${H3DUtil_SOURCE_DIR}/modules/FindH3DTEEM.cmake
+                 ${H3DUtil_SOURCE_DIR}/modules/FindSofaHelper.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/StripAndAddLibraryDirectories.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/UseDebian.cmake
            DESTINATION H3DUtil/build/modules
