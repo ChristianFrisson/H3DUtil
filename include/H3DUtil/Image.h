@@ -218,6 +218,21 @@ namespace H3DUtil {
       return byte_alignment;
     }
 
+    /// Sets the byte alignment for the start of each pixel row in memory.
+    /// Returns true, if successful.
+    /// Valid values are 1, 2, 4 and 8.
+    inline bool setByteAlignment( int _byte_alignment ) {
+      if( _byte_alignment == 1 ||
+          _byte_alignment == 2 ||
+          _byte_alignment == 4 ||
+          _byte_alignment == 8 ) {
+        byte_alignment = _byte_alignment;
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     /// Returns the image data as a float array with the same number of elements
     /// as getImageData but with the values normalized to the range [0,1] with
     /// the lowest value that can be held by the data type used in the image maps
