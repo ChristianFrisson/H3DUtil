@@ -61,6 +61,7 @@ IF( GENERATE_CPACK_PROJECT )
                                           External/include/dcmtk
                                           External/include/teem
                                           External/include/Bzip2 )
+                                   
       SET( EXTERNAL_LIBRARIES ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/pthreadVC2.lib
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/FreeImage.lib
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/zlib.lib
@@ -100,6 +101,17 @@ IF( GENERATE_CPACK_PROJECT )
                  REGEX "(/.svn)|(/CVS)" EXCLUDE )
       endforeach( val )
     ENDIF( EXTERNAL_INCLUDES )
+                             
+    INSTALL( DIRECTORY ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/ExternalLicenses/
+                 DESTINATION External/include/ExternalLicenses
+                 COMPONENT H3DUtil_cpack_external_runtime
+                 REGEX "(/.svn)|(/CVS)" EXCLUDE )
+
+    IF( EXISTS "${H3DUtil_CPACK_EXTERNAL_ROOT}/include/ACKNOWLEDGEMENTS" )
+      INSTALL( FILES "${H3DUtil_CPACK_EXTERNAL_ROOT}/include/ACKNOWLEDGEMENTS"
+               DESTINATION External/include
+               COMPONENT H3DUtil_cpack_external_runtime )
+    ENDIF( EXISTS "${H3DUtil_CPACK_EXTERNAL_ROOT}/include/ACKNOWLEDGEMENTS" )
     
     foreach( library ${EXTERNAL_LIBRARIES} )
       IF( EXISTS ${library} )
