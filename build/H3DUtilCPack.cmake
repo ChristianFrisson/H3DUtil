@@ -259,6 +259,7 @@ IF( GENERATE_CPACK_PROJECT )
                  ${H3DUtil_SOURCE_DIR}/modules/FindMd5sum.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindPTHREAD.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindSofaHelper.cmake
+                 ${H3DUtil_SOURCE_DIR}/modules/InstallH3DUtilAndExternals.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/StripAndAddLibraryDirectories.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/UseDebian.cmake
            DESTINATION H3DUtil/build/modules
