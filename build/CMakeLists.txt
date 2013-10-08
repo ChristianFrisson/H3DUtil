@@ -180,6 +180,17 @@ SET( H3DUTIL_COMPILE_FLAGS "-DH3DUTIL_EXPORTS" )
 
 SET( ENABLE_THREAD_LOCK_DEBUG "OFF" CACHE BOOL "switcher to control the thread lock debug collection" )
 IF( ENABLE_THREAD_LOCK_DEBUG )
+  if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+    execute_process(
+        COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+    if (GCC_VERSION VERSION_GREATER 4.7 OR GCC_VERSION VERSION_EQUAL 4.7)
+      add_definitions("-std=gnu++11")
+    else ()
+      message(FATAL_ERROR "Enabling ENABLE_THREAD_LOCK_DEBUG requires C++11 support. This compiler lacks such support.")
+    endif ()
+  elseif (${MSVC_VERSION} LESS 1600 )
+    message(FATAL_ERROR "Enabling ENABLE_THREAD_LOCK_DEBUG requires C++11 support. This compiler lacks such support.")
+  endif ()
   SET( THREAD_LOCK_DEBUG 1 )
 ENDIF( ENABLE_THREAD_LOCK_DEBUG )
 
