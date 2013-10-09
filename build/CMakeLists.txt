@@ -175,6 +175,9 @@ IF( WIN32 )
   SET(requiredLibs ${requiredLibs} winmm.lib )
 ENDIF(WIN32)
 
+# add the libraries needed for linking
+TARGET_LINK_LIBRARIES( H3DUtil ${requiredLibs} ${optionalLibs} )
+
 # make sure symbols are exported.
 SET( H3DUTIL_COMPILE_FLAGS "-DH3DUTIL_EXPORTS" )
 
@@ -185,6 +188,8 @@ IF( ENABLE_THREAD_LOCK_DEBUG )
         COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
     if (GCC_VERSION VERSION_GREATER 4.7 OR GCC_VERSION VERSION_EQUAL 4.7)
       add_definitions("-std=gnu++11")
+    elseif(GCC_VERSION VERSION_GREATER 4.3 OR GCC_VERSION VERSION_EQUAL 4.3)
+      add_definitions("-std=gnu++0x")
     else ()
       message(FATAL_ERROR "Enabling ENABLE_THREAD_LOCK_DEBUG requires C++11 support. This compiler lacks such support.")
     endif ()
@@ -193,11 +198,6 @@ IF( ENABLE_THREAD_LOCK_DEBUG )
   endif ()
   SET( THREAD_LOCK_DEBUG 1 )
 ENDIF( ENABLE_THREAD_LOCK_DEBUG )
-
-
-
-# add the libraries needed for linking
-TARGET_LINK_LIBRARIES( H3DUtil ${requiredLibs} ${optionalLibs} )
 
 # make the name of debug libraries end in _d.
 SET_TARGET_PROPERTIES( H3DUtil PROPERTIES DEBUG_POSTFIX "_d" )
