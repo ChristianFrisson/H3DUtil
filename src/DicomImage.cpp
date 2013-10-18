@@ -98,10 +98,14 @@ void H3DUtil::DicomImage::loadImage( const string &url ) {
   DJDecoderRegistration::registerCodecs();
 
   ::DicomImage *image = new ::DicomImage( url.c_str() );
-  if (image->getStatus() != EIS_Normal)
+  if (image->getStatus() != EIS_Normal) {
+		string error_string( ::DicomImage::getString(image->getStatus()) );
+		delete image;
+		DJDecoderRegistration::cleanup();
     throw CouldNotLoadDicomImage( url,
-                                  ::DicomImage::getString(image->getStatus()),
+                                  error_string,
                                   H3D_FULL_LOCATION );
+	}
   w = image->getWidth();
   h = image->getHeight();
   d = image->getFrameCount();
