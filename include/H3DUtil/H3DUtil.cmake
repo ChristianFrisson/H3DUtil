@@ -40,6 +40,12 @@
 
 #cmakedefine THREAD_LOCK_DEBUG
 
+/// Undef if you do not have visual leak detector(https://vld.codeplex.com/) installed
+#cmakedefine HAVE_LIBVLD
+#ifdef HAVE_LIBVLD
+#include <vld.h>
+#endif
+
 /// Undef if you do not have zlib(http://www.zlib.net/) installed. 
 /// Required for support for parsing zipped files.
 #cmakedefine HAVE_ZLIB
