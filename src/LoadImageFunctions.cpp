@@ -180,13 +180,13 @@ bool H3DUtil::saveFreeImagePNG( const string &url,
   RGBA c;
 
   // Transfer values from the image
-  for( int x = 0; x < image.width(); ++x ) {
-    for( int y = 0; y < image.height(); ++y ) {
+  for( unsigned int x = 0; x < image.width(); ++x ) {
+    for( unsigned y = 0; y < image.height(); ++y ) {
       c= image.getPixel ( x, y );
-      pixelcolor.rgbRed = c.r*255;
-      pixelcolor.rgbGreen = c.g*255;
-      pixelcolor.rgbBlue = c.b*255;
-      pixelcolor.rgbReserved = c.a*255;
+      pixelcolor.rgbRed = BYTE( c.r*255 );
+      pixelcolor.rgbGreen = BYTE( c.g*255 );
+      pixelcolor.rgbBlue = BYTE( c.b*255 );
+      pixelcolor.rgbReserved = BYTE( c.a*255 );
       FreeImage_SetPixelColor(free_image,x,y,&pixelcolor);
     }
   }
@@ -715,7 +715,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
           // it is used properly.
           string locale_string( setlocale( LC_NUMERIC, NULL ) );
           if( locale_string.length() < 7 || locale_string.substr( 0, 7 ) != "English" ) {
-            H3DFloat test_data_comma( atof( "0,2" ) );
+            H3DFloat test_data_comma = H3DFloat( atof( "0,2" ) );
             if( test_data_comma > 0.1 ) {
               for( unsigned int j = 0; j < string_value.size(); ++j ) {
                 if( string_value[j] == '.' )
@@ -774,7 +774,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
     // If it does not exist SliceThickness is used.
     if( second_patient_pos_set ) {
       H3DFloat slice_distance( H3DAbs(patient_pos1 - patient_pos2) );
-      pixel_size.z = slice_distance * 1e-3; // to metres
+      pixel_size.z = slice_distance * H3DFloat( 1e-3 ); // to metres
     }
 
     // read all files and compose them into one image.
