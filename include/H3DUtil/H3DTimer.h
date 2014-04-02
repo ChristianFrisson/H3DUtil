@@ -49,4 +49,20 @@ public:
   
 }
 #endif
+
+// Macros for convenience.
+//
+// Using these macros means that client code can
+// compile with and without the profiler enabled 
+// and will not incur any overhead when it is disabled.
+#ifdef HAVE_PROFILER
+#define H3DTIMER_BEGIN(name)      H3DTimer::stepBegin ( name );
+#define H3DTIMER_END(name)        H3DTimer::stepEnd ( name );
+#define H3DTIMER_NEXT(prev,next)  H3DTimer::stepNext ( prev, next );
+#else
+#define H3DTIMER_BEGIN(name)
+#define H3DTIMER_END(name)
+#define H3DTIMER_NEXT(prev,next)
+#endif
+
 #endif
