@@ -281,7 +281,7 @@ H3DUtil::RGBA Image::imageValueToRGBA( void *_pixel_data ) {
       H3DFloat fv = getRationalValueAsFloat( pixel_data, 
                                              bytes_per_component );
       H3DFloat a = getRationalValueAsFloat( pixel_data + bytes_per_component, 
-                                             bytes_per_component );
+                                            bytes_per_component );
       return H3DUtil::RGBA( fv, fv, fv, a );
     }
     };
@@ -311,13 +311,13 @@ H3DUtil::RGBA Image::imageValueToRGBA( void *_pixel_data ) {
       return H3DUtil::RGBA( r, g, b, 1 );
     }
     case Image::RATIONAL: {
-      H3DFloat r = getSignedValueAsFloat( pixel_data, 
-                                          bytes_per_component );
-      H3DFloat g = getSignedValueAsFloat( pixel_data + bytes_per_component, 
-                                          bytes_per_component );
-      H3DFloat b = getSignedValueAsFloat( pixel_data + 
-                                          2 * bytes_per_component, 
-                                          bytes_per_component );
+      H3DFloat r = getRationalValueAsFloat( pixel_data, 
+                                            bytes_per_component );
+      H3DFloat g = getRationalValueAsFloat( pixel_data + bytes_per_component, 
+                                            bytes_per_component );
+      H3DFloat b = getRationalValueAsFloat( pixel_data + 
+                                            2 * bytes_per_component, 
+                                            bytes_per_component );
       return H3DUtil::RGBA( r, g, b, 1 );
     }
     };
@@ -346,13 +346,13 @@ H3DUtil::RGBA Image::imageValueToRGBA( void *_pixel_data ) {
       return H3DUtil::RGBA( r, g, b, 1 );
     }
     case Image::RATIONAL: {
-      H3DFloat b = getSignedValueAsFloat( pixel_data, 
-                                          bytes_per_component );
-      H3DFloat g = getSignedValueAsFloat( pixel_data + bytes_per_component, 
-                                          bytes_per_component );
-      H3DFloat r = getSignedValueAsFloat( pixel_data + 
-                                          2 * bytes_per_component, 
-                                          bytes_per_component );
+      H3DFloat b = getRationalValueAsFloat( pixel_data, 
+                                            bytes_per_component );
+      H3DFloat g = getRationalValueAsFloat( pixel_data + bytes_per_component, 
+                                            bytes_per_component );
+      H3DFloat r = getRationalValueAsFloat( pixel_data + 
+                                            2 * bytes_per_component, 
+                                            bytes_per_component );
       return H3DUtil::RGBA( r, g, b, 1 );
     }
     };
@@ -387,16 +387,16 @@ H3DUtil::RGBA Image::imageValueToRGBA( void *_pixel_data ) {
       return H3DUtil::RGBA( r, g, b, a );
     }
     case Image::RATIONAL: {
-      H3DFloat r = getSignedValueAsFloat( pixel_data, 
-                                          bytes_per_component );
-      H3DFloat g = getSignedValueAsFloat( pixel_data + bytes_per_component, 
-                                          bytes_per_component );
-      H3DFloat b = getSignedValueAsFloat( pixel_data + 
-                                          2 * bytes_per_component, 
-                                          bytes_per_component );
-      H3DFloat a = getSignedValueAsFloat( pixel_data + 
-                                          3 * bytes_per_component, 
-                                          bytes_per_component );
+      H3DFloat r = getRationalValueAsFloat( pixel_data, 
+                                            bytes_per_component );
+      H3DFloat g = getRationalValueAsFloat( pixel_data + bytes_per_component, 
+                                            bytes_per_component );
+      H3DFloat b = getRationalValueAsFloat( pixel_data + 
+                                            2 * bytes_per_component, 
+                                            bytes_per_component );
+      H3DFloat a = getRationalValueAsFloat( pixel_data + 
+                                            3 * bytes_per_component, 
+                                            bytes_per_component );
       return H3DUtil::RGBA( r, g, b, a );
     }
     };
@@ -431,16 +431,16 @@ H3DUtil::RGBA Image::imageValueToRGBA( void *_pixel_data ) {
       return H3DUtil::RGBA( r, g, b, a );
     }
     case Image::RATIONAL: {
-      H3DFloat b = getSignedValueAsFloat( pixel_data, 
-                                          bytes_per_component );
-      H3DFloat g = getSignedValueAsFloat( pixel_data + bytes_per_component, 
-                                          bytes_per_component );
-      H3DFloat r = getSignedValueAsFloat( pixel_data + 
-                                          2 * bytes_per_component, 
-                                          bytes_per_component );
-      H3DFloat a = getSignedValueAsFloat( pixel_data + 
-                                          3 * bytes_per_component, 
-                                          bytes_per_component );
+      H3DFloat b = getRationalValueAsFloat( pixel_data, 
+                                            bytes_per_component );
+      H3DFloat g = getRationalValueAsFloat( pixel_data + bytes_per_component, 
+                                            bytes_per_component );
+      H3DFloat r = getRationalValueAsFloat( pixel_data + 
+                                            2 * bytes_per_component, 
+                                            bytes_per_component );
+      H3DFloat a = getRationalValueAsFloat( pixel_data + 
+                                            3 * bytes_per_component, 
+                                            bytes_per_component );
       return H3DUtil::RGBA( r, g, b, a );
     }
     };
