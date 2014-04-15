@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -119,7 +119,7 @@ namespace H3DUtil {
 
     /// Constructor.
     RGBA( const RGB &c,
-	  H3DFloat _a ) : r(c.r), g(c.g), b(c.b), a(_a) {}
+    H3DFloat _a ) : r(c.r), g(c.g), b(c.b), a(_a) {}
     H3DFloat r, g, b, a;
   };
 

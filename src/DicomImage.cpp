@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3D API.
 //
@@ -99,13 +99,13 @@ void H3DUtil::DicomImage::loadImage( const string &url ) {
 
   ::DicomImage *image = new ::DicomImage( url.c_str() );
   if (image->getStatus() != EIS_Normal) {
-		string error_string( ::DicomImage::getString(image->getStatus()) );
-		delete image;
-		DJDecoderRegistration::cleanup();
+    string error_string( ::DicomImage::getString(image->getStatus()) );
+    delete image;
+    DJDecoderRegistration::cleanup();
     throw CouldNotLoadDicomImage( url,
                                   error_string,
                                   H3D_FULL_LOCATION );
-	}
+  }
   w = image->getWidth();
   h = image->getHeight();
   d = image->getFrameCount();

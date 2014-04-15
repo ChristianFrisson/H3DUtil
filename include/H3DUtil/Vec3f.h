@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -41,7 +41,7 @@ namespace H3DUtil {
     struct Vec3d;
 
     /// A Vec3f specifies a high-precision 3d vector. The values of the 
-    /// Vec3f are H3DFloat.		
+    /// Vec3f are H3DFloat.
     /// \ingroup H3DUtilBasicTypes
     struct H3DUTIL_API Vec3f {
 
@@ -70,11 +70,11 @@ namespace H3DUtil {
       /// \ref Vec3fCrossProduct "operator*" operator can also be used
       /// to get the dot product between two vectors.
       inline Vec3f crossProduct( const Vec3f &v ) const {
-        return 	Vec3f( y*v.z - z*v.y,
+        return  Vec3f( y*v.z - z*v.y,
                        z*v.x - x*v.z,
                        x*v.y - y*v.x );
       }
-				
+
       /// Normalize the vector to be of length 1.
       /// \throws NormalizeError If the vector is of zero length.
       ///
@@ -113,12 +113,12 @@ namespace H3DUtil {
       inline H3DFloat lengthSqr() const {
         return x*x + y*y + z*z;
       }
-		
+
       /// Returns the length of the vector.
       inline H3DFloat length() const {
         return H3DSqrt( x*x + y*y + z*z );
       }
-		
+
       inline H3DFloat &operator[]( int i ) { 
         if( i == 0 ) return x;
         if( i == 1 ) return y;
@@ -198,10 +198,10 @@ namespace H3DUtil {
     }
     
     /// Function for printing a Vec3f to an ostream.
-	  inline ostream& operator<<( ostream &os, const Vec3f &v ) {
-		  os << v.x << " " << v.y << " " << v.z;
-		  return os;
-	  }
+    inline ostream& operator<<( ostream &os, const Vec3f &v ) {
+      os << v.x << " " << v.y << " " << v.z;
+      return os;
+    }
 
     /// Multiplication with float.
     inline Vec3f operator*( const float &a, const Vec3f &b ) { return b * a; }
@@ -224,7 +224,7 @@ namespace H3DUtil {
 
     /// Subtraction between two Vec3f.
     inline Vec3f operator-( const Vec3f &a, const Vec3f &b ) { return a + (-b); }
-				
+
     /// \}
 
   }

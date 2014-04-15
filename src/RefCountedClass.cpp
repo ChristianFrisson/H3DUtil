@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -63,11 +63,11 @@ RefCountedClass::~RefCountedClass() {
 }
 
 void RefCountedClass::ref() {
-	bool locked = false;
+  bool locked = false;
   if( ref_count_lock_pointer ) {
     ref_count_lock_pointer->lock();
-		locked = true;
-	}
+    locked = true;
+  }
   ++ref_count;
 #ifdef REF_COUNT_DEBUG
   Console(1) << "Ref " << getName() << " " << this << ": " 

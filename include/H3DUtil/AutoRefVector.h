@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -51,7 +51,7 @@ namespace H3DUtil {
     typedef typename std::vector<NodeClass*>::size_type size_type;
     /// A signed integral type.
     typedef typename std::vector<NodeClass*>::difference_type difference_type; 
-	 /// Const iterator used to iterate through a vector.
+    /// Const iterator used to iterate through a vector.
     typedef typename std::vector<NodeClass*>::const_iterator const_iterator;
     /// Iterator used to iterate backwards through a vector.
     typedef typename std::vector<NodeClass*>::const_reverse_iterator 

@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -119,7 +119,7 @@ namespace H3DUtil {
     inline bool operator==( const Rotation &r1, const Rotation &r2 ) {
       return r1.axis == r2.axis && r1.angle == r2.angle;
     }
-		
+
     /// Negation of a Rotation is the Rotation around the same axis
     /// but in the other direction.
     ///
@@ -176,10 +176,10 @@ namespace H3DUtil {
     }
 
     /// Function for printing a Rotation to an ostream.
-	  inline ostream& operator<<( ostream &os, const Rotation &r ) {
-		  os << r.axis << " " << r.angle;
-		  return os;
-	  }
+    inline ostream& operator<<( ostream &os, const Rotation &r ) {
+      os << r.axis << " " << r.angle;
+      return os;
+    }
 
     /// Multiplication of Rotation is the composition of the rotations.
     Rotation H3DUTIL_API operator*( const Rotation &r1 ,const Rotation &r2 );

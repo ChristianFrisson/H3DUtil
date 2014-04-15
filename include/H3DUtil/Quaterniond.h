@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -40,7 +40,7 @@ namespace H3DUtil {
   namespace ArithmeticTypes {
     // forward declarations.
     class Matrix3d;
-	class Matrix3d;
+    class Matrix3d;
     class Rotationd;
 
     /// Quaterniond describes an arbitrary rotation.
@@ -126,10 +126,10 @@ namespace H3DUtil {
     /// \{
 
     /// Function for printing a Quaterniond to an ostream.
-	  inline ostream& operator<<( ostream &os, const Quaterniond &q ) {
-		  os << q.v << " " << q.w;
-		  return os;
-	  }
+    inline ostream& operator<<( ostream &os, const Quaterniond &q ) {
+      os << q.v << " " << q.w;
+      return os;
+    }
 
     /// Equality between two Quaterniond instances.
     inline bool operator==( const Quaterniond &q1, const Quaterniond &q2 ) {

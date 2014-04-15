@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -104,7 +104,7 @@ namespace H3DUtil {
     /// \ingroup H3DUtilBasicTypes
     /// \{
 
-				
+
     /// Print a Vec4f values to a ostream.
     inline ostream& operator<<( ostream &os, const Vec4f &v ) {
       os << v.x << " " << v.y << " " << v.z << " " << v.w;
@@ -119,7 +119,7 @@ namespace H3DUtil {
     inline Vec4f operator+( const Vec4f &v1, const Vec4f &v2 ) {
       return Vec4f( v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w );
     }
-		
+
     /// Multiplication between Vec4f and float.
     inline Vec4f operator*( const Vec4f &v, const float &f ) {
       return Vec4f( v.x * f, v.y * f, v.z * f, v.w * f );
@@ -167,7 +167,7 @@ namespace H3DUtil {
     inline Vec4f operator-( const Vec4f &a, const Vec4f &b ) { 
       return a + (-b); 
     }
-				
+
     // \}
     
   }

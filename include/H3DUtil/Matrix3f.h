@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -79,12 +79,12 @@ namespace H3DUtil {
         m[1][0] = 0; m[1][1] = 1; m[1][2] = 0;
         m[2][0] = 0; m[2][1] = 0; m[2][2] = 1;
       }
-				
+
       /// Returns the transpose of the matrix.
       inline Matrix3f transpose() const {
         return Matrix3f( m[0][0], m[1][0], m[2][0],
-												 m[0][1], m[1][1], m[2][1],
-												 m[0][2], m[1][2], m[2][2] );
+                         m[0][1], m[1][1], m[2][1],
+                         m[0][2], m[1][2], m[2][2] );
       };
 
       /// Returns the inverse of the matrix.
@@ -134,7 +134,7 @@ namespace H3DUtil {
     /// automatically defined from the explicit ones defined here.
     /// \ingroup H3DUtilBasicTypes
     /// \{
-				
+
     /// Multiplication between two Matrix3f instances.
     inline Matrix3f operator*( const Matrix3f &m1, const Matrix3f &m2 ) {
       return Matrix3f( 
@@ -156,7 +156,7 @@ namespace H3DUtil {
                       m1[1][0]+m2[1][0], m1[1][1]+m2[1][1], m1[1][2]+m2[1][2],
                       m1[2][0]+m2[2][0], m1[2][1]+m2[2][1], m1[2][2]+m2[2][2] );
     }
-		
+
     /// Muliplication between Matrix3f and float. 
     inline Matrix3f operator*( const Matrix3f &m, const float &f ) {
       return Matrix3f( m[0][0]*f, m[0][1]*f, m[0][2]*f,
@@ -196,7 +196,7 @@ namespace H3DUtil {
      }
 
     /// Function for printing a Matrix3f to an ostream.
-	  H3DUTIL_API ostream& operator<<( ostream &os, const Matrix3f &m );
+    H3DUTIL_API ostream& operator<<( ostream &os, const Matrix3f &m );
 
     /// Multiplication with float.
     inline Matrix3f operator*( const float &a, const Matrix3f &b ) { return b * a; }

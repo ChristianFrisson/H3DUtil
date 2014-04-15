@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -21,11 +21,8 @@
 //    www.sensegraphics.com for more information.
 //
 //
-/// \file TimeStamp.h
-/// \brief Routines to handle time stamping of the field network
-///
-/// TimeStamp stores an internal time value that represents the seconds
-/// elapsed since January 1, 1970.
+/// \file H3DTimer.h
+/// \brief Header for H3DTimer class.
 //
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __H3DTIMER_H__
@@ -39,14 +36,19 @@
 
 namespace H3DUtil{
 
- class H3DUTIL_API H3DTimer:public sofa::helper::AdvancedTimer{
-   
-public:
-    H3DTimer() : AdvancedTimer(  ) {}
+  /// This is basically a wrapper class around sofa::helper::AdvancedTimer.
+  /// Currently it does not add any new features to sofa::helper::AdvancedTimer
+  /// but there might be some new ones in the future.
+  class H3DUTIL_API H3DTimer:public sofa::helper::AdvancedTimer{
 
+  public:
+    /// Constructor
+    H3DTimer() : AdvancedTimer(  ) {}
+    
+    /// Call this function when ending profiling section.
+    /// Call start function when starting a profiling section.
     static void end(IdTimer id, std::stringstream& profiledResult);
   };
-  
 }
 #endif
 

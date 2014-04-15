@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -716,15 +716,15 @@ unsigned int Image::nrPixelComponents() {
 namespace ImageInternals {
   template< class A, class FloatType >
   void buildNormalizedData( FloatType *normalized_data, 
-			    void *orig_data,
-			    unsigned int nr_elements,
-			    float scale,
-			    float bias ) {
+          void *orig_data,
+          unsigned int nr_elements,
+          float scale,
+          float bias ) {
     A *d = (A*) orig_data;
     
     for (unsigned int i = 0; i < nr_elements; ++i) {
       normalized_data[i] = 
-	(d[ i ] / FloatType( numeric_limits<A >::max() ) ) * scale + bias;
+      (d[ i ] / FloatType( numeric_limits<A >::max() ) ) * scale + bias;
       if( normalized_data[i] < 0 ) normalized_data[i] = 0;
     }
   }
@@ -754,29 +754,29 @@ namespace ImageInternals {
     
     if( pixel_component_type ==Image::UNSIGNED ) {
       if( bits_per_pixel == 8*nr_components ) {
-	  buildNormalizedData< unsigned char >( normalized_data, image->getImageData(), 
-						nr_voxels * nr_components, (float)scale, (float)bias ); 
+        buildNormalizedData< unsigned char >( normalized_data, image->getImageData(), 
+            nr_voxels * nr_components, (float)scale, (float)bias ); 
       } else if( bits_per_pixel == 16*nr_components ) {
-	buildNormalizedData< unsigned short >( normalized_data, image->getImageData(), 
-					       nr_voxels * nr_components, (float)scale, (float)bias );
+        buildNormalizedData< unsigned short >( normalized_data, image->getImageData(), 
+                 nr_voxels * nr_components, (float)scale, (float)bias );
       } else if( bits_per_pixel == 32*nr_components ) {
-	  buildNormalizedData< unsigned int >( normalized_data, image->getImageData(), 
-					       nr_voxels * nr_components, (float)scale, (float)bias ); 
+        buildNormalizedData< unsigned int >( normalized_data, image->getImageData(), 
+                 nr_voxels * nr_components, (float)scale, (float)bias ); 
       } else {
-	return NULL;
+        return NULL;
       }
     } else if( pixel_component_type == Image::SIGNED ) { 
       if( bits_per_pixel == 8*nr_components ) {
-	buildNormalizedData< char >( normalized_data, image->getImageData(), 
-				     nr_voxels * nr_components, (float)scale, (float)bias ); 
+        buildNormalizedData< char >( normalized_data, image->getImageData(), 
+             nr_voxels * nr_components, (float)scale, (float)bias ); 
       } else if( bits_per_pixel == 16*nr_components ) {
-	buildNormalizedData< short >( normalized_data, image->getImageData(), 
-				      nr_voxels * nr_components, (float)scale, (float)bias );
+        buildNormalizedData< short >( normalized_data, image->getImageData(), 
+              nr_voxels * nr_components, (float)scale, (float)bias );
       } else if( bits_per_pixel == 32*nr_components ) {
-	buildNormalizedData< int >( normalized_data, image->getImageData(), 
-				    nr_voxels * nr_components, (float)scale, (float)bias ); 
+        buildNormalizedData< int >( normalized_data, image->getImageData(), 
+            nr_voxels * nr_components, (float)scale, (float)bias ); 
       } else { 
-	return NULL;
+        return NULL;
       }
     } else {
       return NULL;

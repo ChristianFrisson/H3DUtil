@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -52,7 +52,7 @@ namespace H3DUtil {
       /// Constructor.
       Vec2d( H3DDouble _x,
              H3DDouble _y ) : x(_x), y(_y) {}
-						
+
       /// Conversion from Vec2d.
       Vec2d( const Vec2f &v ): x( v.x ), y( v.y ) {}
 
@@ -138,7 +138,7 @@ namespace H3DUtil {
     /// defined here.
     /// \ingroup H3DUtilBasicTypes
     /// \{
-				
+
     /// Function for printing a Vec2d to an ostream.
     inline ostream& operator<<( ostream &os, const Vec2d &v ) {
       os << v.x << " " << v.y;
@@ -172,7 +172,7 @@ namespace H3DUtil {
 
     /// Subtraction between two Vec2d.
     inline Vec2d operator-( const Vec2d &a, const Vec2d &b ) { return a + (-b); }
-				
+
     // \}
 
   }

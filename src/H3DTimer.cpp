@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -22,7 +22,7 @@
 //
 //
 /// \file H3DTimer.cpp
-/// \brief Routines to handle time stamping.
+/// \brief Source file for H3DTimer class.
 ///
 //
 //////////////////////////////////////////////////////////////////////////////

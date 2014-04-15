@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -169,7 +169,7 @@ Matrix4d Matrix4d::transformInverse() const {
   H3DDouble inv01 = -(m01*m22-t20)*t17;
   H3DDouble inv02 = (t23-t24)*t17;
   H3DDouble inv03 = 
-	-(t23*m23-m01*m13*m22-t24*m23+m11*m03*m22+t20*m13-m21*m03* m12)*t17;
+  -(t23*m23-m01*m13*m22-t24*m23+m11*m03*m22+t20*m13-m21*m03* m12)*t17;
   H3DDouble inv10 = -(m10*m22-m20*m12)*t17;
   H3DDouble inv11 = (m00*m22-t43)*t17;
   H3DDouble inv12 = -(t46-t47)*t17;
@@ -180,9 +180,9 @@ Matrix4d Matrix4d::transformInverse() const {
   H3DDouble inv23 = -(t4*m23-t51*m21-t8*m23+t54*m21+t12*m13-t57*m11)*t17;
   
   return Matrix4d( inv00, inv01, inv02, inv03,
-		   inv10, inv11, inv12, inv13,
-		   inv20, inv21, inv22, inv23,
-		   0, 0, 0, 1 );  
+       inv10, inv11, inv12, inv13,
+       inv20, inv21, inv22, inv23,
+       0, 0, 0, 1 );  
 }
 
 // This code has been automatically generated from Maple 7, see maple/matrix_inverse.mxs.
@@ -231,7 +231,7 @@ Matrix4d Matrix4d::inverse() const {
   H3DDouble t37 = m10*m31;
   H3DDouble t38 = m02*m23;
   H3DDouble t40 = m03*m22;
-  H3DDouble t42 =	
+  H3DDouble t42 =
     t14*t15-t14*t17-t19*t20+t19*t22+t24*t25-t24*t27-
     t29*t15+t29*t17+t32*t33-t32*t35-t37*t38+t37*t40;
   H3DDouble t43 = m20*m01;
@@ -249,7 +249,7 @@ Matrix4d Matrix4d::inverse() const {
   H3DDouble d = t42+t63;
 
   if( H3DAbs(d) == 0 ){
-	throw SingularMatrix4d( "", H3D_FULL_LOCATION );
+  throw SingularMatrix4d( "", H3D_FULL_LOCATION );
   }
 
   H3DDouble t65 = 1/d;
@@ -312,18 +312,18 @@ Matrix4d Matrix4d::inverse() const {
 }
 
 Matrix3d Matrix4d::getRotationPart() const {
-	Matrix3d m = getScaleRotationPart();
-	Vec3d x_axis = m * Vec3d(1,0,0);
-	Vec3d y_axis = m * Vec3d(0,1,0);
-	Vec3d z_axis = m * Vec3d(0,0,1);
-	
-	x_axis.normalize();
-	y_axis.normalize();
-	z_axis.normalize();
-	
-	return Matrix3d( x_axis.x, y_axis.x, z_axis.x,
-									 x_axis.y, y_axis.y, z_axis.y,
-									 x_axis.z, y_axis.z, z_axis.z );
+  Matrix3d m = getScaleRotationPart();
+  Vec3d x_axis = m * Vec3d(1,0,0);
+  Vec3d y_axis = m * Vec3d(0,1,0);
+  Vec3d z_axis = m * Vec3d(0,0,1);
+  
+  x_axis.normalize();
+  y_axis.normalize();
+  z_axis.normalize();
+  
+  return Matrix3d( x_axis.x, y_axis.x, z_axis.x,
+                   x_axis.y, y_axis.y, z_axis.y,
+                   x_axis.z, y_axis.z, z_axis.z );
 }
 
 ostream& ArithmeticTypes::operator<<( ostream &os, const Matrix4d &m ) {

@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -57,7 +57,7 @@ Matrix3f Matrix3f::inverse() const {
   H3DFloat t14 = m20*m11;
   H3DFloat d = (t4*m22-t6*m12-t8*m22+t10*m02+t12*m12-t14*m02);
   if( H3DAbs(d) == 0 ) 
-	throw SingularMatrix3f( "", H3D_FULL_LOCATION );
+  throw SingularMatrix3f( "", H3D_FULL_LOCATION );
   H3DFloat t17 = 1/d;
   H3DFloat inv00 = (m11*m22-m21*m12)*t17;
   H3DFloat inv01 = -(m01*m22-m21*m02)*t17;
@@ -70,8 +70,8 @@ Matrix3f Matrix3f::inverse() const {
   H3DFloat inv22 = (t4-t8)*t17;
 
   return Matrix3f( inv00, inv01, inv02, 
-		   inv10, inv11, inv12, 
-		   inv20, inv21, inv22 );
+       inv10, inv11, inv12, 
+       inv20, inv21, inv22 );
 }
 
 

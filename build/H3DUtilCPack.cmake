@@ -54,19 +54,26 @@ IF( GENERATE_CPACK_PROJECT )
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/zlib/
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/dcmtk/
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/teem/
-                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/Bzip2/ )
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/Bzip2/
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/sofahelper/
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/vld/ )
       SET( EXTERNAL_INCLUDE_INSTALL_PATHS External/include/pthread
                                           External/include/FreeImage
                                           External/include/zlib
                                           External/include/dcmtk
                                           External/include/teem
-                                          External/include/Bzip2 )
+                                          External/include/Bzip2
+                                          External/include/sofahelper
+                                          External/include/vld )
                                    
       SET( EXTERNAL_LIBRARIES ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/pthreadVC2.lib
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/FreeImage.lib
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/zlib.lib
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/teem.lib
-                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/libbz2.lib )
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/libbz2.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/vld.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/SofaHelper_1_02.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/SofaHelper_1_0d2.lib )
       SET( DCM_NAME_LIST ofstd dcmjpeg ijg8 ijg12 ijg16 dcmdata dcmimgle dcmimage )
       FOREACH( library_name ${DCM_NAME_LIST} )
         SET( EXTERNAL_STATIC_LIBRARIES ${EXTERNAL_STATIC_LIBRARIES}
@@ -83,7 +90,11 @@ IF( GENERATE_CPACK_PROJECT )
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/FreeImage.dll
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/zlib1.dll
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/teem.dll
-                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/libbz2.dll )
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/libbz2.dll
+                             ${H3DAPI_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/SofaHelper_1_0d2.dll
+                             ${H3DAPI_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/SofaHelper_1_02.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/vld_x86.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/dbghelp.dll )
 
     ELSEIF( NOT DEFINED HAPI_CPACK_EXTERNAL_ROOT )
       MESSAGE( WARNING "H3DUtil_CPACK_EXTERNAL_ROOT must be set to the External directory used by H3DUtil in order to package properly." )
@@ -173,13 +184,13 @@ IF( GENERATE_CPACK_PROJECT )
   ENDIF( WIN32 )
 
   IF( UNIX )
-    SET(CPACK_SOURCE_INSTALLED_DIRECTORIES "${H3DUtil_SOURCE_DIR}/..;/" )	
+    SET(CPACK_SOURCE_INSTALLED_DIRECTORIES "${H3DUtil_SOURCE_DIR}/..;/" )  
     SET(CPACK_SOURCE_GENERATOR TGZ ZIP ) 
     SET(CPACK_SOURCE_PACKAGE_FILE_NAME "h3dutil-${H3DUTIL_MAJOR_VERSION}.${H3DUTIL_MINOR_VERSION}.${H3DUTIL_BUILD_VERSION}") 
 
 
     SET( H3DUTIL_CPACK_IGNORE_PATTERNS ${H3DUTIL_CPACK_IGNORE_PATTERNS}
-				    "/CVS/;/.svn/;/.bzr/;/.hg/;/.git.*/;.swp$;.#;/#;~$")
+            "/CVS/;/.svn/;/.bzr/;/.hg/;/.git.*/;.swp$;.#;/#;~$")
     SET(CPACK_SOURCE_IGNORE_FILES ${H3DUTIL_CPACK_IGNORE_PATTERNS} )
   ENDIF( UNIX )
 
@@ -241,8 +252,8 @@ IF( GENERATE_CPACK_PROJECT )
 
   # H3DUtil.cmake that goes to headers is not needed unless sources is required.
   INSTALL( FILES ${H3DUtil_SOURCE_DIR}/../include/H3DUtil/H3DUtil.cmake
-			DESTINATION H3DUtil/include/H3DUtil
-			COMPONENT H3DUtil_cpack_sources )
+      DESTINATION H3DUtil/include/H3DUtil
+      COMPONENT H3DUtil_cpack_sources )
   
   # Install src files.
   INSTALL( FILES ${H3DUTIL_SRCS}
@@ -266,7 +277,7 @@ IF( GENERATE_CPACK_PROJECT )
   INSTALL( FILES ${H3DUtil_SOURCE_DIR}/modules/FindDCMTK.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindFreeImage.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindH3DBZip2.cmake
-                 ${H3DUtil_SOURCE_DIR}/modules/FindH3DTEEM.cmake
+                 ${H3DUtil_SOURCE_DIR}/modules/FindH3DTeem.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindH3DZLIB.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindMd5sum.cmake
                  ${H3DUtil_SOURCE_DIR}/modules/FindPTHREAD.cmake
@@ -328,7 +339,7 @@ IF( GENERATE_CPACK_PROJECT )
   IF( NOT H3D_USE_DEPENDENCIES_ONLY )
     IF (NOT TARGET HAPI)
       INCLUDE(CPack)
-      IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")	
+      IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")  
         INCLUDE(UseDebian)
         IF(DEBIAN_FOUND)
           ADD_DEBIAN_TARGETS(H3DUtil)

@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -53,7 +53,7 @@ namespace H3DUtil {
       /// Constructor.
       Vec2f( H3DFloat _x,
              H3DFloat _y ) : x(_x), y(_y) {}
-						
+
       /// Return the components by their index, 
       /// x has index 0
       /// y has index 1
@@ -85,7 +85,7 @@ namespace H3DUtil {
       inline H3DFloat dotProduct( const Vec2f &v ) const {
         return x*v.x + y*v.y;
       }
-						
+
       /// Normalize the vector to be of length 1.
       /// \throws NormalizeError If the vector is of zero length.
       ///
@@ -139,7 +139,7 @@ namespace H3DUtil {
     /// defined here.
     /// \ingroup H3DUtilBasicTypes
     /// \{
-				
+
     /// Function for printing a Vec2f to an ostream.
     inline ostream& operator<<( ostream &os, const Vec2f &v ) {
       os << v.x << " " << v.y;

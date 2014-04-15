@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -79,7 +79,7 @@ namespace H3DUtil {
     pthread_mutex_t mutex;
   };
 
-	/// Read-write lock that allows only one writing thread or one or
+  /// Read-write lock that allows only one writing thread or one or
   /// more reading threads on the same lock.
   class H3DUTIL_API ReadWriteLock {
   public:
@@ -242,7 +242,7 @@ struct hash_pthread
 #ifdef H3D_WINDOWS
                 return _Left.x!=0;
 #else
-		return _Left!=0;
+    return _Left!=0;
 #endif
                 }
         };

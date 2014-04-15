@@ -97,21 +97,21 @@ IF( H3DUTIL_INCLUDE_DIR AND EXTERNAL_ROOT )
                                
                                "#define HAVE_TEEM"
                                "include" "teem" )
-    IF( TEEM_BZIP2 )
+    IF( Teem_BZIP2 )
       set( externals_to_look_for ${externals_to_look_for} "Bzip2" )
-    ENDIF( TEEM_BZIP2 )
+    ENDIF( Teem_BZIP2 )
     
     set( externals_to_look_for ${externals_to_look_for}
                                "lib" "teem" )
-    IF( TEEM_BZIP2 )
+    IF( Teem_BZIP2 )
       set( externals_to_look_for ${externals_to_look_for} "libbz2" )
-    ENDIF( TEEM_BZIP2 )
+    ENDIF( Teem_BZIP2 )
     
     set( externals_to_look_for ${externals_to_look_for}
                                "bin" "teem" )
-    IF( TEEM_BZIP2 )
+    IF( Teem_BZIP2 )
       set( externals_to_look_for ${externals_to_look_for} "libbz2" )
-    ENDIF( TEEM_BZIP2 )
+    ENDIF( Teem_BZIP2 )
     
     set( externals_to_look_for ${externals_to_look_for}                               
                                "#define"

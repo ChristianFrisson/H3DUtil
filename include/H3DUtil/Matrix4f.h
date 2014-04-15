@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -81,7 +81,7 @@ namespace H3DUtil {
       explicit Matrix4f( const Vec3f& translation, 
                          const Rotation& rotation= Rotation(), 
                          const Vec3f& scale= Vec3f(1,1,1) );
-				
+
       /// Constructor. From Rotation object.
       explicit Matrix4f( const Rotation &r );
 
@@ -102,7 +102,7 @@ namespace H3DUtil {
         m[2][0] = 0; m[2][1] = 0; m[2][2] = 1; m[2][3] = 0;
         m[3][0] = 0; m[3][1] = 0; m[3][2] = 0; m[3][3] = 1;
       }
-			
+
       /// Returns the inverse of the matrix assuming that it is on 
       /// the form
       ///
@@ -112,21 +112,21 @@ namespace H3DUtil {
       ///    0   0   0   1   ]
       ///
       Matrix4f transformInverse() const;
-	
+
       /// Returns the transpose of the matrix.
       inline Matrix4f transpose() const {
         return Matrix4f( m[0][0], m[1][0], m[2][0], m[3][0],
-												 m[0][1], m[1][1], m[2][1], m[3][1],
-												 m[0][2], m[1][2], m[2][2], m[3][2],
+                         m[0][1], m[1][1], m[2][1], m[3][1],
+                         m[0][2], m[1][2], m[2][2], m[3][2],
                          m[0][3], m[1][3], m[2][3], m[3][3] );
       };
 
       /// Returns the inverse of the matrix.
       Matrix4f inverse() const;
 
-      /// Get a row of the matrix.				
+      /// Get a row of the matrix.
       inline H3DFloat* operator[]( const int i ) { return m[i]; }
-				
+
       /// Get a row of the matrix.
       inline const H3DFloat* operator[]( const int i ) const { return m[i]; }
 
@@ -150,20 +150,20 @@ namespace H3DUtil {
         m[i][j] = v;
       }
 
-			/// Returns the scale and rotation part of the Matrix4f.
-			inline Matrix3f getScaleRotationPart() const {
-				return Matrix3f( m[0][0], m[0][1], m[0][2],
-												 m[1][0], m[1][1], m[1][2],
-												 m[2][0], m[2][1], m[2][2] );
-			}
+      /// Returns the scale and rotation part of the Matrix4f.
+      inline Matrix3f getScaleRotationPart() const {
+        return Matrix3f( m[0][0], m[0][1], m[0][2],
+                         m[1][0], m[1][1], m[1][2],
+                         m[2][0], m[2][1], m[2][2] );
+      }
 
       /// Get the scaling part of the matrix for each axis.
       inline Vec3f getScalePart() const {
         return getScaleRotationPart().getScalePart();
       }
 
-			/// Returns the rotation part of the Matrix4f.
-			Matrix3f getRotationPart() const;
+      /// Returns the rotation part of the Matrix4f.
+      Matrix3f getRotationPart() const;
 
       /// Returns the translation part of the Matrix4f.
       Vec3f getTranslationPart() const {
@@ -245,7 +245,7 @@ namespace H3DUtil {
                        m[2][0]*f, m[2][1]*f, m[2][2]*f, m[2][3]*f,
                        m[3][0]*f, m[3][1]*f, m[3][2]*f, m[3][3]*f );
     }
-	  
+
     /// Equality between two Matrix4f instances.
     inline bool operator==( const Matrix4f &m1, const Matrix4f &m2 ) {
        return m1[0][0]==m2[0][0] && m1[0][1]==m2[0][1] && m1[0][2]==m2[0][2] && 

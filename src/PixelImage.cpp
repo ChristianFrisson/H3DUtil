@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -98,7 +98,7 @@ PixelImage::PixelImage( Image *image,
       pixel_size = image->pixelSize();
       unsigned int size = (w * h * d * bits_per_pixel)/8;
       image_data = new unsigned char[ size ];
-	  memcpy( image_data, image->getImageData(), size );
+      memcpy( image_data, image->getImageData(), size );
     } else {
       unsigned int size = 
         (new_width * new_height * new_depth * bits_per_pixel)/8;

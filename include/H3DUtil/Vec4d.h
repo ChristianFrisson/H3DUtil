@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -101,7 +101,7 @@ namespace H3DUtil {
     /// \ingroup H3DUtilBasicTypes
     /// \{
 
-				
+
     /// Print a Vec4d values to a ostream.
     inline ostream& operator<<( ostream &os, const Vec4d &v ) {
       os << v.x << " " << v.y << " " << v.z << " " << v.w;
@@ -116,7 +116,7 @@ namespace H3DUtil {
     inline Vec4d operator+( const Vec4d &v1, const Vec4d &v2 ) {
       return Vec4d( v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w );
     }
-		
+
     /// Multiplication between Vec4d and double.
     inline Vec4d operator*( const Vec4d &v, const double &d ) {
       return Vec4d( v.x * d, v.y * d, v.z * d, v.w * d );
@@ -135,7 +135,7 @@ namespace H3DUtil {
 
     /// Subtraction between two Vec4d.
     inline Vec4d operator-( const Vec4d &a, const Vec4d &b ) { return a + (-b); }
-				
+
     /// \}
   }
 }

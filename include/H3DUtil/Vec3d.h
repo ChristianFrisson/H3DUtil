@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -69,11 +69,11 @@ namespace H3DUtil {
       /// \ref Vec3fCrossProduct "operator*" operator can also be
       /// used to get the dot product between two vectors.
       inline Vec3d crossProduct( const Vec3d &v ) const {
-        return 	Vec3d( y*v.z - z*v.y,
+        return  Vec3d( y*v.z - z*v.y,
                        z*v.x - x*v.z,
                        x*v.y - y*v.x );
       }
-				
+
       /// Normalize the vector to be of length 1.
       /// \throws NormalizeError If the vector is of zero length.
       ///
@@ -161,7 +161,7 @@ namespace H3DUtil {
     inline Vec3d operator+( const Vec3d &v1, const Vec3d &v2 ) {
       return Vec3d( v1.x + v2.x, v1.y + v2.y, v1.z + v2.z );
     }
-				
+
     /// Multiply a Vec3d with a double.
     inline Vec3d operator*( const Vec3d &v, const double &d ) {
       return Vec3d( v.x * d, v.y * d, v.z * d );
@@ -209,7 +209,7 @@ namespace H3DUtil {
 
     /// Subtraction between two Vec3d.
     inline Vec3d operator-( const Vec3d &a, const Vec3d &b ) { return a + (-b); }
-				
+
     // \}
   }
 }

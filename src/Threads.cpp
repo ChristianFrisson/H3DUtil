@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -321,15 +321,15 @@ void *PeriodicThread::thread_func( void * _data ) {
 
     sched_yield();
 #ifndef WIN32
-		// According to documentation usleep(0) should not do anything so it should
-		// not do any harm to add this code. The reason to add it is that
-		// sched_yield does not seem to do what we expect it to
-		// do on linux ubuntu. It should yield to other threads of same or
-		// higher priority but even if there are threads waiting to obtain
-		// a lock that lock is in some cases never obtained when sched_yield
-		// is used. Therefore usleep(0) is added because it must do something
-		// since the lock is suddenly obtained.
-		usleep(0);
+    // According to documentation usleep(0) should not do anything so it should
+    // not do any harm to add this code. The reason to add it is that
+    // sched_yield does not seem to do what we expect it to
+    // do on linux ubuntu. It should yield to other threads of same or
+    // higher priority but even if there are threads waiting to obtain
+    // a lock that lock is in some cases never obtained when sched_yield
+    // is used. Therefore usleep(0) is added because it must do something
+    // since the lock is suddenly obtained.
+    usleep(0);
 #endif
   }
 } 
@@ -359,7 +359,7 @@ PeriodicThread::PeriodicThread( int _thread_priority,
              _thread_priority == THREAD_PRIORITY_NORMAL ? NORMAL_PRIORITY :
              _thread_priority == THREAD_PRIORITY_ABOVE_NORMAL ? HIGH_PRIORITY :
              REALTIME_PRIORITY;
-	int policy = SCHED_OTHER;
+  int policy = SCHED_OTHER;
 #else
   // This is actually not really correct but is put here anyways since priority
   // should be set to something. In old code 20 was used for HIGH_PRIORITY
@@ -367,12 +367,12 @@ PeriodicThread::PeriodicThread( int _thread_priority,
   priority = _thread_priority < 20 ? NORMAL_PRIORITY :
              _thread_priority < 99 ? HIGH_PRIORITY :
              REALTIME_PRIORITY;
-	int policy =
+  int policy =
     priority > NORMAL_PRIORITY ?
     SCHED_FIFO : SCHED_OTHER;
 #endif
 
-	pthread_attr_t attr;
+  pthread_attr_t attr;
   sched_param p;
   p.sched_priority = _thread_priority;
   pthread_attr_init( &attr );
@@ -435,12 +435,12 @@ PeriodicThread::~PeriodicThread() {
   
   if( !pthread_equal( this_thread, thread_id ) ) {
     callback_lock.lock();
-		callbacks_added_lock.lock();
-		// No need to free ids here since they are local to the PeriodicThread
-		// and this is the PeriodicThread destructor.
-		callbacks_added.clear();
-		callbacks.clear();
-		callbacks_added_lock.unlock();
+    callbacks_added_lock.lock();
+    // No need to free ids here since they are local to the PeriodicThread
+    // and this is the PeriodicThread destructor.
+    callbacks_added.clear();
+    callbacks.clear();
+    callbacks_added_lock.unlock();
     exitThread();
     callback_lock.signal();
     callback_lock.unlock();

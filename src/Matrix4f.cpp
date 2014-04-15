@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-//    Copyright 2004-2013, SenseGraphics AB
+//    Copyright 2004-2014, SenseGraphics AB
 //
 //    This file is part of H3DUtil.
 //
@@ -160,7 +160,7 @@ Matrix4f Matrix4f::transformInverse() const {
   H3DFloat inv01 = -(m01*m22-t20)*t17;
   H3DFloat inv02 = (t23-t24)*t17;
   H3DFloat inv03 = 
-	-(t23*m23-m01*m13*m22-t24*m23+m11*m03*m22+t20*m13-m21*m03* m12)*t17;
+  -(t23*m23-m01*m13*m22-t24*m23+m11*m03*m22+t20*m13-m21*m03* m12)*t17;
   H3DFloat inv10 = -(m10*m22-m20*m12)*t17;
   H3DFloat inv11 = (m00*m22-t43)*t17;
   H3DFloat inv12 = -(t46-t47)*t17;
@@ -171,9 +171,9 @@ Matrix4f Matrix4f::transformInverse() const {
   H3DFloat inv23 = -(t4*m23-t51*m21-t8*m23+t54*m21+t12*m13-t57*m11)*t17;
   
   return Matrix4f( inv00, inv01, inv02, inv03,
-		   inv10, inv11, inv12, inv13,
-		   inv20, inv21, inv22, inv23,
-		   0, 0, 0, 1 );  
+       inv10, inv11, inv12, inv13,
+       inv20, inv21, inv22, inv23,
+       0, 0, 0, 1 );  
 }
 
 // This code has been automatically generated from Maple 7, see maple/matrix_inverse.mxs.
@@ -222,7 +222,7 @@ Matrix4f Matrix4f::inverse() const {
   H3DFloat t37 = m10*m31;
   H3DFloat t38 = m02*m23;
   H3DFloat t40 = m03*m22;
-  H3DFloat t42 =	
+  H3DFloat t42 =
     t14*t15-t14*t17-t19*t20+t19*t22+t24*t25-t24*t27-
     t29*t15+t29*t17+t32*t33-t32*t35-t37*t38+t37*t40;
   H3DFloat t43 = m20*m01;
@@ -240,7 +240,7 @@ Matrix4f Matrix4f::inverse() const {
   H3DFloat d = t42+t63;
 
   if( H3DAbs(d) == 0 ){
-	throw SingularMatrix4f( "", H3D_FULL_LOCATION );
+  throw SingularMatrix4f( "", H3D_FULL_LOCATION );
   }
 
   H3DFloat t65 = 1/d;
@@ -297,24 +297,24 @@ Matrix4f Matrix4f::inverse() const {
   H3DFloat inv33 = (t14*m22-t19*m12-t29*m22+t32*m02+t43*m12-t46*m02)*t65;
 
   return( Matrix4f( inv00, inv01, inv02, inv03,
-		    inv10, inv11, inv12, inv13,
-		    inv20, inv21, inv22, inv23,
-		    inv30, inv31, inv32, inv33 ) );  
+        inv10, inv11, inv12, inv13,
+        inv20, inv21, inv22, inv23,
+        inv30, inv31, inv32, inv33 ) );  
 }
 
 Matrix3f Matrix4f::getRotationPart() const {
-	Matrix3f m = getScaleRotationPart();
-	Vec3f x_axis = m * Vec3f(1,0,0);
-	Vec3f y_axis = m * Vec3f(0,1,0);
-	Vec3f z_axis = m * Vec3f(0,0,1);
-	
-	x_axis.normalize();
-	y_axis.normalize();
-	z_axis.normalize();
-	
-	return Matrix3f( x_axis.x, y_axis.x, z_axis.x,
-									 x_axis.y, y_axis.y, z_axis.y,
-									 x_axis.z, y_axis.z, z_axis.z );
+  Matrix3f m = getScaleRotationPart();
+  Vec3f x_axis = m * Vec3f(1,0,0);
+  Vec3f y_axis = m * Vec3f(0,1,0);
+  Vec3f z_axis = m * Vec3f(0,0,1);
+  
+  x_axis.normalize();
+  y_axis.normalize();
+  z_axis.normalize();
+  
+  return Matrix3f( x_axis.x, y_axis.x, z_axis.x,
+                   x_axis.y, y_axis.y, z_axis.y,
+                   x_axis.z, y_axis.z, z_axis.z );
 }
 
 ostream& ArithmeticTypes::operator<<( ostream &os, const Matrix4f &m ) {
