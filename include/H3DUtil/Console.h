@@ -49,6 +49,7 @@
 
 #include <H3DUtil/H3DUtil.h>
 #include <H3DUtil/TimeStamp.h>
+#include <H3DUtil/Threads.h>
 
 #include <ostream>
 #include <sstream>
@@ -78,6 +79,10 @@ namespace H3DUtil {
     bool showtime;
     /// If true the warning level used will be sent to the output stream.
     bool showlevel;
+    /// Mutex used to implement thread safe enable/disable of console output
+    MutexLock mutex;
+    /// Counter used to implement thread safe enable/disable of console output
+    int disable_count;
   public:
     /// Constructor
     basic_debugbuf(  ) : 
@@ -85,7 +90,8 @@ namespace H3DUtil {
       level( 0 ),
       outputstream( &cerr ),
       showtime(false),
-      showlevel( true ){
+      showlevel( true ),
+      disable_count ( 0 ) {
       setLockMutexFunction( NULL );
       setUnlockMutexFunction( NULL );
     }
@@ -136,16 +142,41 @@ namespace H3DUtil {
     ostream &getOutputStream() { 
       return *outputstream;
     }
+    
+    /// Disable all console output
+    ///
+    /// Note: disable() and enable() work like thread-safe push and pop, so that
+    /// multiple threads can define their own blocks where console output
+    /// is disabled between disable() and enable() calls. The alternative of using
+    /// get/setOutputLevel() to set and then restore the output level is not thread-safe.
+    ///
+    void disable () {
+      mutex.lock();
+      disable_count++;
+      mutex.unlock();
+    }
+    
+    /// Enable console output
+    ///
+    void enable () {
+      mutex.lock();
+      if ( disable_count > 0 ) {
+        disable_count--;
+      }
+      mutex.unlock();
+    }
   
   protected:
     /// Send content of string buffer to output stream. Add information
     /// about level and time if it should be added.
     int sync() {
+      mutex.lock();
+      
       if( lock_mutex_func.first )
         lock_mutex_func.first( lock_mutex_func.second );
       TimeStamp time;
-      
-      if ( outputlevel >= 0  &&  level >= outputlevel ) {
+
+      if ( outputlevel >= 0  &&  level >= outputlevel  &&  disable_count == 0 ) {
         if ( showlevel || showtime ){
           *outputstream << "[";
         }
@@ -180,9 +211,12 @@ namespace H3DUtil {
       }
       
       this->str( std::basic_string<CharT>() ); // Clear the string buffer
-      
+
       if( unlock_mutex_func.first )
         unlock_mutex_func.first( unlock_mutex_func.second );
+
+      mutex.unlock();
+
       return 0;
     }
 
@@ -278,6 +312,25 @@ namespace H3DUtil {
     basic_dostream & operator ()( int l ) {
       setLevel( l );
       return *this;
+    }
+    
+    /// Disable all console output
+    ///
+    /// Note: disable() and enable() work like thread-safe push and pop, so that
+    /// multiple threads can define their own blocks where console output
+    /// is disabled between disable() and enable() calls. The alternative of using
+    /// get/setOutputLevel() to set and then restore the output level is not thread-safe.
+    ///
+    void disable () {
+      static_cast<basic_debugbuf<CharT, TraitsT>* >( std::ios::rdbuf() )->
+        disable(); 
+    }
+    
+    /// Enable console output
+    ///
+    void enable () {
+      static_cast<basic_debugbuf<CharT, TraitsT>* >( std::ios::rdbuf() )->
+        enable(); 
     }
 
   };
