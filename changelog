@@ -13,6 +13,8 @@ Changes for version 1.3.0:
 - Added CMake option to include visual leak detector in H3DUtil.
 - Updates to CMake build system to build properly when TortoiseSVN is installed
  but the current H3D build is not a TortoiseSVN checkout.
+- Added enable/disable functions in Console which allow thread-safe disabling
+ of console output.
 
 New classes:
 - H3DTimer
