@@ -57,8 +57,16 @@ namespace H3DUtil {
     /// \param _bitmap The FreeImage bitmap we want to encapsulate.
     ///
     FreeImageImage( FIBITMAP *_bitmap ):
-      bitmap( _bitmap ){
+      bitmap( _bitmap ),
+      pixel_type( RGBA ),
+      pixel_component_type( UNSIGNED ),
+      image_data( NULL ),
+      w(0),
+      h(0),
+      bits_per_pixel(8)
+      {
       byte_alignment = 4;
+      updateImageProperties();
     }
     
     /// Destructor.
@@ -91,6 +99,19 @@ namespace H3DUtil {
 
   protected:
     FIBITMAP * bitmap;
+    // keep a private copy of pixel_type, only update when
+    // bitmap actually changed.
+    PixelType pixel_type;
+    PixelComponentType pixel_component_type;
+    unsigned char* image_data;
+    unsigned int w,h;
+    unsigned int bits_per_pixel;
+    
+
+    // when internal bitmap is updated, update all the image properties
+    // this is used to avoid retrieving the properties through bitmap
+    // every time when they are need, which is inefficient
+    void updateImageProperties();
   };
 
     

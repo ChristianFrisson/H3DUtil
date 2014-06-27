@@ -45,36 +45,15 @@ using namespace H3DUtil;
   H3D_VALUE_EXCEPTION( FREE_IMAGE_TYPE, UnsupportedFreeImageImageType ); 
 
 FreeImageImage::PixelComponentType FreeImageImage::pixelComponentType() {
-  FREE_IMAGE_TYPE t = FreeImage_GetImageType( bitmap );
-  switch( t ) {
-  case FIT_BITMAP:
-  case FIT_UINT16: 
-  case FIT_UINT32: return UNSIGNED;
-  case FIT_INT16: 
-  case FIT_INT32: return SIGNED;
-  case FIT_DOUBLE:
-  case FIT_FLOAT: return RATIONAL;
-  default: 
-    throw UnsupportedFreeImageImageType( t, "", H3D_FULL_LOCATION );
-  }
+
+  return pixel_component_type;
+  
 }
 
 FreeImageImage::PixelType FreeImageImage::pixelType() {
-  FREE_IMAGE_COLOR_TYPE t = FreeImage_GetColorType( bitmap );
 
-  switch( t ) {
-  case FIC_MINISBLACK: 
-  case FIC_MINISWHITE: return LUMINANCE;
-#if defined(FREEIMAGE_COLORORDER) && FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_RGB
-  case FIC_RGB: return RGB;
-  case FIC_RGBALPHA: return RGBA;
-#else
-  case FIC_RGB: return BGR;
-  case FIC_RGBALPHA: return BGRA;
-#endif
-  default: 
-    throw UnsupportedFreeImageColorType( t, "", H3D_FULL_LOCATION );
-  }
+  return pixel_type;
+  
 }
 
 /// Destructor.
@@ -83,21 +62,22 @@ FreeImageImage::~FreeImageImage() {
 }
 
 void *FreeImageImage::getImageData() {
-  return FreeImage_GetBits( bitmap );
+  //return FreeImage_GetBits( bitmap );
+  return image_data;
 }
 
 unsigned int FreeImageImage::bitsPerPixel() {
-  return FreeImage_GetBPP( bitmap );
+  return bits_per_pixel;
 }
 
 /// Returns the height of the image in pixels.
 unsigned int FreeImageImage::height() {
-  return FreeImage_GetHeight( bitmap );
+  return h;
 }
 
 /// Returns the width of the image in pixels.
 unsigned int FreeImageImage::width() {
-  return FreeImage_GetWidth( bitmap );
+  return w;
 }
 
 unsigned DLL_CALLCONV
@@ -142,6 +122,55 @@ FreeImageIO* FreeImageImage::getIStreamIO () {
   io.seek_proc= _SeekProc;
   io.tell_proc= _TellProc;
   return &io;
+}
+
+void FreeImageImage::updateImageProperties(){
+
+  if( bitmap==NULL ) {
+    Console(4)<<"Warning(FreeImageImage): Not able to updateImageProperties as"
+      << " no valid bitmap is available, please check if related image loader is"
+      << " correctly working" << endl;
+    return;
+  }
+  
+  // update pixel type
+  FREE_IMAGE_COLOR_TYPE c_t = FreeImage_GetColorType( bitmap );
+
+  switch( c_t ) {
+  case FIC_MINISBLACK: 
+  case FIC_MINISWHITE: pixel_type = LUMINANCE; break;
+#if defined(FREEIMAGE_COLORORDER) && FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_RGB
+  case FIC_RGB: pixel_type = RGB; break;
+  case FIC_RGBALPHA: pixel_type = RGBA; break;
+#else
+  case FIC_RGB: pixel_type = BGR; break;
+  case FIC_RGBALPHA: pixel_type = BGRA; break;
+#endif
+  default: 
+    throw UnsupportedFreeImageColorType( c_t, "", H3D_FULL_LOCATION );
+  }
+  // update pixel component type
+  FREE_IMAGE_TYPE t = FreeImage_GetImageType( bitmap );
+  switch( t ) {
+  case FIT_BITMAP:
+  case FIT_UINT16: 
+  case FIT_UINT32: pixel_component_type = UNSIGNED; break;
+  case FIT_INT16: 
+  case FIT_INT32: pixel_component_type = SIGNED; break;
+  case FIT_DOUBLE:
+  case FIT_FLOAT: pixel_component_type = RATIONAL; break;
+  default: 
+    throw UnsupportedFreeImageImageType( t, "", H3D_FULL_LOCATION );
+  }
+  // update image data
+  image_data = FreeImage_GetBits( bitmap );
+  // update image width
+  w = FreeImage_GetWidth( bitmap );
+  // update image height
+  h = FreeImage_GetHeight( bitmap );
+  // update bit per pixel
+  bits_per_pixel = FreeImage_GetBPP( bitmap );
+
 }
 
 #endif
