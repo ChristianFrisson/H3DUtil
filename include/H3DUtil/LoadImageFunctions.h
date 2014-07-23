@@ -173,6 +173,19 @@ namespace H3DUtil {
   /// How to interpret the data is specified by the raw_image_info parameter.
   H3DUTIL_API Image *loadRawImage( const string &url,
                                    RawImageInfo &raw_image_info );
+
+#ifdef HAVE_OPENEXR
+  /// \ingroup ImageLoaderFunctions
+  /// Save the specified image as an OpenEXR file with the filename url.
+  /// \return True on success, false otherwise
+  H3DUTIL_API bool saveOpenEXRImage( const string &url,
+                                     Image& image ); 
+
+  /// \ingroup ImageLoaderFunctions
+  /// Read the data from the OpenEXR file pointed to by the parameter url
+  /// \return A new PixelImage containing this data or NULL on error.
+  H3DUTIL_API Image* loadOpenEXRImage ( const string &url );
+#endif
 }
 
 #endif

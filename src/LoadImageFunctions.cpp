@@ -62,6 +62,18 @@
 
 #endif // HAVE_DCMTK
 
+#ifdef HAVE_OPENEXR
+#include <OpenEXR/ImfOutputFile.h>
+#include <OpenEXR/ImfInputFile.h>
+#include <OpenEXR/ImfChannelList.h>
+#include <OpenEXR/ImfMisc.h>
+#include <OpenEXR/ImfNamespace.h>
+namespace IMF = OPENEXR_IMF_NAMESPACE;
+using namespace IMF;
+using namespace std;
+using namespace IMATH_NAMESPACE;
+#endif // HAVE_OPENEXF
+
 #include <H3DUtil/PixelImage.h>
 #include <H3DUtil/DicomImage.h>
 #include <fstream>
@@ -815,6 +827,220 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
     return new PixelImage( width, height, depth, 
                            bits_per_pixel, pixel_type, component_type,
                            data, false, pixel_size );
+  }
+}
+#endif
+
+#ifdef HAVE_OPENEXR
+H3DUTIL_API bool H3DUtil::saveOpenEXRImage( const string &url,
+                                            Image& image ) {
+  
+  if ( image.pixelComponentType() != Image::RATIONAL ) {
+    Console(4) << "Cannot save image as OpenEXR, pixel component type must be RATIONAL! "
+                  "Only float images are supported!" << endl;
+    return false;
+  }
+
+  // channel offset from base (-1 if channel is not used)
+  int offsets[4]= { -1, -1, -1, -1 };
+
+  // number of channels used
+  int nr_channel= 0;
+
+  int bytes_per_pixel= image.bitsPerPixel()/8;
+
+  switch ( image.pixelType() ) {
+  case Image::LUMINANCE:
+    offsets[0]= 0;
+    nr_channel= 1;
+    break;
+  case Image::LUMINANCE_ALPHA:
+    offsets[0]= 0;
+    offsets[3]= 1;
+    nr_channel= 2;
+    break;
+  case Image::RGB:
+    offsets[0]= 0;
+    offsets[1]= 1;
+    offsets[2]= 2;
+    nr_channel= 3;
+    break;
+  case Image::RGBA:
+    offsets[0]= 0;
+    offsets[1]= 1;
+    offsets[2]= 2;
+    offsets[3]= 3;
+    nr_channel= 4;
+    break;
+  case Image::BGR:
+    offsets[0]= 2;
+    offsets[1]= 1;
+    offsets[2]= 0;
+    nr_channel= 3;
+    break;
+  case Image::BGRA:
+    offsets[0]= 2;
+    offsets[1]= 1;
+    offsets[2]= 0;
+    offsets[3]= 3;
+    nr_channel= 4;
+    break;
+  case Image::VEC3:
+    offsets[0]= 0;
+    offsets[1]= 1;
+    offsets[2]= 2;
+    nr_channel= 3;
+    break;
+  }
+
+  if ( bytes_per_pixel/nr_channel != sizeof(float) ) {
+    Console(4) << "Cannot save image as OpenEXR, bits per pixel per channel "
+                  "does not match size of float! Only float images are supported!" << endl;
+    return false;
+  }
+
+  try {
+    
+    Header header (image.width(), image.height());
+    if ( offsets[0] != -1 ) header.channels().insert ("R", Channel (IMF::FLOAT));
+    if ( offsets[1] != -1 ) header.channels().insert ("G", Channel (IMF::FLOAT));
+    if ( offsets[2] != -1 ) header.channels().insert ("B", Channel (IMF::FLOAT));
+    if ( offsets[3] != -1 ) header.channels().insert ("A", Channel (IMF::FLOAT));
+
+    OutputFile file (url.c_str(), header);
+
+    FrameBuffer frameBuffer;
+
+    if ( offsets[0] != -1 ) {
+      frameBuffer.insert ("R",					                                  // name
+		          Slice (IMF::FLOAT,			                                    // type
+              (char *) image.getImageData() + offsets[0]*sizeof(float),		// base
+              bytes_per_pixel,		                                        // xStride
+			        bytes_per_pixel * image.width()));	                        // yStride
+    }
+
+    if ( offsets[1] != -1 ) {
+      frameBuffer.insert ("G",					                                  // name
+		          Slice (IMF::FLOAT,			                                    // type
+              (char *) image.getImageData() + offsets[1]*sizeof(float),		// base
+			        bytes_per_pixel,		                                        // xStride
+			        bytes_per_pixel * image.width()));	                        // yStride
+    }
+
+    if ( offsets[2] != -1 ) {
+      frameBuffer.insert ("B",					                                  // name
+		          Slice (IMF::FLOAT,			                                    // type
+              (char *) image.getImageData() + offsets[2]*sizeof(float),		// base
+			        bytes_per_pixel,		                                        // xStride
+			        bytes_per_pixel * image.width()));	                        // yStride
+    }
+
+    if ( offsets[3] != -1 ) {
+      frameBuffer.insert ("A",					                                  // name
+		          Slice (IMF::FLOAT,			                                    // type
+              (char *) image.getImageData() + offsets[3]*sizeof(float),		// base
+			        bytes_per_pixel,		                                        // xStride
+			        bytes_per_pixel * image.width()));	                        // yStride
+    }
+
+    file.setFrameBuffer (frameBuffer);
+    file.writePixels (image.height());
+
+  } catch ( const std::exception& e ) {
+    Console(4) << e.what() << endl;
+    return false;
+  }
+
+  return true;
+}
+
+
+H3DUTIL_API Image* H3DUtil::loadOpenEXRImage ( const string &url ) {
+
+  try {
+
+    InputFile file (url.c_str());
+  
+    Box2i dw = file.header().dataWindow();
+    int width  = dw.max.x - dw.min.x + 1;
+    int height = dw.max.y - dw.min.y + 1;
+  
+    FrameBuffer frameBuffer;
+
+    const Channel* r= file.header().channels().findChannel ( "R" );
+    const Channel* g= file.header().channels().findChannel ( "G" );
+    const Channel* b= file.header().channels().findChannel ( "B" );
+    const Channel* a= file.header().channels().findChannel ( "A" );
+
+    int bytes_per_pixel= 0;
+
+    if ( r ) bytes_per_pixel+= pixelTypeSize ( r->type );
+    if ( g ) bytes_per_pixel+= pixelTypeSize ( g->type );
+    if ( b ) bytes_per_pixel+= pixelTypeSize ( b->type );
+    if ( a ) bytes_per_pixel+= pixelTypeSize ( a->type );
+
+    Image::PixelType pixel_type;
+    if ( r && g && b && !a ) {
+      pixel_type= Image::RGB;
+    } else if ( r && g && b && a ) {
+      pixel_type= Image::RGBA;
+    } else {
+      Console(4) << "Error: Only RGB and RGBA images are supported!" << endl;
+      return NULL;
+    }
+
+    char *data = 
+        new char[ width * height * bytes_per_pixel ];
+  
+    if ( r ) {
+      frameBuffer.insert ("R",					    // name
+        Slice (r->type,			                // type
+			         data,	                      // base
+			         bytes_per_pixel,	            // xStride
+			         bytes_per_pixel * width ) );	// fillValue
+    }
+    if ( g ) {
+      frameBuffer.insert ("G",					    // name
+        Slice (r->type,			                // type
+               // base
+			         data + pixelTypeSize ( r->type ),
+			         bytes_per_pixel,	            // xStride
+			         bytes_per_pixel * width ) );	// fillValue
+    }
+    if ( b ) {
+      frameBuffer.insert ("B",					    // name
+        Slice (r->type,			                // type
+			         // base
+			         data + pixelTypeSize ( r->type ) 
+                    + pixelTypeSize ( g->type ),
+			         bytes_per_pixel,	            // xStride
+			         bytes_per_pixel * width ) );	// fillValue
+    }
+    if ( a ) {
+      frameBuffer.insert ("A",					    // name
+        Slice (r->type,			                // type
+			         // base
+			         data + pixelTypeSize ( r->type ) 
+                    + pixelTypeSize ( g->type ) 
+                    + pixelTypeSize ( b->type ),
+			         bytes_per_pixel,	            // xStride
+			         bytes_per_pixel * width ) );	// fillValue
+    }
+  
+    file.setFrameBuffer (frameBuffer);
+    file.readPixels (dw.min.y, dw.max.y);
+
+    return new PixelImage( width,
+                           height,
+                           1,
+                           bytes_per_pixel*8,
+                           pixel_type,
+                           Image::RATIONAL,
+                           (unsigned char*)data );
+
+  } catch ( const std::exception& e ) {
+    Console(4) << e.what() << endl;
+    return NULL;
   }
 }
 #endif

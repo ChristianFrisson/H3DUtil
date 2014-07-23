@@ -64,6 +64,9 @@
 /// ImageLoaderFunctions.h).
 #cmakedefine HAVE_DCMTK
 
+/// Undef if you do not have OpenEXR
+#cmakedefine HAVE_OPENEXR
+
 // note that _WIN32 is always defined when _WIN64 is defined.
 #if( defined( _WIN64 ) || defined(WIN64) )
 // set when on 64 bit Windows
