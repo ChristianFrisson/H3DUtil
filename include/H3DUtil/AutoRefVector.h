@@ -61,20 +61,20 @@ namespace H3DUtil {
     inline AutoRefVector() {}
 
     /// Copy constructor from a vector class.
-    inline AutoRefVector( const vector<NodeClass *> &v ) : 
+    inline AutoRefVector( const std::vector<NodeClass *> &v ) :
       std::vector<NodeClass*>( v ) {
       refAll();
     }
 
     /// Copy constructor
-    inline AutoRefVector( const AutoRefVector<NodeClass> &v ) : 
+    inline AutoRefVector( const AutoRefVector<NodeClass> &v ) :
       std::vector<NodeClass*>( v ) {
       refAll();
     }
 
     /// Creates a vector with n elements.
     inline AutoRefVector( size_type n ):
-      vector< NodeClass * >( n ) {}
+      std::vector< NodeClass * >( n ) {}
 
     /// Destructor.
     inline virtual ~AutoRefVector() {
@@ -93,11 +93,11 @@ namespace H3DUtil {
     }
 
     /// Assignement operator.
-    inline AutoRefVector<NodeClass> &operator=( 
-                                               const vector<NodeClass *> &v ) {
+    inline AutoRefVector<NodeClass> &operator=(
+                                       const std::vector<NodeClass *> &v ) {
       // temporarily add an extra reference to the nodes in v so
       // they are not accidentally removed in unrefAll()
-      for( typename vector< NodeClass * >::const_iterator i = v.begin();
+      for( typename std::vector< NodeClass * >::const_iterator i = v.begin();
            i != v.end();
            ++i ) 
         if(*i) (*i)->ref();
@@ -106,7 +106,7 @@ namespace H3DUtil {
       refAll();
 
       // remove the temporary references.
-      for( typename vector< NodeClass * >::const_iterator i = v.begin();
+      for( typename std::vector< NodeClass * >::const_iterator i = v.begin();
            i != v.end();
            ++i ) 
         if(*i) (*i)->unref();
@@ -209,13 +209,13 @@ namespace H3DUtil {
     /// Inserts a new element at the end.
     inline void push_back( const value_type &x ) {
       ref( x );
-      vector< NodeClass * >::push_back( x );
+      std::vector< NodeClass * >::push_back( x );
     }
 
     /// Removed the last element.
     void pop_back() {
       unref( back() );
-      vector< NodeClass * >::pop_back();
+      std::vector< NodeClass * >::pop_back();
     }
         
     /// Erases all of the elements.
@@ -226,7 +226,7 @@ namespace H3DUtil {
 
     /// Erase the first element equal to a.
     inline virtual void erase( NodeClass *a ) {
-      typename vector<NodeClass * >::iterator i = 
+      typename std::vector<NodeClass * >::iterator i = 
         std::find( std::vector<NodeClass*>::begin(), 
                    std::vector<NodeClass*>::end(), 
                    a );
@@ -240,7 +240,7 @@ namespace H3DUtil {
     inline virtual void insert(unsigned int pos,
                                const value_type & x) {
       ref( x );
-      vector< NodeClass*>::insert( vector< NodeClass*>::begin() + pos, x );
+      std::vector< NodeClass*>::insert( std::vector< NodeClass*>::begin() + pos, x );
     }
 
     /// Removes the element at the index pos.
@@ -249,7 +249,7 @@ namespace H3DUtil {
       if( pos >= size() ) return;
 
       unref( std::vector<NodeClass*>::operator[]( pos ) );
-      vector< NodeClass*>::erase( vector< NodeClass*>::begin() + pos );
+      std::vector< NodeClass*>::erase( std::vector< NodeClass*>::begin() + pos );
     }
 
   protected:
