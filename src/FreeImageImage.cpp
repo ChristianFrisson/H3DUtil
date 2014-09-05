@@ -158,7 +158,9 @@ void FreeImageImage::updateImageProperties(){
   case FIT_INT16: 
   case FIT_INT32: pixel_component_type = SIGNED; break;
   case FIT_DOUBLE:
-  case FIT_FLOAT: pixel_component_type = RATIONAL; break;
+  case FIT_FLOAT:
+  case FIT_RGBF:
+  case FIT_RGBAF: pixel_component_type = RATIONAL; break;
   default: 
     throw UnsupportedFreeImageImageType( t, "", H3D_FULL_LOCATION );
   }

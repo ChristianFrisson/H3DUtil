@@ -960,7 +960,12 @@ H3DUTIL_API Image* H3DUtil::loadOpenEXRImage ( const string &url ) {
   try {
 
     InputFile file (url.c_str());
-  
+    // The InputFile class cause something that looks like memory leaks.
+    // It is most probably just some static intialization that is caught a bit to early when exiting.
+    // Either way the "memory leak" seems to not grow when exiting. It might for programs that frequently
+    // load and unload H3DUtil but H3DUtil is not intended for that.
+    // See http://lists.nongnu.org/archive/html/openexr-devel/2013-11/msg00003.html
+
     Box2i dw = file.header().dataWindow();
     int width  = dw.max.x - dw.min.x + 1;
     int height = dw.max.y - dw.min.y + 1;
