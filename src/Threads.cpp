@@ -283,6 +283,31 @@ void *PeriodicThread::thread_func( void * _data ) {
 
     vector< PeriodicThread::CallbackList::iterator > to_remove;
     thread->callback_lock.lock();
+
+    // At the beginning of every haptic thread cycle, add more callbacks if 
+    // there are any. So the added call back do not need to wait one cycle to get
+    // added , and at least another cycle to actually get executed in worst case.
+    // This will make the synchronousHapticCB runs faster as that function will wait
+    // for sync_haptics callback to be actually executed in haptic thread. However,
+    // even the callback adding in the very beginning of the cycle, in worst case, 
+    // the callback may still miss its first chance to get added 
+    // and wait one cycle more to be added and executed. So depends on how fast haptic
+    // thread runs and how many haptic thread in total, synchronousHapticCB may 
+    // becomes relatively slow.
+    
+    // if no more callbacks wait for a callback to be added in order to
+    // avoid spending time doing no useful operations in the thread.
+    if( thread->frequency < 0 ) {
+      // Check thread_func_is_running in order to avoid potential hangs
+      // if the user clears the callbacks list and then destroys the thread
+      // class. In that case the wait statement can be reached after
+      // signal in ~PeriodicThread().
+      if( thread->callbacks.size() == 0 && thread->thread_func_is_running )
+        thread->callback_lock.wait();
+    } else {
+      thread->transferCallbackList();
+    }
+
     for( PeriodicThread::CallbackList::iterator i = thread->callbacks.begin();
          i != thread->callbacks.end(); ++i ) {
       PeriodicThread::CallbackCode c = ( (*i).second ).first(
@@ -303,19 +328,6 @@ void *PeriodicThread::thread_func( void * _data ) {
     thread->callbacks_added_lock.unlock();
 
     thread->callback_lock.signal();
-
-    // if no more callbacks wait for a callback to be added in order to
-    // avoid spending time doing no useful operations in the thread.
-    if( thread->frequency < 0 ) {
-      // Check thread_func_is_running in order to avoid potential hangs
-      // if the user clears the callbacks list and then destroys the thread
-      // class. In that case the wait statement can be reached after
-      // signal in ~PeriodicThread().
-      if( thread->callbacks.size() == 0 && thread->thread_func_is_running )
-        thread->callback_lock.wait();
-    } else {
-      thread->transferCallbackList();
-    }
 
     thread->callback_lock.unlock();
 
