@@ -95,6 +95,11 @@ IF( H3DUTIL_INCLUDE_DIR AND EXTERNAL_ROOT )
                                "lib" "FreeImage"
                                "bin" "FreeImage"
                                
+                               "#define HAVE_OPENEXR"
+                               "include" "OpenEXR"
+                               "lib" "IlmImf" "IlmThread" "Imath" "Half" "Iex"
+                               "bin" "IlmImf" "IlmThread" "Imath" "Half" "Iex"
+                               
                                "#define HAVE_TEEM"
                                "include" "teem" )
     IF( Teem_BZIP2 )

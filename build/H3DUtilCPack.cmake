@@ -56,7 +56,8 @@ IF( GENERATE_CPACK_PROJECT )
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/teem/
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/Bzip2/
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/sofahelper/
-                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/vld/ )
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/vld/
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/include/OpenEXR/ )
       SET( EXTERNAL_INCLUDE_INSTALL_PATHS External/include/pthread
                                           External/include/FreeImage
                                           External/include/zlib
@@ -64,7 +65,8 @@ IF( GENERATE_CPACK_PROJECT )
                                           External/include/teem
                                           External/include/Bzip2
                                           External/include/sofahelper
-                                          External/include/vld )
+                                          External/include/vld
+                                          External/include/OpenEXR )
                                    
       SET( EXTERNAL_LIBRARIES ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/pthreadVC2.lib
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/FreeImage.lib
@@ -73,7 +75,21 @@ IF( GENERATE_CPACK_PROJECT )
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/libbz2.lib
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/vld.lib
                               ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/SofaHelper_1_02.lib
-                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/SofaHelper_1_0d2.lib )
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/SofaHelper_1_0d2.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/Iex.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/Iex_d.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/IexMath.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/IexMath_d.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/IlmImf.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/IlmImf_d.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/IlmImfUtil.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/IlmImfUtil_d.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/IlmThread.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/IlmThread_d.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/Imath.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/Imath_d.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/Half.lib
+                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/lib32/Half_d.lib )
       SET( DCM_NAME_LIST ofstd dcmjpeg ijg8 ijg12 ijg16 dcmdata dcmimgle dcmimage )
       FOREACH( library_name ${DCM_NAME_LIST} )
         SET( EXTERNAL_STATIC_LIBRARIES ${EXTERNAL_STATIC_LIBRARIES}
@@ -94,7 +110,21 @@ IF( GENERATE_CPACK_PROJECT )
                              ${H3DAPI_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/SofaHelper_1_0d2.dll
                              ${H3DAPI_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/SofaHelper_1_02.dll
                              ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/vld_x86.dll
-                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/dbghelp.dll )
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/dbghelp.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/Iex.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/Iex_d.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/IexMath.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/IexMath_d.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/IlmImf.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/IlmImf_d.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/IlmImfUtil.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/IlmImfUtil_d.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/IlmThread.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/IlmThread_d.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/Imath.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/Imath_d.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/Half.dll
+                             ${H3DUtil_CPACK_EXTERNAL_ROOT}/${EXTERNAL_BIN_PATH}/Half_d.dll )
 
     ELSEIF( NOT DEFINED HAPI_CPACK_EXTERNAL_ROOT )
       MESSAGE( WARNING "H3DUtil_CPACK_EXTERNAL_ROOT must be set to the External directory used by H3DUtil in order to package properly." )
