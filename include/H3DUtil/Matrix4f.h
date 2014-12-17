@@ -62,7 +62,8 @@ namespace H3DUtil {
                        H3DFloat m20, H3DFloat m21, 
                        H3DFloat m22, H3DFloat m23,
                        H3DFloat m30, H3DFloat m31, 
-                       H3DFloat m32, H3DFloat m33 ) {
+                       H3DFloat m32, H3DFloat m33 ) 
+			{
         m[0][0] = m00; m[0][1] = m01; m[0][2] = m02; m[0][3] = m03; 
         m[1][0] = m10; m[1][1] = m11; m[1][2] = m12; m[1][3] = m13; 
         m[2][0] = m20; m[2][1] = m21; m[2][2] = m22; m[2][3] = m23; 
