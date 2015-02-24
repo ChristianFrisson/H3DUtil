@@ -64,4 +64,4 @@ SET( H3DUTIL_SRCS "${H3DUtil_SOURCE_DIR}/../src/Console.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/Vec2f.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/Vec3f.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/Vec4f.cpp"
-				  "${H3DUtil_SOURCE_DIR}/../src/H3DTimer.cpp")
+                  "${H3DUtil_SOURCE_DIR}/../src/H3DTimer.cpp")
