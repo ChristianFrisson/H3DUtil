@@ -303,10 +303,10 @@ Matrix4f Matrix4f::inverse() const {
 }
 
 Matrix3f Matrix4f::getRotationPart() const {
-  Matrix3f m = getScaleRotationPart();
-  Vec3f x_axis = m * Vec3f(1,0,0);
-  Vec3f y_axis = m * Vec3f(0,1,0);
-  Vec3f z_axis = m * Vec3f(0,0,1);
+  Matrix3f _m = getScaleRotationPart();
+  Vec3f x_axis = _m * Vec3f(1,0,0);
+  Vec3f y_axis = _m * Vec3f(0,1,0);
+  Vec3f z_axis = _m * Vec3f(0,0,1);
   
   x_axis.normalize();
   y_axis.normalize();
