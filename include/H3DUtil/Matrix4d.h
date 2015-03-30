@@ -181,6 +181,19 @@ namespace H3DUtil {
     private:
       /// The matrix data.
       H3DDouble m[4][4];
+
+    public:
+      /// Per-element precision double comparison against an epsilon value.
+      inline bool nearEqual( const Matrix4d &rhs, const H3DDouble epsilon = std::numeric_limits< H3DDouble >::epsilon() ) const {
+        for( unsigned int i = 0; i < 4; ++i ) {
+          for( unsigned int j = 0; j < 4; ++j ) {
+            if( !epsilonCompare( m[i][j], rhs[i][j], epsilon ) ) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }
     };
 
     /// \defgroup Matrix4dOperators Matrix4d operators.

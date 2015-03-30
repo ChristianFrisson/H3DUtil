@@ -98,6 +98,12 @@ namespace H3DUtil {
 
       /// The angle of the rotation. 
       H3DDouble angle;
+
+      /// Per-element precision double comparison against an epsilon value.
+      inline bool nearEqual( const Rotationd &rhs, const H3DDouble epsilon = std::numeric_limits< H3DDouble >::epsilon() ) const {
+        return axis.nearEqual( rhs.axis, epsilon ) &&
+               epsilonCompare( angle, rhs.angle, epsilon );
+      }
     };
 
     /// \defgroup RotationdOperators Rotationd operators.

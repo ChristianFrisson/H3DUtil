@@ -213,6 +213,14 @@ namespace H3DUtil {
   inline F H3DCeil( F f ) {
     return ceil( f );
   }
+
+  /// \ingroup H3DUtilMath
+  /// Returns true if the difference between two values is lower than the
+  /// specified epsilon value.
+  template< class F >
+  inline bool epsilonCompare( const F &lhs, const F &rhs, const F epsilon = std::numeric_limits< F >::epsilon() ) {
+    return H3DAbs( lhs - rhs ) < epsilon;
+  }
 }
 
 #endif

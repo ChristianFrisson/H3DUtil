@@ -123,6 +123,12 @@ namespace H3DUtil {
       Vec3f v;
       /// The Quaternion scalar part.
       H3DFloat w;
+
+      /// Per-element precision float comparison against an epsilon value.
+      inline bool nearEqual( const Quaternion &rhs, const H3DFloat epsilon = std::numeric_limits< H3DFloat >::epsilon() ) const {
+        return v.nearEqual( rhs.v, epsilon ) &&
+               epsilonCompare( w, rhs.w, epsilon );
+      }
     };
 
     /// \defgroup QuaternionOperators Quaternion operators.

@@ -126,6 +126,19 @@ namespace H3DUtil {
     private:
       /// The matrix data.
       H3DFloat m[3][3];
+
+    public:
+      /// Per-element precision float comparison against an epsilon value.
+      inline bool nearEqual( const Matrix3f &rhs, const H3DFloat epsilon = std::numeric_limits< H3DFloat >::epsilon() ) const {
+        for( unsigned int i = 0; i < 3; ++i ) {
+          for( unsigned int j = 0; j < 3; ++j ) {
+            if( !epsilonCompare( m[i][j], rhs[i][j], epsilon ) ) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }
     };
     
     /// \defgroup Matrix3fOperators Matrix3f operators.

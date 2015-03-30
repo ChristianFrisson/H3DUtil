@@ -100,6 +100,13 @@ namespace H3DUtil {
     }
 
     H3DFloat r, g, b;
+
+    /// Per-element precision float comparison against an epsilon value.
+    inline bool nearEqual( const RGB &rhs, const H3DFloat epsilon = std::numeric_limits< H3DFloat >::epsilon() ) const {
+      return epsilonCompare( r, rhs.r, epsilon ) &&
+             epsilonCompare( g, rhs.g, epsilon ) &&
+             epsilonCompare( b, rhs.b, epsilon );
+    }
   }; 
     
   /// Structure for RGBA values.
@@ -119,8 +126,16 @@ namespace H3DUtil {
 
     /// Constructor.
     RGBA( const RGB &c,
-    H3DFloat _a ) : r(c.r), g(c.g), b(c.b), a(_a) {}
+          H3DFloat _a ) : r(c.r), g(c.g), b(c.b), a(_a) {}
     H3DFloat r, g, b, a;
+
+    /// Per-element precision float comparison against an epsilon value.
+    inline bool nearEqual( const RGBA &rhs, const H3DFloat epsilon = std::numeric_limits< H3DFloat >::epsilon() ) const {
+      return epsilonCompare( r, rhs.r, epsilon ) &&
+             epsilonCompare( g, rhs.g, epsilon ) &&
+             epsilonCompare( b, rhs.b, epsilon ) &&
+             epsilonCompare( a, rhs.a, epsilon );
+    }
   };
 
   /// Function for printing a RGB to an ostream.

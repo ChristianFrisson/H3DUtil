@@ -138,6 +138,13 @@ namespace H3DUtil {
 
       /// The public values of the vector.
       H3DDouble x, y, z;
+
+      /// Per-element precision double comparison against an epsilon value.
+      inline bool nearEqual( const Vec3d &rhs, const H3DDouble epsilon = std::numeric_limits< H3DDouble >::epsilon() ) const {
+        return epsilonCompare( x, rhs.x, epsilon ) &&
+               epsilonCompare( y, rhs.y, epsilon ) &&
+               epsilonCompare( z, rhs.z, epsilon );
+      }
     };
 
     /// \defgroup Vec3dOperators Vec3d operators.

@@ -173,6 +173,19 @@ namespace H3DUtil {
     private:
       /// The matrix data.
       H3DFloat m[4][4];
+
+    public:
+      /// Per-element precision float comparison against an epsilon value.
+      inline bool nearEqual( const Matrix4f &rhs, const H3DFloat epsilon = std::numeric_limits< H3DFloat >::epsilon() ) const {
+        for( unsigned int i = 0; i < 4; ++i ) {
+          for( unsigned int j = 0; j < 4; ++j ) {
+            if( !epsilonCompare( m[i][j], rhs[i][j], epsilon ) ) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }
     };
 
     /// \defgroup Matrix4fOperators Matrix4f operators.

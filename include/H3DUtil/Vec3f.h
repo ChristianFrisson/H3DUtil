@@ -139,6 +139,13 @@ namespace H3DUtil {
 
       /// The public values of the vector.
       H3DFloat x, y, z;
+
+      /// Per-element precision float comparison against an epsilon value.
+      inline bool nearEqual( const Vec3f &rhs, const H3DFloat epsilon = std::numeric_limits< H3DFloat >::epsilon() ) const {
+        return epsilonCompare( x, rhs.x, epsilon ) &&
+               epsilonCompare( y, rhs.y, epsilon ) &&
+               epsilonCompare( z, rhs.z, epsilon );
+      }
     };
     
     /// \defgroup Vec3fOperators Vec3f operators.

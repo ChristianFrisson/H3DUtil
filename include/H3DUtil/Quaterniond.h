@@ -116,6 +116,12 @@ namespace H3DUtil {
       Vec3d v;
       /// The Quaterniond scalar part.
       H3DDouble w;
+
+      /// Per-element precision double comparison against an epsilon value.
+      inline bool nearEqual( const Quaterniond &rhs, const H3DDouble epsilon = std::numeric_limits< H3DDouble >::epsilon() ) const {
+        return v.nearEqual( rhs.v, epsilon ) &&
+               epsilonCompare( w, rhs.w, epsilon );
+      }
     };
 
     /// \defgroup QuaterniondOperators Quaterniond operators.
