@@ -31,6 +31,7 @@
 
 #include <H3DUtil/Exception.h>
 #include <math.h>
+#include <limits>
 
 namespace H3DUtil {
 
