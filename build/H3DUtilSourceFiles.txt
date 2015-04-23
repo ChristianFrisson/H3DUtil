@@ -3,6 +3,7 @@ SET( H3DUTIL_HEADERS "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/AutoPtrVector.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/AutoRefVector.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/Console.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/DicomImage.h"
+                     "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/DualQuaternion.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/DynamicLibrary.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/Exception.h"
                      "${H3DUtil_SOURCE_DIR}/../include/H3DUtil/ExtremaFindingAlgorithms.h"
@@ -43,6 +44,7 @@ ENDIF( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/H3DAPI/HAPI/H3DUtil )
 
 SET( H3DUTIL_SRCS "${H3DUtil_SOURCE_DIR}/../src/Console.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/DicomImage.cpp"
+                  "${H3DUtil_SOURCE_DIR}/../src/DualQuaternion.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/DynamicLibrary.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/Exception.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/FreeImageImage.cpp"
@@ -64,4 +66,4 @@ SET( H3DUTIL_SRCS "${H3DUtil_SOURCE_DIR}/../src/Console.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/Vec2f.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/Vec3f.cpp"
                   "${H3DUtil_SOURCE_DIR}/../src/Vec4f.cpp"
-                  "${H3DUtil_SOURCE_DIR}/../src/H3DTimer.cpp")
+                                  "${H3DUtil_SOURCE_DIR}/../src/H3DTimer.cpp")

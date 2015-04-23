@@ -29,9 +29,16 @@
 
 #include <H3DUtil/Matrix4f.h>
 #include <H3DUtil/TypeOperators.h>
+#include <H3DUtil/DualQuaternion.h>
 
 using namespace H3DUtil;
 using namespace ArithmeticTypes;
+
+Matrix4f::Matrix4f( const DualQuaternion &dq ) {
+  Quaternion qt ( 2 * dq.qe * dq.q0.conjugate() );
+  *this = Matrix4f( qt.v, Rotation( dq.q0 ) );
+}
+
 
 Matrix4f::Matrix4f( const Vec3f& translation, 
                     const Rotation& rotation, 
@@ -303,10 +310,10 @@ Matrix4f Matrix4f::inverse() const {
 }
 
 Matrix3f Matrix4f::getRotationPart() const {
-  Matrix3f _m = getScaleRotationPart();
-  Vec3f x_axis = _m * Vec3f(1,0,0);
-  Vec3f y_axis = _m * Vec3f(0,1,0);
-  Vec3f z_axis = _m * Vec3f(0,0,1);
+  Matrix3f m = getScaleRotationPart();
+  Vec3f x_axis = m * Vec3f(1,0,0);
+  Vec3f y_axis = m * Vec3f(0,1,0);
+  Vec3f z_axis = m * Vec3f(0,0,1);
   
   x_axis.normalize();
   y_axis.normalize();
