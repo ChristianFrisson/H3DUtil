@@ -80,6 +80,13 @@ namespace H3DUtil {
   }
 
   /// \ingroup H3DUtilMath
+  /// Returns f squared. 
+  template< class F >
+  inline F H3DSqr( F f ) {
+    return f*f;
+  }
+
+  /// \ingroup H3DUtilMath
   /// Returns the exponential function of f. 
   template< class F >
   inline F H3DExp( F f ) {
