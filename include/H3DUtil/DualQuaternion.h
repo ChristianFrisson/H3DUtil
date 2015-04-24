@@ -174,8 +174,8 @@ namespace H3DUtil {
     /// quaternion even if  and  are unit quaternion
     inline DualQuaternion operator+( const DualQuaternion &q1, 
                                      const DualQuaternion &q2 ) {
-      return DualQuaternion( q1.q0 + q2.qe,
-                             q1.q0 + q2.qe );
+      return DualQuaternion( q1.q0 + q2.q0,
+                             q1.qe + q2.qe );
     }
     /// \}
 
