@@ -911,10 +911,23 @@ H3DUTIL_API bool H3DUtil::saveOpenEXRImage( const string &url,
 
     FrameBuffer frameBuffer;
 
+    char* image_data = (char*)image.getImageData();
+    int image_width = image.width();
+    int image_height = image.height();
+    char* image_data_flipped = new char[image_width*image_height*bytes_per_pixel];
+
+    for( int i = 0; i<image_width*bytes_per_pixel; ++i ) {
+      for( int j = 0; j<image_height; ++j ){
+        image_data_flipped[i+j*image_width*bytes_per_pixel] = 
+          image_data[i+(image_height-1-j)*bytes_per_pixel*image_width];
+      }
+    }
+
+
     if ( offsets[0] != -1 ) {
       frameBuffer.insert ("R",					                                  // name
 		          Slice (IMF::FLOAT,			                                    // type
-              (char *) image.getImageData() + offsets[0]*sizeof(float),		// base
+              image_data_flipped + offsets[0]*sizeof(float),		// base
               bytes_per_pixel,		                                        // xStride
 			        bytes_per_pixel * image.width()));	                        // yStride
     }
@@ -922,7 +935,7 @@ H3DUTIL_API bool H3DUtil::saveOpenEXRImage( const string &url,
     if ( offsets[1] != -1 ) {
       frameBuffer.insert ("G",					                                  // name
 		          Slice (IMF::FLOAT,			                                    // type
-              (char *) image.getImageData() + offsets[1]*sizeof(float),		// base
+              image_data_flipped + offsets[1]*sizeof(float),		// base
 			        bytes_per_pixel,		                                        // xStride
 			        bytes_per_pixel * image.width()));	                        // yStride
     }
@@ -930,7 +943,7 @@ H3DUTIL_API bool H3DUtil::saveOpenEXRImage( const string &url,
     if ( offsets[2] != -1 ) {
       frameBuffer.insert ("B",					                                  // name
 		          Slice (IMF::FLOAT,			                                    // type
-              (char *) image.getImageData() + offsets[2]*sizeof(float),		// base
+              image_data_flipped + offsets[2]*sizeof(float),		// base
 			        bytes_per_pixel,		                                        // xStride
 			        bytes_per_pixel * image.width()));	                        // yStride
     }
@@ -938,14 +951,14 @@ H3DUTIL_API bool H3DUtil::saveOpenEXRImage( const string &url,
     if ( offsets[3] != -1 ) {
       frameBuffer.insert ("A",					                                  // name
 		          Slice (IMF::FLOAT,			                                    // type
-              (char *) image.getImageData() + offsets[3]*sizeof(float),		// base
+              image_data_flipped + offsets[3]*sizeof(float),		// base
 			        bytes_per_pixel,		                                        // xStride
 			        bytes_per_pixel * image.width()));	                        // yStride
     }
 
     file.setFrameBuffer (frameBuffer);
     file.writePixels (image.height());
-
+    delete[] image_data_flipped;
   } catch ( const std::exception& e ) {
     Console(4) << e.what() << endl;
     return false;
@@ -967,9 +980,10 @@ H3DUTIL_API Image* H3DUtil::loadOpenEXRImage ( const string &url ) {
     // See http://lists.nongnu.org/archive/html/openexr-devel/2013-11/msg00003.html
 
     Box2i dw = file.header().dataWindow();
+    
     int width  = dw.max.x - dw.min.x + 1;
     int height = dw.max.y - dw.min.y + 1;
-  
+
     FrameBuffer frameBuffer;
 
     const Channel* r= file.header().channels().findChannel ( "R" );
@@ -1031,17 +1045,28 @@ H3DUTIL_API Image* H3DUtil::loadOpenEXRImage ( const string &url ) {
 			         bytes_per_pixel,	            // xStride
 			         bytes_per_pixel * width ) );	// fillValue
     }
-  
     file.setFrameBuffer (frameBuffer);
     file.readPixels (dw.min.y, dw.max.y);
+    
+    
+    // openexr read data from top to bottom in y direction, 
+    // need to flip the data in y direction
+    char* data_flipped = new char[ width * height * bytes_per_pixel ];
 
+    for( int i = 0; i<width*bytes_per_pixel; ++i ) {
+      for( int j = 0; j<height; ++j ){
+        data_flipped[i+j*width*bytes_per_pixel] = 
+          data[i+(height-1-j)*bytes_per_pixel*width];
+      }
+    }
+    delete[] data;
     return new PixelImage( width,
                            height,
                            1,
                            bytes_per_pixel*8,
                            pixel_type,
                            Image::RATIONAL,
-                           (unsigned char*)data );
+                           (unsigned char*)data_flipped );
 
   } catch ( const std::exception& e ) {
     Console(4) << e.what() << endl;
