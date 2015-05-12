@@ -204,6 +204,11 @@ SET( H3DUTIL_COMPILE_FLAGS "-DH3DUTIL_EXPORTS" )
 
 SET( ENABLE_THREAD_LOCK_DEBUG "OFF" CACHE BOOL "switcher to control the thread lock debug collection" )
 IF( ENABLE_THREAD_LOCK_DEBUG )
+  IF( COMMAND cmake_policy )
+    IF( POLICY CMP0054 )
+      cmake_policy(SET CMP0054 OLD)
+    ENDIF( POLICY CMP0054 )
+  ENDIF( COMMAND cmake_policy )
   if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     execute_process(
         COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)

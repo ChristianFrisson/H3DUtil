@@ -11,7 +11,9 @@
 #                         of the same build as the dependent package.
 # 
 
-GET_FILENAME_COMPONENT(module_file_path ${CMAKE_CURRENT_LIST_FILE} PATH )
+include( H3DExternalSearchPath )
+GET_FILENAME_COMPONENT( module_file_path ${CMAKE_CURRENT_LIST_FILE} PATH )
+get_external_search_paths_h3d( module_include_search_paths module_lib_search_paths ${module_file_path} "sofahelper" "sofahelper/framework" )
 
 IF( WIN32 )
 SET( SOFA_LIBRARY_POSTFIX "_1_0" )
@@ -45,14 +47,7 @@ ENDIF ()
 # Look for the header file.
 FIND_PATH(SOFAHELPER_INCLUDE_DIR   NAMES   sofa/helper/AdvancedTimer.h
                                     PATHS   ${SOFA_INSTALL_DIR}/framework
-                                            $ENV{H3D_EXTERNAL_ROOT}/include
-                                            $ENV{H3D_EXTERNAL_ROOT}/include/sofahelper/framework
-                                            $ENV{H3D_ROOT}/../External/include  
-                                            $ENV{H3D_ROOT}/../External/include/sofahelper/framework
-                                            ../../External/include
-                                            ../../External/include/sofahelper/framework
-                                            ${module_file_path}/../../../External/include
-                                            ${module_file_path}/../../../External/include/sofahelper
+                                            ${module_include_search_paths}
                                     DOC     "Path in which the file AdvancedTimer.h is located." )
                                     
 MARK_AS_ADVANCED(SOFAHELPER_INCLUDE_DIR)
@@ -81,20 +76,14 @@ IF ( SOFA_DELAY_FIND_LIBS )
 ELSE ()
   # use precompiled lib to work
 FIND_LIBRARY(SOFAHELPER_LIBRARY    NAMES   SofaHelper${SOFA_LIBRARY_POSTFIX}2
-                                    PATHS   ${SOFA_INSTALL_DIR}/lib
-                                            $ENV{H3D_EXTERNAL_ROOT}/${LIB}
-                                            $ENV{H3D_ROOT}/../External/${LIB}
-                                            ../../External/${LIB}
-                                            ${module_file_path}/../../../External/${LIB}
-                                    DOC     "Path to SofaHelper${SOFA_LIBRARY_POSTFIX}2 library." )
+                                   PATHS   ${SOFA_INSTALL_DIR}/lib
+                                           ${module_lib_search_paths}
+                                   DOC     "Path to SofaHelper${SOFA_LIBRARY_POSTFIX}2 library." )
 MARK_AS_ADVANCED(SOFAHELPER_LIBRARY)
 FIND_LIBRARY(SOFAHELPER_DEBUG_LIBRARY  NAMES   SofaHelper${SOFA_LIBRARY_POSTFIX}d2
-                                        PATHS   ${SOFA_INSTALL_DIR}/lib
-                                                $ENV{H3D_EXTERNAL_ROOT}/${LIB}
-                                                $ENV{H3D_ROOT}/../External/${LIB}
-                                                ../../External/${LIB}
-                                                ${module_file_path}/../../../External/${LIB}
-                                        DOC     "Path to SofaHelper${SOFA_LIBRARY_POSTFIX}d2 library.")
+                                       PATHS   ${SOFA_INSTALL_DIR}/lib
+                                               ${module_lib_search_paths}
+                                       DOC     "Path to SofaHelper${SOFA_LIBRARY_POSTFIX}d2 library.")
 
 MARK_AS_ADVANCED(SOFAHELPER_DEBUG_LIBRARY)
 ENDIF()

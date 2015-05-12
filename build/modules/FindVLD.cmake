@@ -5,30 +5,22 @@
 #  VLD_LIBRARIES    - List of libraries when using vld.
 #  VLD_FOUND        - True if vld found.
 
-GET_FILENAME_COMPONENT(module_file_path ${CMAKE_CURRENT_LIST_FILE} PATH )
+include( H3DExternalSearchPath )
+GET_FILENAME_COMPONENT( module_file_path ${CMAKE_CURRENT_LIST_FILE} PATH )
+get_external_search_paths_h3d( module_include_search_paths module_lib_search_paths ${module_file_path} )
 
 IF( CMAKE_CL_64 )
   MESSAGE( SEND_ERROR "64 bit version of visual leak detector is not tested yet." )
-  SET( LIB "lib32" )
-ELSE( CMAKE_CL_64 )
-  SET( LIB "lib32" )
 ENDIF( CMAKE_CL_64 )
-
 # Look for the header file.
 FIND_PATH(VLD_INCLUDE_DIR    NAMES vld/vld.h
-                             PATHS $ENV{H3D_EXTERNAL_ROOT}/include
-                                   $ENV{H3D_ROOT}/../External/include
-                                   ../../External/include
-                                   ${module_file_path}/../../../External/include
+                             PATHS ${module_include_search_paths}
                              DOC "Path in which the file vld/vld.h is located." )
 MARK_AS_ADVANCED(VLD_INCLUDE_DIR)
 
 # Look for the library.
 FIND_LIBRARY(VLD_LIBRARY    NAMES  vld
-                            PATHS $ENV{H3D_EXTERNAL_ROOT}/${LIB}
-                                  $ENV{H3D_ROOT}/../External/${LIB}
-                                  ../../External/${LIB}
-                                  ${module_file_path}/../../../External/${LIB}
+                            PATHS ${module_lib_search_paths}
                             DOC "Path to vld library." )
 MARK_AS_ADVANCED(VLD_LIBRARY)
 
