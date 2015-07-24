@@ -55,7 +55,8 @@ namespace H3DUtil {
       RGBA,
       BGR,
       BGRA,
-      VEC3
+      VEC3,
+      R
       // Color table bitmap??
     } PixelType;
         

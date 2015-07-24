@@ -854,6 +854,10 @@ H3DUTIL_API bool H3DUtil::saveOpenEXRImage( const string &url,
     offsets[0]= 0;
     nr_channel= 1;
     break;
+  case Image::R:
+    offsets[0] = 0;
+    nr_channel = 1;
+    break;
   case Image::LUMINANCE_ALPHA:
     offsets[0]= 0;
     offsets[3]= 1;

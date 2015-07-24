@@ -33,6 +33,9 @@
 #undef max
 #endif
 #include <limits>
+#ifdef HAVE_OPENEXR
+#include <OpenEXR/half.h>
+#endif
 
 using namespace H3DUtil;
 
@@ -150,14 +153,38 @@ namespace ImageInternals {
 
   inline H3DFloat getRationalValueAsFloat( void *i, 
                                            unsigned int bytes_to_read ) {
-    assert( bytes_to_read == 4 || bytes_to_read == 8 );
+    assert( bytes_to_read == 4 || bytes_to_read == 8||bytes_to_read==2 );
     double v = 0;
     if( bytes_to_read == 4 ) {
       v = *((float *)i);
     } else if( bytes_to_read == 8 ) {
       v = *((double *)i);
+    } else if(bytes_to_read == 2){ 
+#ifdef HAVE_OPENEXR
+      unsigned short v_temp;
+      memcpy( &v_temp, i, bytes_to_read ); 
+      half v_temp_half;
+      v_temp_half.setBits(v_temp);
+      v = float(v_temp_half);
+#else
+      Console(4)<<"ERROR: need openexr support to convert 16bit float to 32bit float "<<endl;
+#endif
+
     }
     return (H3DFloat) v;
+  }
+
+  inline H3DFloat getValueAsFloat( void *i, unsigned int bytes_to_read, 
+                                   Image::PixelComponentType pct ){
+    if( pct == Image::UNSIGNED ) {
+      return getUnsignedValueAsFloat(i, bytes_to_read);
+    }else if( pct == Image::SIGNED ) {
+      return getSignedValueAsFloat(i, bytes_to_read );
+    }else if( pct == Image::RATIONAL ){
+      return getRationalValueAsFloat(i, bytes_to_read);
+    }else{
+      Console(4)<<"Warning: Specified pixel component type data converting to float is not supported yet"<<endl;
+    }
   }
 
   inline void writeFloatAsSignedValue( H3DFloat r,
@@ -183,15 +210,36 @@ namespace ImageInternals {
   inline void writeFloatAsRationalValue( H3DFloat r,
                                          void *i, 
                                          unsigned int bytes_to_write ) {
-    assert( bytes_to_write == 4 || bytes_to_write == 8 );
+    assert( bytes_to_write == 4 || bytes_to_write == 8 || bytes_to_write == 2);
 
     if( bytes_to_write == 4 ) {
       *((float *)i) = r;
     } else if( bytes_to_write == 8 ) {
       *((double *)i) = r;
+    } else if( bytes_to_write == 2 ) {
+#ifdef HAVE_OPENEXR
+      half r_temp_half = half(r);
+      unsigned short r_temp = r_temp_half.bits();
+      memcpy( i, &r_temp, bytes_to_write );
+#else
+      Console(4)<<"ERROR: need openexr support to convert float to half"<<endl;
+#endif
     }
   }
-
+  inline void writeFloatAsValue( H3DFloat r,
+                                 void *i,
+                                 unsigned int bytes_to_write,
+                                 Image::PixelComponentType pct){
+    if( pct == Image::UNSIGNED ) {
+      writeFloatAsUnsignedValue( r, i, bytes_to_write );
+    }else if( pct == Image::SIGNED ) {
+      writeFloatAsSignedValue( r, i, bytes_to_write );
+    }else if( pct == Image::RATIONAL ) {
+      writeFloatAsRationalValue( r, i, bytes_to_write );
+    }else{
+      Console(4)<<"Warning: Specified pixel component type data converting to pixel data is not supported yet"<<endl;
+    }
+  }
 }
 
 H3DUtil::RGBA Image::getPixel( int x, int y, int z ) {
@@ -259,6 +307,11 @@ H3DUtil::RGBA Image::imageValueToRGBA( void *_pixel_data ) {
       return H3DUtil::RGBA( fv, fv, fv, 1 );
     }
     };
+  case Image::R:
+    {
+      H3DFloat fv = getValueAsFloat( pixel_data, bytes_per_pixel, pixelComponentType() );
+      return H3DUtil::RGBA(fv, 0,0,1);
+    }
   case Image::LUMINANCE_ALPHA: {
     unsigned int bytes_per_component = bytes_per_pixel / 2;
     switch( pixelComponentType() ) { 
@@ -481,6 +534,10 @@ void Image::RGBAToImageValue( const H3DUtil::RGBA &rgba, void *_pixel_data ) {
       return;
     }
     };
+  case Image::R:{
+    writeFloatAsValue(rgba.r, pixel_data, bytes_per_pixel, pixelComponentType() );
+    return;
+  }
   case Image::LUMINANCE_ALPHA: {
     unsigned int bytes_per_component = bytes_per_pixel / 2;
     switch( pixelComponentType() ) { 
@@ -703,7 +760,8 @@ void Image::RGBAToImageValue( const H3DUtil::RGBA &rgba, void *_pixel_data ) {
 
 unsigned int Image::nrPixelComponents() {
   PixelType pixel_type = pixelType();
-  if( pixel_type == LUMINANCE ) return 1;
+  if( pixel_type == LUMINANCE ||
+      pixel_type == R ) return 1;
   if( pixel_type == LUMINANCE_ALPHA ) return 2;
   if( pixel_type == RGB ||
       pixel_type == BGR ||
