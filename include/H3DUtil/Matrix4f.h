@@ -173,6 +173,9 @@ namespace H3DUtil {
       Vec3f getTranslationPart() const {
         return Vec3f( m[0][3], m[1][3], m[2][3] );
       }
+      /// Overload += operator to skip temporary copy
+      Matrix4f& operator+=(const Matrix4f& m2);
+
     private:
       /// The matrix data.
       H3DFloat m[4][4];
