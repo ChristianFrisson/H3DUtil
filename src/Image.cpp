@@ -185,6 +185,7 @@ namespace ImageInternals {
     }else{
       Console(4)<<"Warning: Specified pixel component type data converting to float is not supported yet"<<endl;
     }
+    return 0;
   }
 
   inline void writeFloatAsSignedValue( H3DFloat r,
