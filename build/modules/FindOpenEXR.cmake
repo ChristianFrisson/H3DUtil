@@ -11,11 +11,10 @@ FIND_PACKAGE(H3DZLIB)
 
 SET( OpenEXRIncludeSearchPath "" )
 SET( OpenEXRLibrarySearchPath "" )
-IF( MSVC10 )
-  include( H3DExternalSearchPath )
-  GET_FILENAME_COMPONENT( module_file_path ${CMAKE_CURRENT_LIST_FILE} PATH )
-  get_external_search_paths_h3d( OpenEXRIncludeSearchPath OpenEXRLibrarySearchPath ${module_file_path} )
-ENDIF()
+include( H3DExternalSearchPath )
+GET_FILENAME_COMPONENT( module_file_path ${CMAKE_CURRENT_LIST_FILE} PATH )
+SET( CHECK_IF_H3D_EXTERNAL_MATCHES_VS_VERSION ON )
+get_external_search_paths_h3d( OpenEXRIncludeSearchPath OpenEXRLibrarySearchPath ${module_file_path} )
 
 # Look for the header file.
 FIND_PATH( OpenEXR_INCLUDE_DIR NAMES OpenEXR/Iex.h
