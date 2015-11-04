@@ -42,7 +42,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#if defined(_MSC_VER) && _MSC_FULL_VER == 190022609
+#if defined(_MSC_VER) && ( _MSC_VER >= 1900 )
 #define HAVE_STRUCT_TIMESPEC 1
 #endif
 #include <pthread.h>
