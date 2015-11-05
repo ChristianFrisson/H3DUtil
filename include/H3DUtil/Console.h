@@ -59,6 +59,15 @@
 
 namespace H3DUtil {
 
+  /// Enum for human readable logging levels
+  namespace LogLevel {
+    enum e {
+      Info = 3,
+      Warning = 4,
+      Error = 5
+    };
+  }
+
   /// A string buffer class that stores different messages depending
   /// on internal parameters and sends this to an output stream.
   /// See basic_dostream for example usage.
@@ -71,7 +80,7 @@ namespace H3DUtil {
     /// outputlevel to be displayed.
     int level;
     /// The output stream to send the content of the string buffer to.
-    ostream *outputstream;
+    std::vector < ostream * > outputstream;
     /// The time when an instance of this class is created.
     TimeStamp starttime;
     /// If true the time passed since starttime will be sent to the output
@@ -88,10 +97,12 @@ namespace H3DUtil {
     basic_debugbuf(  ) : 
       outputlevel( 3 ),
       level( 0 ),
-      outputstream( &cerr ),
       showtime(false),
       showlevel( true ),
       disable_count ( 0 ) {
+
+      outputstream.push_back ( &cerr );
+
       setLockMutexFunction( NULL );
       setUnlockMutexFunction( NULL );
     }
@@ -127,7 +138,12 @@ namespace H3DUtil {
     void setShowLevel( bool show ) { showlevel = show; }
 
     /// Set the output stream to use.
-    void setOutputStream( ostream &s ) { outputstream = &s; }
+    void setOutputStream( ostream &s, int _level = 0 ) { 
+      if( (int)outputstream.size() <= _level ) {
+        outputstream.resize( _level + 1 );
+      }
+      outputstream[_level] = &s;
+    }
 
     /// Set the variable outputlevel.
     void setOutputLevel( int _outputlevel ) { outputlevel = _outputlevel; }
@@ -139,8 +155,19 @@ namespace H3DUtil {
     void setLevel( int _level ) { level = _level; }
 
     /// Get the ostream that is used as output stream.
-    ostream &getOutputStream() { 
-      return *outputstream;
+    ostream &getOutputStream( int _level = 0 ) {
+      if( _level >= 0 ) {
+        if( _level >= (int)outputstream.size() ) {
+          _level = (int)outputstream.size() - 1;
+        }
+        while( !outputstream[_level] ) {
+          --_level;
+        }
+
+        return *outputstream[_level];
+      } else {
+        return *outputstream[0];
+      }
     }
     
     /// Disable all console output
@@ -175,25 +202,31 @@ namespace H3DUtil {
       if( lock_mutex_func.first )
         lock_mutex_func.first( lock_mutex_func.second );
       TimeStamp time;
-
+      
       if ( outputlevel >= 0  &&  level >= outputlevel  &&  disable_count == 0 ) {
+        // Get output stream assigned for level
+        std::ostream& s = getOutputStream( level );
+
         if ( showlevel || showtime ){
-          *outputstream << "[";
+          s << "[";
         }
         
         if ( showlevel ) {
-          if ( level <= 2 ) {
-            *outputstream << "I"; }
-          else {
-            *outputstream << "W"; }
+          if ( level >= LogLevel::Error ) {
+            s << "E"; 
+          } else if( level >= LogLevel::Warning ) {
+            s << "W"; 
+          } else {
+            s << "I";
+          }
         }
         
         if ( showlevel && showtime ) {
-          *outputstream << " ";
+          s << " ";
         }
         
         if ( showtime ) {
-          *outputstream << std::setfill('0')
+          s << std::setfill('0')
                         << std::setprecision(2)
                         << std::setiosflags(std::ios::fixed)
                         << std::setw(6)
@@ -204,10 +237,10 @@ namespace H3DUtil {
                         << std::resetiosflags(std::ios::floatfield);
         }
         if ( showlevel || showtime ) {
-          *outputstream << "] ";
+          s << "] ";
         }
         
-        *outputstream << std::basic_stringbuf<CharT, TraitsT>::str().c_str();
+        s << std::basic_stringbuf<CharT, TraitsT>::str().c_str();
       }
       
       this->str( std::basic_string<CharT>() ); // Clear the string buffer
@@ -278,15 +311,15 @@ namespace H3DUtil {
     }
 
     /// Set the ostream to use as output stream.
-    void setOutputStream( ostream &s ) { 
+    void setOutputStream( ostream &s, int _level = 0 ) { 
       static_cast< basic_debugbuf<CharT, TraitsT>* >(std::ios::rdbuf())->
-        setOutputStream( s );  
+        setOutputStream( s, _level );  
     }
 
     /// Get the ostream that is used as output stream.
-    ostream &getOutputStream() { 
+    ostream &getOutputStream( int _level = 0 ) { 
       return static_cast< basic_debugbuf<CharT, TraitsT>* >(std::ios::rdbuf())->
-        getOutputStream();  
+        getOutputStream( _level );  
     }
 
     /// Set the minimum level that will be used before displaying anything.
