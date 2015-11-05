@@ -38,10 +38,10 @@
 //  Console    << " This is a warning" << endl;
 //  Console    << " This is still the same warning" << endl;
 //
-//  Console(1) << "Level 1" << endl;
+//  Console(LogLevel::Debug) << "Level 1" << endl;
 //  Console(2) << "Level 2" << endl;
 //  Console.setShowTime( true );
-//  Console(3) << "Level 3, with time" << endl;
+//  Console(LogLevel::Warning) << "Level 3, with time" << endl;
 //
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __CONSOLE_H__
@@ -62,6 +62,7 @@ namespace H3DUtil {
   /// Enum for human readable logging levels
   namespace LogLevel {
     enum e {
+      Debug = 1,
       Info = 3,
       Warning = 4,
       Error = 5

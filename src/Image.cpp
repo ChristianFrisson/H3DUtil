@@ -167,7 +167,7 @@ namespace ImageInternals {
       v_temp_half.setBits(v_temp);
       v = float(v_temp_half);
 #else
-      Console(4)<<"ERROR: need openexr support to convert 16bit float to 32bit float "<<endl;
+      Console(LogLevel::Error)<<"ERROR: need openexr support to convert 16bit float to 32bit float "<<endl;
 #endif
 
     }
@@ -183,7 +183,7 @@ namespace ImageInternals {
     }else if( pct == Image::RATIONAL ){
       return getRationalValueAsFloat(i, bytes_to_read);
     }else{
-      Console(4)<<"Warning: Specified pixel component type data converting to float is not supported yet"<<endl;
+      Console(LogLevel::Error)<<"Warning: Specified pixel component type data converting to float is not supported yet"<<endl;
     }
     return 0;
   }
@@ -223,7 +223,7 @@ namespace ImageInternals {
       unsigned short r_temp = r_temp_half.bits();
       memcpy( i, &r_temp, bytes_to_write );
 #else
-      Console(4)<<"ERROR: need openexr support to convert float to half"<<endl;
+      Console(LogLevel::Error)<<"ERROR: need openexr support to convert float to half"<<endl;
 #endif
     }
   }
@@ -238,7 +238,7 @@ namespace ImageInternals {
     }else if( pct == Image::RATIONAL ) {
       writeFloatAsRationalValue( r, i, bytes_to_write );
     }else{
-      Console(4)<<"Warning: Specified pixel component type data converting to pixel data is not supported yet"<<endl;
+      Console(LogLevel::Error)<<"Warning: Specified pixel component type data converting to pixel data is not supported yet"<<endl;
     }
   }
 }
@@ -807,7 +807,7 @@ namespace ImageInternals {
     try {
       normalized_data = new FloatType[nr_voxels];
     } catch (bad_alloc& ba) {
-      Console(4) << ba.what() << endl;
+      Console(LogLevel::Error) << ba.what() << endl;
       return NULL;
     }
     

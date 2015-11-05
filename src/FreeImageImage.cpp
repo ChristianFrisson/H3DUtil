@@ -127,7 +127,7 @@ FreeImageIO* FreeImageImage::getIStreamIO () {
 void FreeImageImage::updateImageProperties(){
 
   if( bitmap==NULL ) {
-    Console(4)<<"Warning(FreeImageImage): Not able to updateImageProperties as"
+    Console(LogLevel::Error)<<"Warning(FreeImageImage): Not able to updateImageProperties as"
       << " no valid bitmap is available, please check if related image loader is"
       << " correctly working" << endl;
     return;

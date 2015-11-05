@@ -54,7 +54,7 @@ RefCountedClass::RefCountedClass( bool _use_lock ):
 
 RefCountedClass::~RefCountedClass() {
 #ifdef REF_COUNT_DEBUG
-  Console(1) << "~RefCountedClass: " << this << endl;
+  Console(LogLevel::Debug) << "~RefCountedClass: " << this << endl;
 #endif
   if( ref_count_lock_pointer ) {
     delete ref_count_lock_pointer;
@@ -70,7 +70,7 @@ void RefCountedClass::ref() {
   }
   ++ref_count;
 #ifdef REF_COUNT_DEBUG
-  Console(1) << "Ref " << getName() << " " << this << ": " 
+  Console(LogLevel::Debug) << "Ref " << getName() << " " << this << ": " 
     << ref_count << endl;
 #endif
   if( !manual_initialize && ref_count == 1 ) {
@@ -85,7 +85,7 @@ void RefCountedClass::unref() {
     ref_count_lock_pointer->lock();
   --ref_count;
 #ifdef REF_COUNT_DEBUG
-  Console(1) << "Unref " << getName() << " " << this << ": " 
+  Console(LogLevel::Debug) << "Unref " << getName() << " " << this << ": " 
     << ref_count << endl;
 #endif
   if( ref_count == 0 ) {

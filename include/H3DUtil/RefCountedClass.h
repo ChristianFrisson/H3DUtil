@@ -100,6 +100,16 @@ namespace H3DUtil {
       return type_name;
     }
 
+    /// Returns a combination of the typename and name, or just the typename
+    /// if the object is unnamed
+    inline string getFullName() {
+      if( hasName() ) {
+        return getTypeName() + "(" + getName() + ")";
+      } else {
+        return getTypeName();
+      }
+    }
+
     /// Returns true if the initialize() function has been called.
     inline bool isInitialized() {
       return is_initialized;
@@ -128,5 +138,8 @@ namespace H3DUtil {
   };
     
 }
+
+// A macro which may be used for logging within a RefCountedClass and prepends the object name and source line number
+#define H3DConsole(level) Console(level) << "[" << this->getFullName() << "@" << __LINE__ << "] "
 
 #endif

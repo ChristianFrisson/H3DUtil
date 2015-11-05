@@ -139,11 +139,11 @@ Image *loadFreeImageInternal( FIBITMAP* bm, const string& url= "" ) {
   case FIC_RGB:
   case FIC_RGBALPHA: break;
   default: {
-    Console(3) << "Warning: UnsupportedFreeImageColorType " << t << ". ";
+    Console(LogLevel::Warning) << "Warning: UnsupportedFreeImageColorType " << t << ". ";
     if ( url.empty() ) {
-      Console(3) << "Cannot load file from stream." << endl;
+      Console(LogLevel::Warning) << "Cannot load file from stream." << endl;
     } else {
-      Console(3) << "File " << url << " can not be loaded. "
+      Console(LogLevel::Warning) << "File " << url << " can not be loaded. "
                  << "File name might be the name of a downloaded temporary file. "
                  << endl;
     }
@@ -232,7 +232,7 @@ Image *H3DUtil::loadRawImage( const string &url,
   else if( raw_image_info.pixel_type_string == "VEC3" ) 
     pixel_type = Image::VEC3;
   else {
-    Console(3) << "Warning: Invalid pixelType value \"" << raw_image_info.pixel_type_string
+    Console(LogLevel::Warning) << "Warning: Invalid pixelType value \"" << raw_image_info.pixel_type_string
                << "\" in  RawImageLoader. " << endl;
     return NULL;
   }
@@ -245,7 +245,7 @@ Image *H3DUtil::loadRawImage( const string &url,
   else if( raw_image_info.pixel_component_type_string == "RATIONAL" )
     pixel_component_type = Image::RATIONAL;
   else {
-    Console(3) << "Warning: Invalid pixelComponentType value \"" 
+    Console(LogLevel::Warning) << "Warning: Invalid pixelComponentType value \"" 
                << raw_image_info.pixel_component_type_string
                << "\" in  RawImageLoader. " << endl;
     return NULL;
@@ -282,13 +282,13 @@ Image *H3DUtil::loadRawImage( const string &url,
     err = inflateInit2(&strm,47);
     
     if( err == Z_MEM_ERROR ){
-      Console(3) << "Warning: zlib memory error." << endl;
+      Console(LogLevel::Warning) << "Warning: zlib memory error." << endl;
       delete[] data;
       delete[] data2;
       return NULL;
     }
     if( err == Z_VERSION_ERROR ){
-      Console(3) << "Warning: zlib version error." << endl;
+      Console(LogLevel::Warning) << "Warning: zlib version error." << endl;
       delete[] data;
       delete[] data2;
       return NULL;
@@ -297,19 +297,19 @@ Image *H3DUtil::loadRawImage( const string &url,
     err = inflate(&strm,Z_FINISH);
     
     if( err == Z_DATA_ERROR ){
-      Console(3) << "Warning: zlib unrecognizable data error." << endl;
+      Console(LogLevel::Warning) << "Warning: zlib unrecognizable data error." << endl;
       delete[] data;
       delete[] data2;
       return NULL;
     }
     if( err == Z_STREAM_ERROR ){
-      Console(3) << "Warning: zlib stream error." << endl;
+      Console(LogLevel::Warning) << "Warning: zlib stream error." << endl;
       delete[] data;
       delete[] data2;
       return NULL;
     }
     if( err == Z_BUF_ERROR ){
-      Console(3) << "Warning: zlib out of memory error." << endl;
+      Console(LogLevel::Warning) << "Warning: zlib out of memory error." << endl;
       delete[] data;
       delete[] data2;
       return NULL;
@@ -318,13 +318,13 @@ Image *H3DUtil::loadRawImage( const string &url,
     err = inflateEnd(&strm);
     
     if( err == Z_STREAM_ERROR ){
-      Console(3) << "Warning: zlib stream error." << endl;
+      Console(LogLevel::Warning) << "Warning: zlib stream error." << endl;
       delete[] data;
       delete[] data2;
       return NULL;
     }
     
-    Console(2) << "Inflated compressed raw file." << endl;
+    Console(LogLevel::Debug) << "Inflated compressed raw file." << endl;
     delete[] data;
     data = data2;
   }
@@ -436,7 +436,7 @@ Image *H3DUtil::loadNrrdFile( const string &url ) {
   if(!airIsNaN(nin->axis[d_axis].spacing))
     spacing.z = (H3DFloat)( nin->axis[d_axis].spacing );
   else
-    Console(3) << "Warning: NRRD file " << url
+    Console(LogLevel::Warning) << "Warning: NRRD file " << url
          << " lacks spacing information in axis 2. Sets to default 0.0003\n";
   }
 
@@ -445,7 +445,7 @@ Image *H3DUtil::loadNrrdFile( const string &url ) {
   if(!airIsNaN(nin->axis[h_axis].spacing))
     spacing.y = (H3DFloat)( nin->axis[h_axis].spacing );
   else
-    Console(3) << "Warning: NRRD file " << url
+    Console(LogLevel::Warning) << "Warning: NRRD file " << url
          << " lacks spacing information in axis 1. Sets to default 0.0003\n";
   }
 
@@ -454,7 +454,7 @@ Image *H3DUtil::loadNrrdFile( const string &url ) {
   if(!airIsNaN(nin->axis[w_axis].spacing))
     spacing.x = (H3DFloat)( nin->axis[w_axis].spacing );
   else
-    Console(3) << "Warning: NRRD file " << url
+    Console(LogLevel::Warning) << "Warning: NRRD file " << url
          << " lacks spacing information in axis 0. Sets to default 0.0003\n";
   }
 
@@ -629,9 +629,9 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
     if( handle != INVALID_HANDLE_VALUE ) {
       string name = path + "\\" + find_data->cFileName;
       filenames.push_back( name );
-      //Console(3) << name << endl;
+      //Console(LogLevel::Warning) << name << endl;
       while( FindNextFile(handle, find_data) ) {
-        //Console(3) << find_data->cFileName << endl;
+        //Console(LogLevel::Warning) << find_data->cFileName << endl;
         filenames.push_back( string( path + "\\" + find_data->cFileName ) );
       }
     }
@@ -662,7 +662,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
     try {
       slice_2d.reset( new DicomImage( url ) );
     } catch( const DicomImage::CouldNotLoadDicomImage &e ) {
-      Console(3) << e << endl;
+      Console(LogLevel::Warning) << e << endl;
       return NULL;
     }
 
@@ -766,7 +766,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
                     H3DAbs( patient_orn[3] - 0 ) > Constants::f_epsilon ||
                     H3DAbs( patient_orn[4] - 1 ) > Constants::f_epsilon ||
                     H3DAbs( patient_orn[5] - 0 ) > Constants::f_epsilon ) {
-                  Console(3) << "Warning: ImageOrientationPatient is not "
+                  Console(LogLevel::Warning) << "Warning: ImageOrientationPatient is not "
                              << "the assumed default. Dicom image might not "
                              << "be read correctly." << endl;
                 }
@@ -806,7 +806,7 @@ H3DUTIL_API Image *H3DUtil::loadDicomFile( const string &url,
         try {
           slice_2d.reset( new DicomImage( filenames[i] ) );
         } catch( const DicomImage::CouldNotLoadDicomImage &e ) {
-          Console(3) << e << endl;
+          Console(LogLevel::Warning) << e << endl;
           delete [] data;
           return NULL;
         }
@@ -836,7 +836,7 @@ H3DUTIL_API bool H3DUtil::saveOpenEXRImage( const string &url,
                                             Image& image ) {
   
   if ( image.pixelComponentType() != Image::RATIONAL ) {
-    Console(4) << "Cannot save image as OpenEXR, pixel component type must be RATIONAL! "
+    Console(LogLevel::Error) << "Cannot save image as OpenEXR, pixel component type must be RATIONAL! "
                   "Only float images are supported!" << endl;
     return false;
   }
@@ -898,7 +898,7 @@ H3DUTIL_API bool H3DUtil::saveOpenEXRImage( const string &url,
   }
 
   if ( bytes_per_pixel/nr_channel != sizeof(float) ) {
-    Console(4) << "Cannot save image as OpenEXR, bits per pixel per channel "
+    Console(LogLevel::Error) << "Cannot save image as OpenEXR, bits per pixel per channel "
                   "does not match size of float! Only float images are supported!" << endl;
     return false;
   }
@@ -964,7 +964,7 @@ H3DUTIL_API bool H3DUtil::saveOpenEXRImage( const string &url,
     file.writePixels (image.height());
     delete[] image_data_flipped;
   } catch ( const std::exception& e ) {
-    Console(4) << e.what() << endl;
+    Console(LogLevel::Error) << e.what() << endl;
     return false;
   }
 
@@ -1008,7 +1008,7 @@ H3DUTIL_API Image* H3DUtil::loadOpenEXRImage ( const string &url ) {
     } else if ( r && g && b && a ) {
       pixel_type= Image::RGBA;
     } else {
-      Console(4) << "Error: Only RGB and RGBA images are supported!" << endl;
+      Console(LogLevel::Error) << "Error: Only RGB and RGBA images are supported!" << endl;
       return NULL;
     }
 
@@ -1073,7 +1073,7 @@ H3DUTIL_API Image* H3DUtil::loadOpenEXRImage ( const string &url ) {
                            (unsigned char*)data_flipped );
 
   } catch ( const std::exception& e ) {
-    Console(4) << e.what() << endl;
+    Console(LogLevel::Error) << e.what() << endl;
     return NULL;
   }
 }

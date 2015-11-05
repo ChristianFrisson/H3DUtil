@@ -210,7 +210,7 @@ void *PeriodicThread::thread_func( void * _data ) {
           mach_thread_self(),
           THREAD_TIME_CONSTRAINT_POLICY, (thread_policy_t)&ttcpolicy,
           THREAD_TIME_CONSTRAINT_POLICY_COUNT)) != KERN_SUCCESS ) {
-    H3DUtil::Console(4) << "Threads: set_realtime() failed" << endl;
+    H3DUtil::Console(LogLevel::Error) << "Threads: set_realtime() failed" << endl;
   }
 #endif
   
@@ -228,14 +228,14 @@ void *PeriodicThread::thread_func( void * _data ) {
     // Create a waitable timer.
     hTimer = CreateWaitableTimer(NULL, TRUE, NULL );
     if (!hTimer) {
-      H3DUtil::Console(4) << "CreateWaitableTimer failed (%d)" << endl 
+      H3DUtil::Console(LogLevel::Error) << "CreateWaitableTimer failed (%d)" << endl 
                          << GetLastError() << endl;
       timeEndPeriod(1); 
       return NULL;
     }
   
     if (!SetWaitableTimer(hTimer, &liDueTime, 0, NULL, NULL, 0)) {
-      H3DUtil::Console(4) << "SetWaitableTimer failed (%d)\n"
+      H3DUtil::Console(LogLevel::Error) << "SetWaitableTimer failed (%d)\n"
         << GetLastError() << endl;
       timeEndPeriod(1); 
       return NULL;
@@ -261,7 +261,7 @@ void *PeriodicThread::thread_func( void * _data ) {
 
       // Set a timer to wait for.
       if (!SetWaitableTimer(hTimer, &liDueTime, 0, NULL, NULL, 0)) {
-        H3DUtil::Console(4) << "SetWaitableTimer failed (%d)\n"
+        H3DUtil::Console(LogLevel::Error) << "SetWaitableTimer failed (%d)\n"
           << GetLastError() << endl;
         return NULL;
       }
