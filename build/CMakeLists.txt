@@ -72,14 +72,14 @@ SET(CMAKE_MODULE_PATH ${H3DUtil_SOURCE_DIR}/modules )
 
 SET( ENABLE_PROFILER "OFF" CACHE BOOL "switcher to control the profiler")
 IF( ENABLE_PROFILER )
-	FIND_PACKAGE(SofaHelper)
-	IF(SOFAHELPER_FOUND )
-		SET(HAVE_PROFILER 1)
-		INCLUDE_DIRECTORIES(${SOFAHELPER_INCLUDE_DIR})
-		SET(optionalLibs ${optionalLibs} ${SOFAHELPER_LIBRARIES} )
-	ELSEIF( SOFAHELPER_FOUND )
-		message(WARNING "No sofa helper library is found, profiler can not be enabled")
-	ENDIF(SOFAHELPER_FOUND)
+  FIND_PACKAGE(SofaHelper)
+  IF(SOFAHELPER_FOUND )
+    SET(HAVE_PROFILER 1)
+    INCLUDE_DIRECTORIES(${SOFAHELPER_INCLUDE_DIR})
+    SET(optionalLibs ${optionalLibs} ${SOFAHELPER_LIBRARIES} )
+  ELSEIF( SOFAHELPER_FOUND )
+    message(WARNING "No sofa helper library is found, profiler can not be enabled")
+  ENDIF(SOFAHELPER_FOUND)
 ENDIF( ENABLE_PROFILER )
 
 # Optional extra library. Needed to support memory leak detector
@@ -151,11 +151,11 @@ IF( MSVC )
 
   SET( H3DUtil_is_working_copy 10 )
   IF( SubWCRev )
-		EXECUTE_PROCESS( COMMAND ${SubWCRev} ${H3DUtil_SOURCE_DIR}/../
-										 RESULT_VARIABLE H3DUtil_is_working_copy )
-		IF( ${H3DUtil_is_working_copy} EQUAL 0 )
-		  SET( H3DUTIL_SVN_VERSION "$WCREV$" )
-		ENDIF( ${H3DUtil_is_working_copy} EQUAL 0 )
+    EXECUTE_PROCESS( COMMAND ${SubWCRev} ${H3DUtil_SOURCE_DIR}/../
+                     RESULT_VARIABLE H3DUtil_is_working_copy )
+    IF( ${H3DUtil_is_working_copy} EQUAL 0 )
+      SET( H3DUTIL_SVN_VERSION "$WCREV$" )
+    ENDIF( ${H3DUtil_is_working_copy} EQUAL 0 )
   ENDIF( SubWCRev )
 
   # autogenerate H3DUtil.rc depending on the version
@@ -234,54 +234,27 @@ SET_TARGET_PROPERTIES( H3DUtil PROPERTIES VERSION ${H3DUTIL_FULL_VERSION} )
 
 IF(APPLE)
   SET_TARGET_PROPERTIES (H3DUtil
-	  	         PROPERTIES 
-#			 BUILD_WITH_INSTALL_RPATH 1
+               PROPERTIES 
+#       BUILD_WITH_INSTALL_RPATH 1
                          INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 ENDIF(APPLE)
 
 IF(UNIX)
-SET_TARGET_PROPERTIES( H3DUtil PROPERTIES OUTPUT_NAME h3dutil )
+  SET_TARGET_PROPERTIES( H3DUtil PROPERTIES OUTPUT_NAME h3dutil )
 ENDIF(UNIX)
 
 IF( MSVC )
-  SET( H3D_MSVC_VERSION 6 )
-  SET( TEMP_MSVC_VERSION 1299 )
-  WHILE( ${MSVC_VERSION} GREATER ${TEMP_MSVC_VERSION} )
-    MATH( EXPR H3D_MSVC_VERSION "${H3D_MSVC_VERSION} + 1" )
-    MATH( EXPR TEMP_MSVC_VERSION "${TEMP_MSVC_VERSION} + 100" )
-  ENDWHILE( ${MSVC_VERSION} GREATER ${TEMP_MSVC_VERSION} )
-
+  include( H3DCommonFunctions )
   # change the name depending on compiler to be able to tell them apart
   # since they are not compatible with each other. 
-	# H3DUtil can not link incrementally on vc8 for some reason. We shut of incremental linking for
-	# all visual studio versions.
-  SET_TARGET_PROPERTIES( H3DUtil PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_vc${H3D_MSVC_VERSION}
-                                            LINK_FLAGS_DEBUG " /NODEFAULTLIB:msvcrt /INCREMENTAL:NO" )
+  setH3DMSVCOutputName( H3DUtil "H3DUtil" )
+  # Add common H3D compile flags for microsoft visual studio
+  addCommonH3DMSVCCompileFlags( H3DUTIL_COMPILE_FLAGS )
+  
+  # H3DUtil can not link incrementally on vc8 for some reason. We shut of incremental linking for
+  # all visual studio versions.
+  SET_TARGET_PROPERTIES( H3DUtil PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:msvcrt /INCREMENTAL:NO" )
 
-  # Treat wchar_t as built in type for all visual studio versions.
-  # This is default for every version above 7 ( so far ) but we still set it for all.
-  SET( H3DUTIL_COMPILE_FLAGS "${H3DUTIL_COMPILE_FLAGS} /Zc:wchar_t")
-
-  IF( MSVC80 )
-    # This might be useful for visual studio 2005 users that often recompile the api.
-    IF( NOT DEFINED USE_VC8_MP_FLAG )
-      SET( USE_VC8_MP_FLAG "NO" CACHE BOOL "In visual studio 8 the MP flag exists but is not documented. Maybe it is unsafe to use. If you want to use it then set this flag to yes." )
-    ENDIF( NOT DEFINED USE_VC8_MP_FLAG )
-
-    IF( USE_VC8_MP_FLAG )
-      SET( H3DUTIL_COMPILE_FLAGS "${H3DUTIL_COMPILE_FLAGS} /MP" )
-    ENDIF( USE_VC8_MP_FLAG )
-  ENDIF( MSVC80 )
-
-  IF( ${MSVC_VERSION} GREATER 1399 )
-    # Remove compiler warnings about deprecation for visual studio versions 8 and above.
-    SET( H3DUTIL_COMPILE_FLAGS "${H3DUTIL_COMPILE_FLAGS} -D_CRT_SECURE_NO_DEPRECATE" )
-  ENDIF( ${MSVC_VERSION} GREATER 1399 )
-
-  IF( ${MSVC_VERSION} GREATER 1499 )
-    # Build using several threads for visual studio versions 9 and above.
-    SET( H3DUTIL_COMPILE_FLAGS "${H3DUTIL_COMPILE_FLAGS} /MP" )
-  ENDIF( ${MSVC_VERSION} GREATER 1499 )
 ELSEIF(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   IF(NOT MINGW)
     #used to link in dynamic library load functions. Needed by some examples in HAPI
