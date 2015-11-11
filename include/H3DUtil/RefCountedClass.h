@@ -33,8 +33,6 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
-
 namespace H3DUtil {
 
   /// Base class for all classes that should be reference counted.
@@ -79,15 +77,15 @@ namespace H3DUtil {
     void unref();
 
     /// Get the name of the node.
-    inline string getName() { 
+    inline std::string getName() { 
       if( name == "" )
-        return string( "Unnamed " ) + getTypeName();
+        return std::string( "Unnamed " ) + getTypeName();
       else 
         return name; 
     }
 
     /// Set the name of the node.
-    inline void setName( const string &_name ) { 
+    inline void setName( const std::string &_name ) { 
       name = _name;
     }
     
@@ -96,13 +94,13 @@ namespace H3DUtil {
 
     /// Get the name of this Node type. E.g. if the Node is an IndexedFaceSet
     /// it should return "IndexedFaceSet"
-    inline string getTypeName() {
+    inline std::string getTypeName() {
       return type_name;
     }
 
     /// Returns a combination of the typename and name, or just the typename
     /// if the object is unnamed
-    inline string getFullName() {
+    inline std::string getFullName() {
       if( hasName() ) {
         return getTypeName() + "(" + getName() + ")";
       } else {
@@ -120,10 +118,10 @@ namespace H3DUtil {
     unsigned int ref_count; 
 
     /// The name
-    string name;
+    std::string name;
 
     /// String version of the name of the type.
-    string type_name;
+    std::string type_name;
 
     /// true if initialize() function has been called.
     bool is_initialized;

@@ -43,16 +43,16 @@ namespace H3DUtil {
   /// \param url The url of the image to load.
   /// \returns A pointer to and Image class containing the data
   /// of the loaded url.
-  H3DUTIL_API Image *loadFreeImage( const string &url );
+  H3DUTIL_API Image *loadFreeImage( const std::string &url );
 
-  H3DUTIL_API Image *loadFreeImage( istream &is );
+  H3DUTIL_API Image *loadFreeImage( std::istream &is );
 
   /// \ingroup ImageLoaderFunctions
   /// Saves an image as a PNG file using FreeImage.
   /// \param url The filename to save to.
   /// \param image The image to save.
   /// \returns 0 on success.
-  H3DUTIL_API bool saveFreeImagePNG( const string &url,
+  H3DUTIL_API bool saveFreeImagePNG( const std::string &url,
                                      Image& image );
 #endif
 
@@ -62,14 +62,14 @@ namespace H3DUtil {
   /// \param url The url of the image to load.
   /// \returns A pointer to and Image class containing the data
   /// of the loaded url. NULL if unsuccessful.
-  H3DUTIL_API Image *loadNrrdFile( const string &url );
+  H3DUTIL_API Image *loadNrrdFile( const std::string &url );
 
   /// \ingroup ImageLoaderFunctions
   /// Saves an image in the Nrrd file format.
   /// \param url The filename to save to.
   /// \param image The image to save.
   /// \returns 0 on success.
-  H3DUTIL_API int saveImageAsNrrdFile( const string &url,
+  H3DUTIL_API int saveImageAsNrrdFile( const std::string &url,
                                        Image *image );
 #endif
 
@@ -121,7 +121,7 @@ namespace H3DUtil {
   /// if they are found.
   /// \returns A pointer to and Image class containing the data
   /// of the loaded url. NULL if unsuccessful.
-  H3DUTIL_API Image *loadDicomFile( const string &url, 
+  H3DUTIL_API Image *loadDicomFile( const std::string &url, 
                                     bool load_single_file = true );
 #endif
 
@@ -171,20 +171,20 @@ namespace H3DUtil {
   /// Read the data from the file pointed to by the parameter url
   /// and creates and returns a PixelImage containing this data.
   /// How to interpret the data is specified by the raw_image_info parameter.
-  H3DUTIL_API Image *loadRawImage( const string &url,
+  H3DUTIL_API Image *loadRawImage( const std::string &url,
                                    RawImageInfo &raw_image_info );
 
 #ifdef HAVE_OPENEXR
   /// \ingroup ImageLoaderFunctions
   /// Save the specified image as an OpenEXR file with the filename url.
   /// \return True on success, false otherwise
-  H3DUTIL_API bool saveOpenEXRImage( const string &url,
+  H3DUTIL_API bool saveOpenEXRImage( const std::string &url,
                                      Image& image ); 
 
   /// \ingroup ImageLoaderFunctions
   /// Read the data from the OpenEXR file pointed to by the parameter url
   /// \return A new PixelImage containing this data or NULL on error.
-  H3DUTIL_API Image* loadOpenEXRImage ( const string &url );
+  H3DUTIL_API Image* loadOpenEXRImage ( const std::string &url );
 #endif
 }
 

@@ -36,7 +36,6 @@
 #include <H3DUtil/TemplateOperators.h>
 #include <H3DUtil/Exception.h>
 #include <ostream>
-using namespace std;
 
 namespace H3DUtil {
   namespace ArithmeticTypes {
@@ -114,7 +113,7 @@ namespace H3DUtil {
 
 
     /// Print a Vec4f values to a ostream.
-    inline ostream& operator<<( ostream &os, const Vec4f &v ) {
+    inline std::ostream& operator<<( std::ostream &os, const Vec4f &v ) {
       os << v.x << " " << v.y << " " << v.z << " " << v.w;
       return os;
     } 

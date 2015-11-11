@@ -81,7 +81,7 @@ namespace H3DUtil {
     /// outputlevel to be displayed.
     int level;
     /// The output stream to send the content of the string buffer to.
-    std::vector < ostream * > outputstream;
+    std::vector < std::ostream * > outputstream;
     /// The time when an instance of this class is created.
     TimeStamp starttime;
     /// If true the time passed since starttime will be sent to the output
@@ -102,7 +102,7 @@ namespace H3DUtil {
       showlevel( true ),
       disable_count ( 0 ) {
 
-      outputstream.push_back ( &cerr );
+      outputstream.push_back ( &std::cerr );
 
       setLockMutexFunction( NULL );
       setUnlockMutexFunction( NULL );
@@ -120,7 +120,7 @@ namespace H3DUtil {
     /// thread safe.
     inline void setLockMutexFunction( void (*func) (void * ), 
                                       void *arg = NULL ) {
-      lock_mutex_func = make_pair( func, arg );
+      lock_mutex_func = std::make_pair( func, arg );
     }
 
     /// Set a function(and optional argument) to be called after
@@ -129,7 +129,7 @@ namespace H3DUtil {
     /// thread safe.
     inline void setUnlockMutexFunction( void (*func) (void * ), 
                                         void *arg = NULL ) {
-      unlock_mutex_func = make_pair( func, arg );
+      unlock_mutex_func = std::make_pair( func, arg );
     }
 
     /// Set the variable showtime.
@@ -139,7 +139,7 @@ namespace H3DUtil {
     void setShowLevel( bool show ) { showlevel = show; }
 
     /// Set the output stream to use.
-    void setOutputStream( ostream &s, int _level = 0 ) { 
+    void setOutputStream( std::ostream &s, int _level = 0 ) { 
       if( (int)outputstream.size() <= _level ) {
         outputstream.resize( _level + 1 );
       }
@@ -156,7 +156,7 @@ namespace H3DUtil {
     void setLevel( int _level ) { level = _level; }
 
     /// Get the ostream that is used as output stream.
-    ostream &getOutputStream( int _level = 0 ) {
+    std::ostream &getOutputStream( int _level = 0 ) {
       if( _level >= 0 ) {
         if( _level >= (int)outputstream.size() ) {
           _level = (int)outputstream.size() - 1;
@@ -255,8 +255,8 @@ namespace H3DUtil {
     }
 
   protected:
-    pair< void (*)(void *), void * > lock_mutex_func;
-    pair< void (*)(void *), void * > unlock_mutex_func;
+    std::pair< void (*)(void *), void * > lock_mutex_func;
+    std::pair< void (*)(void *), void * > unlock_mutex_func;
     
   };
 
@@ -312,13 +312,13 @@ namespace H3DUtil {
     }
 
     /// Set the ostream to use as output stream.
-    void setOutputStream( ostream &s, int _level = 0 ) { 
+    void setOutputStream( std::ostream &s, int _level = 0 ) { 
       static_cast< basic_debugbuf<CharT, TraitsT>* >(std::ios::rdbuf())->
         setOutputStream( s, _level );  
     }
 
     /// Get the ostream that is used as output stream.
-    ostream &getOutputStream( int _level = 0 ) { 
+    std::ostream &getOutputStream( int _level = 0 ) { 
       return static_cast< basic_debugbuf<CharT, TraitsT>* >(std::ios::rdbuf())->
         getOutputStream( _level );  
     }

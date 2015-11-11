@@ -103,7 +103,7 @@ namespace H3DUtil {
     /// \{
 
     /// Function for printing a DualQuaternion to an ostream.
-    inline ostream& operator<<( ostream &os, const DualQuaternion &q ) {
+    inline std::ostream& operator<<( std::ostream &os, const DualQuaternion &q ) {
       os << q.q0 << " " << q.qe;
       return os;
     }

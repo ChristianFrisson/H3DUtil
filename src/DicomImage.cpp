@@ -46,7 +46,7 @@
 
 using namespace H3DUtil;
 
-H3DUtil::DicomImage::DicomImage( const string &url ):
+H3DUtil::DicomImage::DicomImage( const std::string &url ):
   PixelImage( 0,0,0,0,RGB, UNSIGNED, NULL ) {
 
   dir_file_info.clear();
@@ -61,25 +61,25 @@ H3DUtil::DicomImage::DicomImage( const string &url ):
   /// the volume data is not in the file but each slice is in its own
   /// separate file specified by this DIRFILE.
   if( media_storage == UID_MediaStorageDirectoryStorage ) {
-    string::size_type slash_pos = url.rfind("/");
-    string::size_type backslash_pos = url.rfind("\\");
-    string::size_type pos;
-    if( slash_pos == string::npos ) {
-      if( backslash_pos == string::npos )
-        pos = string::npos;
+    std::string::size_type slash_pos = url.rfind("/");
+    std::string::size_type backslash_pos = url.rfind("\\");
+    std::string::size_type pos;
+    if( slash_pos == std::string::npos ) {
+      if( backslash_pos == std::string::npos )
+        pos = std::string::npos;
       else 
         pos = backslash_pos;
     } else {
-      if( backslash_pos == string::npos )
+      if( backslash_pos == std::string::npos )
         pos = slash_pos;
       else
         pos = slash_pos < backslash_pos ? backslash_pos : slash_pos;
     }
-    string path = url.substr( 0, pos + 1 );;
+    std::string path = url.substr( 0, pos + 1 );;
     DcmSequenceOfItems *dir_records;
     dataset->findAndGetSequence( DCM_DirectoryRecordSequence,
                                  dir_records );
-    vector< string > urls( dir_records->card() );
+    std::vector< std::string > urls( dir_records->card() );
     dir_file_info.resize( dir_records->card() );
     for( unsigned int i = 0; i < dir_records->card(); ++i ) {
       DcmItem *item = dir_records->getItem( i );
@@ -94,12 +94,12 @@ H3DUtil::DicomImage::DicomImage( const string &url ):
   }
 }
 
-void H3DUtil::DicomImage::loadImage( const string &url ) {
+void H3DUtil::DicomImage::loadImage( const std::string &url ) {
   DJDecoderRegistration::registerCodecs();
 
   ::DicomImage *image = new ::DicomImage( url.c_str() );
   if (image->getStatus() != EIS_Normal) {
-    string error_string( ::DicomImage::getString(image->getStatus()) );
+    std::string error_string( ::DicomImage::getString(image->getStatus()) );
     delete image;
     DJDecoderRegistration::cleanup();
     throw CouldNotLoadDicomImage( url,
@@ -193,7 +193,7 @@ void H3DUtil::DicomImage::loadImage( const string &url ) {
   DJDecoderRegistration::cleanup();
 }
 
-void H3DUtil::DicomImage::loadImage( const vector< string > &urls ) {
+void H3DUtil::DicomImage::loadImage( const std::vector< std::string > &urls ) {
   if( urls.size() > 0 ) {
     ::DicomImage *image = new ::DicomImage( urls[0].c_str() );
     if (image->getStatus() != EIS_Normal)

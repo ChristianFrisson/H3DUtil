@@ -95,7 +95,7 @@ namespace H3DUtil {
         if( H3DAbs(l2-1) > Constants::f_epsilon ) {
           H3DFloat l = H3DSqrt( l2 );
           if( l == 0 ) {
-            string s = "Trying to normalize zero length Vec2f.";
+            std::string s = "Trying to normalize zero length Vec2f.";
             throw Vec2fNormalizeError( s );
           } else {
             x /= l; 
@@ -146,7 +146,7 @@ namespace H3DUtil {
     /// \{
 
     /// Function for printing a Vec2f to an ostream.
-    inline ostream& operator<<( ostream &os, const Vec2f &v ) {
+    inline std::ostream& operator<<( std::ostream &os, const Vec2f &v ) {
       os << v.x << " " << v.y;
       return os;
     } 

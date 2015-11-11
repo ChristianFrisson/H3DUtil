@@ -132,7 +132,7 @@ namespace H3DUtil {
     /// \{
 
     /// Function for printing a Quaterniond to an ostream.
-    inline ostream& operator<<( ostream &os, const Quaterniond &q ) {
+    inline std::ostream& operator<<( std::ostream &os, const Quaterniond &q ) {
       os << q.v << " " << q.w;
       return os;
     }

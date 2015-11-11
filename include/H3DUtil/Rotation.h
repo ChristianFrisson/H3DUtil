@@ -182,7 +182,7 @@ namespace H3DUtil {
     }
 
     /// Function for printing a Rotation to an ostream.
-    inline ostream& operator<<( ostream &os, const Rotation &r ) {
+    inline std::ostream& operator<<( std::ostream &os, const Rotation &r ) {
       os << r.axis << " " << r.angle;
       return os;
     }

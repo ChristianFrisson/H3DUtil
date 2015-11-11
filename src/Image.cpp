@@ -183,7 +183,7 @@ namespace ImageInternals {
     }else if( pct == Image::RATIONAL ){
       return getRationalValueAsFloat(i, bytes_to_read);
     }else{
-      Console(LogLevel::Error)<<"Warning: Specified pixel component type data converting to float is not supported yet"<<endl;
+      Console(LogLevel::Error)<<"Warning: Specified pixel component type data converting to float is not supported yet"<<std::endl;
     }
     return 0;
   }
@@ -238,7 +238,7 @@ namespace ImageInternals {
     }else if( pct == Image::RATIONAL ) {
       writeFloatAsRationalValue( r, i, bytes_to_write );
     }else{
-      Console(LogLevel::Error)<<"Warning: Specified pixel component type data converting to pixel data is not supported yet"<<endl;
+      Console(LogLevel::Error)<<"Warning: Specified pixel component type data converting to pixel data is not supported yet"<<std::endl;
     }
   }
 }
@@ -783,7 +783,7 @@ namespace ImageInternals {
     
     for (unsigned int i = 0; i < nr_elements; ++i) {
       normalized_data[i] = 
-      (d[ i ] / FloatType( numeric_limits<A >::max() ) ) * scale + bias;
+      (d[ i ] / FloatType( std::numeric_limits<A >::max() ) ) * scale + bias;
       if( normalized_data[i] < 0 ) normalized_data[i] = 0;
     }
   }
@@ -806,8 +806,8 @@ namespace ImageInternals {
     FloatType *normalized_data = NULL;
     try {
       normalized_data = new FloatType[nr_voxels];
-    } catch (bad_alloc& ba) {
-      Console(LogLevel::Error) << ba.what() << endl;
+    } catch (std::bad_alloc& ba) {
+      Console(LogLevel::Error) << ba.what() << std::endl;
       return NULL;
     }
     

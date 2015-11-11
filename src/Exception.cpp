@@ -30,7 +30,7 @@
 
 #include <H3DUtil/Exception.h>
 
-void H3DUtil::Exception::H3DAPIException::print( ostream &os ) const {
+void H3DUtil::Exception::H3DAPIException::print( std::ostream &os ) const {
   os << className();
   if( message.length() ) {
     os << ": " << message;

@@ -139,13 +139,13 @@ namespace H3DUtil {
   };
 
   /// Function for printing a RGB to an ostream.
-  inline ostream& operator<<( ostream &os, const RGB &r ) {
+  inline std::ostream& operator<<( std::ostream &os, const RGB &r ) {
     os << r.r << " " << r.g << " " << r.b;
     return os;
   }
   
   /// Function for printing a Rotation to an ostream.
-  inline ostream& operator<<( ostream &os, const RGBA &r ) {
+  inline std::ostream& operator<<( std::ostream &os, const RGBA &r ) {
     os << r.r << " " << r.g << " " << r.b << " " << r.a;
     return os;
   }

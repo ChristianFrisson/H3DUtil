@@ -33,7 +33,6 @@
 #include <string>
 #include <iostream>
 #include <H3DUtil/H3DUtil.h>
-using namespace std;
 
 namespace H3DUtil {
   /// Namespace containing various exception classes.
@@ -46,18 +45,18 @@ namespace H3DUtil {
       /// Constructor
       /// \param _message optional message associated with the exception.
       ///
-      H3DException( const string &_message = "" ) : message( _message ) {}
+      H3DException( const std::string &_message = "" ) : message( _message ) {}
 
       virtual ~H3DException() {};
       /// Function for printing the exception to a stream.
       /// \param os the stream to print to.
       ///   
-      virtual void print( ostream &os ) const  {
+      virtual void print( std::ostream &os ) const  {
         os << "H3DException: " << message;
       }
 
       /// The message associated with this exception
-      string message;
+      std::string message;
     };
 
     /// This is the base class for exceptions where the location in the 
@@ -88,9 +87,9 @@ namespace H3DUtil {
       /// \param _linenumber the line number in which the exception occured.
       /// If specified the macro __LINE__ should be used.
       ///
-      H3DAPIException( const string &_message = "", 
-                       const string &_function = "",
-                       const string &_filename = "",
+      H3DAPIException( const std::string &_message = "", 
+                       const std::string &_function = "",
+                       const std::string &_filename = "",
                        const int    &_linenumber = -1 ) : 
         H3DException( _message ),
         function(_function), filename(_filename), linenumber(_linenumber ) {}
@@ -101,20 +100,20 @@ namespace H3DUtil {
       /// printout of the exception.
       /// \return the name of the class that is being defined
       ///
-      virtual string className() const {
+      virtual std::string className() const {
         return "H3DAPIException";
       }
 
       /// Function for printing the exception to a stream.
       /// \param os the stream to print to.
       /// 
-      virtual void print( ostream &os ) const;
+      virtual void print( std::ostream &os ) const;
       
       /// The function in which the exception occured.
-      string function;
+      std::string function;
 
       /// The name of the file in which the exception occured.
-      string filename;
+      std::string filename;
 
       /// The line number in which the exception occured.
       int linenumber;
@@ -149,9 +148,9 @@ namespace H3DUtil {
       /// \param _linenumber the line number in which the exception occured.
       ///
       ValueException( ValueType _value,
-                      const string &_message  = "",
-                      const string &_function = "",
-                      const string &_filename = "",
+                      const std::string &_message  = "",
+                      const std::string &_function = "",
+                      const std::string &_filename = "",
                       const int &_linenumber  =  -1 ) : 
         H3DAPIException( _message, _function, _filename, _linenumber ),
         value( _value ) {}
@@ -162,14 +161,14 @@ namespace H3DUtil {
       /// printout of the exception.
       /// \return the name of the class that is being defined
       ///
-      virtual string className() const {
+      virtual std::string className() const {
         return "ValueException";
       }
 
       /// Function for printing the exception to a stream.
       /// \param os the stream to print to.
       /// 
-      virtual void print( ostream &os ) const {
+      virtual void print( std::ostream &os ) const {
         os << className() << ": " << value << ".";
         if( message.length() ) {
           os << " " << message;
@@ -196,7 +195,7 @@ namespace H3DUtil {
     /// \param os an ostream
     /// \param e the H3DException to put into the stream.
     /// 
-    inline ostream &operator<<( ostream& os, const H3DException &e ) {
+    inline std::ostream &operator<<( std::ostream& os, const H3DException &e ) {
       e.print( os );
       return os;
     }
@@ -236,15 +235,15 @@ namespace H3DUtil {
   class name : public H3DUtil::Exception::ValueException< value_type > {     \
   public:                                                                   \
     name( value_type _value,                                                \
-          const string &_message = "",                                      \
-          const string &_function = "",                                     \
-          const string &_filename = "",                                     \
+          const std::string &_message = "",                                      \
+          const std::string &_function = "",                                     \
+          const std::string &_filename = "",                                     \
           const int &_linenumber = -1 ) :                                   \
       H3DUtil::Exception::ValueException< value_type >( _value, _message,    \
     _function,                                                              \
     _filename, _linenumber) {}                                              \
   protected:                                                                \
-    string className() const { return #name; }                         \
+    std::string className() const { return #name; }                         \
 }
 
   /// Macro for easy creation of a H3DUtil::Exception::H3DAPIException subclass.
@@ -253,14 +252,14 @@ namespace H3DUtil {
 #define H3D_API_EXCEPTION( name )                                           \
   class name : public H3DUtil::Exception::H3DAPIException {                  \
   public:                                                                   \
-    name( const string &_message = "",                                      \
-          const string &_function = "",                                     \
-          const string &_filename = "",                                     \
+    name( const std::string &_message = "",                                      \
+          const std::string &_function = "",                                     \
+          const std::string &_filename = "",                                     \
           const int &_linenumber = -1 ) :                                   \
       H3DUtil::Exception::H3DAPIException( _message, _function,              \
                 _filename, _linenumber) {}                                  \
   protected:                                                                \
-    string className() const { return #name; }                         \
+    std::string className() const { return #name; }                         \
 }
 
 }

@@ -111,7 +111,7 @@ namespace H3DUtil {
 
 
     /// Print a Vec4d values to a ostream.
-    inline ostream& operator<<( ostream &os, const Vec4d &v ) {
+    inline std::ostream& operator<<( std::ostream &os, const Vec4d &v ) {
       os << v.x << " " << v.y << " " << v.z << " " << v.w;
       return os;
     } 

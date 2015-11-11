@@ -82,27 +82,27 @@ unsigned int FreeImageImage::width() {
 
 unsigned DLL_CALLCONV
 _ReadProc(void *buffer, unsigned size, unsigned count, fi_handle handle) {
-  istream& is= *static_cast<istream*>(handle);
+  std::istream& is= *static_cast<std::istream*>(handle);
 
-  streampos a= is.tellg();
+  std::streampos a= is.tellg();
   is.read ( static_cast<char*>(buffer), size*count );
-  streampos b= is.tellg();
+  std::streampos b= is.tellg();
 
   return static_cast<unsigned int>(b-a);
 }
 
 inline int DLL_CALLCONV
 _SeekProc(fi_handle handle, long offset, int origin) {
-  istream& is= *static_cast<istream*>(handle);
+  std::istream& is= *static_cast<std::istream*>(handle);
   switch ( origin ) {
   case SEEK_SET:
     is.seekg ( offset );
     break;
   case SEEK_CUR:
-    is.seekg ( offset,ios_base::cur );
+    is.seekg ( offset,std::ios_base::cur );
     break;
   case SEEK_END:
-    is.seekg ( offset,ios_base::end );
+    is.seekg ( offset,std::ios_base::end );
     break;
   }
  
@@ -111,7 +111,7 @@ _SeekProc(fi_handle handle, long offset, int origin) {
  
 inline long DLL_CALLCONV
 _TellProc(fi_handle handle) {
-  istream& is= *static_cast<istream*>(handle);
+  std::istream& is= *static_cast<std::istream*>(handle);
   return static_cast<long>(is.tellg());
 }
 
@@ -129,7 +129,7 @@ void FreeImageImage::updateImageProperties(){
   if( bitmap==NULL ) {
     Console(LogLevel::Error)<<"Warning(FreeImageImage): Not able to updateImageProperties as"
       << " no valid bitmap is available, please check if related image loader is"
-      << " correctly working" << endl;
+      << " correctly working" << std::endl;
     return;
   }
   

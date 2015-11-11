@@ -158,10 +158,10 @@ Vec3f Matrix3f::toEulerAngles() {
   return v;
 }
 
-ostream& H3DUtil::ArithmeticTypes::operator<<( ostream &os, const Matrix3f &m ) {
-  os << m[0][0] << " " << m[0][1] << " " << m[0][2] << endl;
-  os << m[1][0] << " " << m[1][1] << " " << m[1][2] << endl;
-  os << m[2][0] << " " << m[2][1] << " " << m[2][2] << endl;
+std::ostream& H3DUtil::ArithmeticTypes::operator<<( std::ostream &os, const Matrix3f &m ) {
+  os << m[0][0] << " " << m[0][1] << " " << m[0][2] << std::endl;
+  os << m[1][0] << " " << m[1][1] << " " << m[1][2] << std::endl;
+  os << m[2][0] << " " << m[2][1] << " " << m[2][2] << std::endl;
   return os;
 }
 

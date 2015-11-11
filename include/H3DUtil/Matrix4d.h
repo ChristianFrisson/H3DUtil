@@ -279,7 +279,7 @@ namespace H3DUtil {
      }
 
     /// Function for printing a Matrix4d to an ostream.
-    H3DUTIL_API ostream& operator<<( ostream &os, const Matrix4d &m );
+    H3DUTIL_API std::ostream& operator<<( std::ostream &os, const Matrix4d &m );
 
     /// Multiplication with float.
     inline Matrix4d operator*( const float &a, const Matrix4d &b ) { return b * a; }

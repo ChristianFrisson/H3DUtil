@@ -52,10 +52,10 @@ namespace H3DUtil {
   class H3DUTIL_API DicomImage: public PixelImage {
   public:
     /// Throw when there was an error while loading the Dicom image.
-    H3D_VALUE_EXCEPTION( string, CouldNotLoadDicomImage );
+    H3D_VALUE_EXCEPTION( std::string, CouldNotLoadDicomImage );
     /// Constructor. 
     /// \param url The url of the Dicom file.
-    DicomImage( const string &url );
+    DicomImage( const std::string &url );
 
     /// Get the DcmFileFormat (see DCMTK documentation) object for the 
     /// loaded file. This allows you to access the meta info and 
@@ -72,7 +72,7 @@ namespace H3DUtil {
     /// Get the vector of DcmFileFormat objects for each file specified
     /// in the DIRFILE, if a DIRFILE was loaded. The vector is empty if
     /// no dirfile was loaded.
-    inline vector< DcmFileFormat > &getDirfileFileInfo() {
+    inline std::vector< DcmFileFormat > &getDirfileFileInfo() {
       return dir_file_info;
     }
 
@@ -86,18 +86,18 @@ namespace H3DUtil {
 
   protected:
     /// Load the image from the given url. The url can be a DIRFILE.
-    void loadImage( const string &url );
+    void loadImage( const std::string &url );
 
     /// Load the image from several urls where each url specifies
     /// a Dicom file containing a 2D-slice.
-    void loadImage( const vector< string > &urls );
+    void loadImage( const std::vector< std::string > &urls );
 
     /// The DcmFileFormat object for the currently loaded image.
     DcmFileFormat dicom_file_info;
     
     /// The DcmFileFormat object for each file entry if a DIRFILE is
     /// loaded.
-    vector< DcmFileFormat > dir_file_info;
+    std::vector< DcmFileFormat > dir_file_info;
   };
 
     

@@ -42,7 +42,7 @@ namespace H3DUtil {
   /// Write a H3DInt32 binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, H3DInt32 data ) {
+  inline void writeH3DType( std::ostream &output, H3DInt32 data ) {
     output.write( (char *)&(data), sizeof( H3DInt32 ) );
   }
 
@@ -53,7 +53,7 @@ namespace H3DUtil {
   /// code might not compile.
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, float data ) {
+  inline void writeH3DType( std::ostream &output, float data ) {
       output.write( (char *)&(data), sizeof( float ) );
   }
 
@@ -64,7 +64,7 @@ namespace H3DUtil {
   /// code might not compile.
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, double data ) {
+  inline void writeH3DType( std::ostream &output, double data ) {
       output.write( (char *)&(data), sizeof( double ) );
   }
 
@@ -72,7 +72,7 @@ namespace H3DUtil {
   /// Write a Vec2f binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Vec2f &data ) {
+  inline void writeH3DType( std::ostream &output, const Vec2f &data ) {
     writeH3DType( output, data.x );
     writeH3DType( output, data.y );
   }
@@ -81,7 +81,7 @@ namespace H3DUtil {
   /// Write a Vec2d binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Vec2d &data ) {
+  inline void writeH3DType( std::ostream &output, const Vec2d &data ) {
     writeH3DType( output, data.x );
     writeH3DType( output, data.y );
   }
@@ -90,7 +90,7 @@ namespace H3DUtil {
   /// Write a Vec3f binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Vec3f &data ) {
+  inline void writeH3DType( std::ostream &output, const Vec3f &data ) {
     writeH3DType( output, data.x );
     writeH3DType( output, data.y );
     writeH3DType( output, data.z );
@@ -100,7 +100,7 @@ namespace H3DUtil {
   /// Write a Vec3d binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Vec3d &data ) {
+  inline void writeH3DType( std::ostream &output, const Vec3d &data ) {
     writeH3DType( output, data.x );
     writeH3DType( output, data.y );
     writeH3DType( output, data.z );
@@ -110,7 +110,7 @@ namespace H3DUtil {
   /// Write a Vec4f binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Vec4f &data ) {
+  inline void writeH3DType( std::ostream &output, const Vec4f &data ) {
     writeH3DType( output, data.x );
     writeH3DType( output, data.y );
     writeH3DType( output, data.z );
@@ -121,7 +121,7 @@ namespace H3DUtil {
   /// Write a Vec4d binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Vec4d &data ) {
+  inline void writeH3DType( std::ostream &output, const Vec4d &data ) {
     writeH3DType( output, data.x );
     writeH3DType( output, data.y );
     writeH3DType( output, data.z );
@@ -132,7 +132,7 @@ namespace H3DUtil {
   /// Write a Rotation binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Rotation &data ) {
+  inline void writeH3DType( std::ostream &output, const Rotation &data ) {
     writeH3DType( output, data.axis );
     writeH3DType( output, data.angle );
   }
@@ -141,7 +141,7 @@ namespace H3DUtil {
   /// Write a Rotationd binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Rotationd &data ) {
+  inline void writeH3DType( std::ostream &output, const Rotationd &data ) {
     writeH3DType( output, data.axis );
     writeH3DType( output, data.angle );
   }
@@ -150,7 +150,7 @@ namespace H3DUtil {
   /// Write a Matrix3f binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Matrix3f &data ) {
+  inline void writeH3DType( std::ostream &output, const Matrix3f &data ) {
     writeH3DType( output, data[0][0] );
     writeH3DType( output, data[0][1] );
     writeH3DType( output, data[0][2] );
@@ -166,7 +166,7 @@ namespace H3DUtil {
   /// Write a Matrix3d binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Matrix3d &data ) {
+  inline void writeH3DType( std::ostream &output, const Matrix3d &data ) {
     writeH3DType( output, data[0][0] );
     writeH3DType( output, data[0][1] );
     writeH3DType( output, data[0][2] );
@@ -182,7 +182,7 @@ namespace H3DUtil {
   /// Write a Matrix4f binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Matrix4f &data ) {
+  inline void writeH3DType( std::ostream &output, const Matrix4f &data ) {
     writeH3DType( output, data[0][0] );
     writeH3DType( output, data[0][1] );
     writeH3DType( output, data[0][2] );
@@ -205,7 +205,7 @@ namespace H3DUtil {
   /// Write a Matrix4d binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Matrix4d &data ) {
+  inline void writeH3DType( std::ostream &output, const Matrix4d &data ) {
     writeH3DType( output, data[0][0] );
     writeH3DType( output, data[0][1] );
     writeH3DType( output, data[0][2] );
@@ -228,7 +228,7 @@ namespace H3DUtil {
   /// Write a Quaternion binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Quaternion &data ) {
+  inline void writeH3DType( std::ostream &output, const Quaternion &data ) {
     writeH3DType( output, data.v );
     writeH3DType( output, data.w );
   }
@@ -237,7 +237,7 @@ namespace H3DUtil {
   /// Write a Quaterniond binary to an ostream ( such as an ofstream ).
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const Quaterniond &data ) {
+  inline void writeH3DType( std::ostream &output, const Quaterniond &data ) {
     writeH3DType( output, data.v );
     writeH3DType( output, data.w );
   }
@@ -247,7 +247,7 @@ namespace H3DUtil {
   /// Not really an H3D type but it is useful anyways.
   /// \param output The ostream to write data to.
   /// \param data The data to write to stream.
-  inline void writeH3DType( ostream &output, const string &data ) {
+  inline void writeH3DType( std::ostream &output, const std::string &data ) {
     if( data.length() > 0 )
       output.write( data.c_str(), sizeof( char ) * data.length() );
     char null_char = '\0';
@@ -258,7 +258,7 @@ namespace H3DUtil {
   /// Read a H3DInt32 binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, H3DInt32 &data ) {
+  inline void readH3DType( std::istream &input, H3DInt32 &data ) {
     input.read( (char *)&(data), sizeof( H3DInt32 ) );
   }
 
@@ -269,7 +269,7 @@ namespace H3DUtil {
   /// code might not compile.
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, float &data ) {
+  inline void readH3DType( std::istream &input, float &data ) {
       input.read( (char *)&(data), sizeof( float ) );
   }
 
@@ -280,7 +280,7 @@ namespace H3DUtil {
   /// code might not compile.
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, double &data ) {
+  inline void readH3DType( std::istream &input, double &data ) {
       input.read( (char *)&(data), sizeof( double ) );
   }
 
@@ -288,7 +288,7 @@ namespace H3DUtil {
   /// Read a Vec2f binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Vec2f &data ) {
+  inline void readH3DType( std::istream &input, Vec2f &data ) {
     readH3DType( input, data.x );
     readH3DType( input, data.y );
   }
@@ -297,7 +297,7 @@ namespace H3DUtil {
   /// Read a Vec2d binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Vec2d &data ) {
+  inline void readH3DType( std::istream &input, Vec2d &data ) {
     readH3DType( input, data.x );
     readH3DType( input, data.y );
   }
@@ -306,7 +306,7 @@ namespace H3DUtil {
   /// Read a Vec3f binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Vec3f &data ) {
+  inline void readH3DType( std::istream &input, Vec3f &data ) {
     readH3DType( input, data.x );
     readH3DType( input, data.y );
     readH3DType( input, data.z );
@@ -316,7 +316,7 @@ namespace H3DUtil {
   /// Read a Vec3d binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Vec3d &data ) {
+  inline void readH3DType( std::istream &input, Vec3d &data ) {
     readH3DType( input, data.x );
     readH3DType( input, data.y );
     readH3DType( input, data.z );
@@ -326,7 +326,7 @@ namespace H3DUtil {
   /// Read a Vec4f binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Vec4f &data ) {
+  inline void readH3DType( std::istream &input, Vec4f &data ) {
     readH3DType( input, data.x );
     readH3DType( input, data.y );
     readH3DType( input, data.z );
@@ -337,7 +337,7 @@ namespace H3DUtil {
   /// Read a Vec4d binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Vec4d &data ) {
+  inline void readH3DType( std::istream &input, Vec4d &data ) {
     readH3DType( input, data.x );
     readH3DType( input, data.y );
     readH3DType( input, data.z );
@@ -348,7 +348,7 @@ namespace H3DUtil {
   /// Read a Rotation binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Rotation &data ) {
+  inline void readH3DType( std::istream &input, Rotation &data ) {
     readH3DType( input, data.axis );
     readH3DType( input, data.angle );
   }
@@ -357,7 +357,7 @@ namespace H3DUtil {
   /// Read a Rotationd binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Rotationd &data ) {
+  inline void readH3DType( std::istream &input, Rotationd &data ) {
     readH3DType( input, data.axis );
     readH3DType( input, data.angle );
   }
@@ -366,7 +366,7 @@ namespace H3DUtil {
   /// Read a Matrix3f binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Matrix3f &data ) {
+  inline void readH3DType( std::istream &input, Matrix3f &data ) {
     readH3DType( input, data[0][0] );
     readH3DType( input, data[0][1] );
     readH3DType( input, data[0][2] );
@@ -382,7 +382,7 @@ namespace H3DUtil {
   /// Read a Matrix3d binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Matrix3d &data ) {
+  inline void readH3DType( std::istream &input, Matrix3d &data ) {
     readH3DType( input, data[0][0] );
     readH3DType( input, data[0][1] );
     readH3DType( input, data[0][2] );
@@ -398,7 +398,7 @@ namespace H3DUtil {
   /// Read a Matrix4f binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Matrix4f &data ) {
+  inline void readH3DType( std::istream &input, Matrix4f &data ) {
     readH3DType( input, data[0][0] );
     readH3DType( input, data[0][1] );
     readH3DType( input, data[0][2] );
@@ -421,7 +421,7 @@ namespace H3DUtil {
   /// Read a Matrix4d binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Matrix4d &data ) {
+  inline void readH3DType( std::istream &input, Matrix4d &data ) {
     readH3DType( input, data[0][0] );
     readH3DType( input, data[0][1] );
     readH3DType( input, data[0][2] );
@@ -444,7 +444,7 @@ namespace H3DUtil {
   /// Read a Quaternion binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Quaternion &data ) {
+  inline void readH3DType( std::istream &input, Quaternion &data ) {
     readH3DType( input, data.v );
     readH3DType( input, data.w );
   }
@@ -453,7 +453,7 @@ namespace H3DUtil {
   /// Read a Quaterniond binary from an istream ( such as an ifstream ).
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, Quaterniond &data ) {
+  inline void readH3DType( std::istream &input, Quaterniond &data ) {
     readH3DType( input, data.v );
     readH3DType( input, data.w );
   }
@@ -463,14 +463,14 @@ namespace H3DUtil {
   /// Not really an H3D type but it is useful anyways.
   /// \param input The istream to read data from.
   /// \param data The variable in which to put the read data.
-  inline void readH3DType( istream &input, string &data ) {
+  inline void readH3DType( std::istream &input, std::string &data ) {
     while( !input.eof() ) {
       char tmp_chr;
       input.read( &tmp_chr, sizeof( char ) );
       if( tmp_chr == '\0' ) {
         break;
       }
-      data = string( data + tmp_chr );
+      data = std::string( data + tmp_chr );
     }
   }
 }

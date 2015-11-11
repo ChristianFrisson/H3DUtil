@@ -84,10 +84,10 @@ namespace H3DUtil {
 
     /// Get the string describing the last error that was encountered when
     /// using the DynamicLibrary functions.
-    static string getLastError();
+    static std::string getLastError();
 
   private:
-    static string last_error;
+    static std::string last_error;
   };
 }
 

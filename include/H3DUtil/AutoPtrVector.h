@@ -32,32 +32,30 @@
 #include <H3DUtil/H3DUtil.h>
 #include <vector>
 
-using namespace std;
-
 namespace H3DUtil {
   /// This class is similar to the auto_ptr class in the vector elements
   /// are Node * or pointers to subclasses of Node. Reference counting 
   /// will be upheld on all nodes in the vector.
   /// 
   template< class PtrType >
-  class AutoPtrVector : public vector<PtrType*> {
+  class AutoPtrVector : public std::vector<PtrType*> {
   public:
     /// Creates an empty vector.
     inline AutoPtrVector() {}
 
     /// Copy constructor from a vector class.
-    inline AutoPtrVector( const vector<PtrType> &v ) : 
-      vector<PtrType*>( v ) {
+    inline AutoPtrVector( const std::vector<PtrType> &v ) : 
+      std::vector<PtrType*>( v ) {
     }
 
     /// Copy constructor
     inline AutoPtrVector( const AutoPtrVector<PtrType> &v ) : 
-      vector<PtrType*>( v ) {
+      std::vector<PtrType*>( v ) {
     }
 
     /// Creates a vector with n elements.
-    inline AutoPtrVector( typename vector<PtrType*>::size_type n ):
-      vector< PtrType * >( n ) {}
+    inline AutoPtrVector( typename std::vector<PtrType*>::size_type n ):
+      std::vector< PtrType * >( n ) {}
 
     /// Destructor.
     inline virtual ~AutoPtrVector() {
@@ -67,35 +65,35 @@ namespace H3DUtil {
     /// Assignement operator.
     inline AutoPtrVector<PtrType> 
     &operator=( const AutoPtrVector<PtrType> &v ) {
-      vector<PtrType*>::operator=( v );
+      std::vector<PtrType*>::operator=( v );
       return *this;
     }
 
     /// Removed the last element.
     void pop_back() {
       delete this->back();
-      vector< PtrType * >::pop_back();
+      std::vector< PtrType * >::pop_back();
     }
         
     /// Erases the element at position pos.
-    inline void erase( typename vector<PtrType*>::iterator pos ) { 
+    inline void erase( typename std::vector<PtrType*>::iterator pos ) { 
       delete *pos;
-      vector<PtrType*>::erase( pos );
+      std::vector<PtrType*>::erase( pos );
     }
 
     /// Erases the range [first, last)
-    inline void erase( typename vector<PtrType*>::iterator first, 
-                       typename vector<PtrType*>::iterator last ) {
-      for( typename vector<PtrType*>::const_iterator i = first; i != last; ++i ) unref( *i );
-      vector<PtrType*>::erase( first, last );
+    inline void erase( typename std::vector<PtrType*>::iterator first, 
+                       typename std::vector<PtrType*>::iterator last ) {
+      for( typename std::vector<PtrType*>::const_iterator i = first; i != last; ++i ) unref( *i );
+      std::vector<PtrType*>::erase( first, last );
     }
 
     /// Erases all of the elements.
     inline void clear() {
-      for( typename vector<PtrType*>::iterator i = this->begin(); 
+      for( typename std::vector<PtrType*>::iterator i = this->begin(); 
            i != this->end(); ++i ) 
         delete (*i);
-      vector<PtrType*>::clear();
+      std::vector<PtrType*>::clear();
     }
   };
 }

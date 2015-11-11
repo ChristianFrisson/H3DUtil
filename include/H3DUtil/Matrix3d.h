@@ -217,7 +217,7 @@ namespace H3DUtil {
     }
 
     /// Function for printing a Matrix3d to an ostream.
-    H3DUTIL_API ostream& operator<<( ostream &os, const Matrix3d &m );
+    H3DUTIL_API std::ostream& operator<<( std::ostream &os, const Matrix3d &m );
 
     /// Multiplication with float.
     inline Matrix3d operator*( const float &a, const Matrix3d &b ) { return b * a; }
