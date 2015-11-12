@@ -70,7 +70,6 @@
 #include <OpenEXR/ImfNamespace.h>
 namespace IMF = OPENEXR_IMF_NAMESPACE;
 using namespace IMF;
-using namespace std;
 using namespace IMATH_NAMESPACE;
 #endif // HAVE_OPENEXF
 
@@ -80,6 +79,7 @@ using namespace IMATH_NAMESPACE;
 #include <memory>
 
 using namespace H3DUtil;
+using namespace std;
 
 #ifdef HAVE_FREEIMAGE
 Image *loadFreeImageInternal( FIBITMAP* bm, const string& url= "" ) {

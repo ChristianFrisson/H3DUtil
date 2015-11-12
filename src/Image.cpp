@@ -167,7 +167,7 @@ namespace ImageInternals {
       v_temp_half.setBits(v_temp);
       v = float(v_temp_half);
 #else
-      Console(LogLevel::Error)<<"ERROR: need openexr support to convert 16bit float to 32bit float "<<endl;
+      Console(LogLevel::Error)<<"ERROR: need openexr support to convert 16bit float to 32bit float "<<std::endl;
 #endif
 
     }
@@ -223,7 +223,7 @@ namespace ImageInternals {
       unsigned short r_temp = r_temp_half.bits();
       memcpy( i, &r_temp, bytes_to_write );
 #else
-      Console(LogLevel::Error)<<"ERROR: need openexr support to convert float to half"<<endl;
+      Console(LogLevel::Error)<<"ERROR: need openexr support to convert float to half"<<std::endl;
 #endif
     }
   }
