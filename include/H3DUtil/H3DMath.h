@@ -32,7 +32,8 @@
 #include <H3DUtil/Exception.h>
 #include <math.h>
 #include <limits>
-
+#undef  min
+#undef max
 namespace H3DUtil {
 
   /// Namespace containing various useful constants.
@@ -124,14 +125,14 @@ namespace H3DUtil {
   /// Returns the maximum value of a and b.
   template< class A >
   inline A H3DMax( const A &a, const A &b  ) {
-    return max( a, b );
+    return std::max( a, b );
   }
     
   /// \ingroup H3DUtilMath
   /// Returns the minimum value of a and b.
   template< class A >
   inline A H3DMin( const A &a, const A &b  ) {
-    return min( a, b );
+    return std::min( a, b );
   }
 
   /// \ingroup H3DUtilMath
