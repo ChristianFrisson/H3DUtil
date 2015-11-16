@@ -31,9 +31,13 @@
 
 #include <H3DUtil/Exception.h>
 #include <math.h>
-#include <limits>
-#undef  min
+#ifdef WIN32
 #undef max
+#undef min
+#endif
+#include <limits>
+#include <algorithm>
+
 namespace H3DUtil {
 
   /// Namespace containing various useful constants.
