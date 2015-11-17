@@ -128,10 +128,9 @@ namespace H3DUtil {
                                     H3DFloat y = 0, 
                                     H3DFloat z = 0,
                                     FilterType filter_type = LINEAR ) {
-      unsigned int byte_rem = bitsPerPixel() % 8;
+      assert(bitsPerPixel() % 8 == 0);
       unsigned int bytes_per_pixel = bitsPerPixel() / 8;
-      
-      assert(bitsPerPixel() % 8==0);
+
       
       H3DUtil::RGBA rgba;
 
