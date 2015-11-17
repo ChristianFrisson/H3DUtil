@@ -344,6 +344,7 @@ void *PeriodicThread::thread_func( void * _data ) {
     usleep(0);
 #endif
   }
+  return 0;
 } 
 
 ThreadBase::ThreadId ThreadBase::main_thread_id =

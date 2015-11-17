@@ -131,7 +131,7 @@ namespace H3DUtil {
       unsigned int byte_rem = bitsPerPixel() % 8;
       unsigned int bytes_per_pixel = bitsPerPixel() / 8;
       
-      assert( byte_rem == 0 );
+      assert(bitsPerPixel() % 8==0);
       
       H3DUtil::RGBA rgba;
 
