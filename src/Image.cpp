@@ -247,7 +247,9 @@ H3DUtil::RGBA Image::getPixel( int x, int y, int z ) {
   unsigned int byte_rem = bitsPerPixel() % 8;
   unsigned int bytes_per_pixel = bitsPerPixel() / 8;
 
-  assert( byte_rem == 0 );
+  if (byte_rem != 0) {
+    assert(!"bitsPerPixel value can not be divided by 8 for image");
+  }
   if( bytes_per_pixel <= 8 ) {
     char pixel_data[8]; 
     getElement( pixel_data, x, y, z );
@@ -266,7 +268,9 @@ void Image::setPixel( const H3DUtil::RGBA &value, int x, int y, int z ) {
   unsigned int byte_rem = bitsPerPixel() % 8;
   unsigned int bytes_per_pixel = bitsPerPixel() / 8;
 
-  assert( byte_rem == 0 );
+  if (byte_rem != 0) {
+    assert(!"bitsPerPixel value can not be divided by 8 for image");
+  }
   if( bytes_per_pixel <= 8 ) {
     char pixel_data[8];
     RGBAToImageValue( value, pixel_data );
@@ -287,7 +291,9 @@ H3DUtil::RGBA Image::imageValueToRGBA( void *_pixel_data ) {
   unsigned int byte_rem = bitsPerPixel() % 8;
   unsigned int bytes_per_pixel = bitsPerPixel() / 8;
 
-  assert( byte_rem == 0 );
+  if( byte_rem!=0 ) {
+    assert(!"bitsPerPixel value can not be divided by 8 for image");
+  }
 
   switch( pixelType() ) {
   case Image::LUMINANCE: 
@@ -511,7 +517,9 @@ void Image::RGBAToImageValue( const H3DUtil::RGBA &rgba, void *_pixel_data ) {
   unsigned int byte_rem = bitsPerPixel() % 8;
   unsigned int bytes_per_pixel = bitsPerPixel() / 8;
 
-  assert( byte_rem == 0 );
+  if (byte_rem != 0) {
+    assert(!"bitsPerPixel value can not be divided by 8 for image");
+  }
 
   switch( pixelType() ) {
   case Image::LUMINANCE: 
