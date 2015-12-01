@@ -186,6 +186,21 @@ namespace H3DUtil {
   /// \return A new PixelImage containing this data or NULL on error.
   H3DUTIL_API Image* loadOpenEXRImage ( const std::string &url );
 #endif
+
+  /// \ingroup ImageLoaderFunctions
+  /// Read the data from the DDS file pointed to by the parameter url
+  /// and create and return a PixelImage containing this data.
+  /// 
+  /// Note: The returned image data may be in a compressed format
+  ///
+  /// Limitations: 
+  ///   Supported DDS types: BC1, BC2, BC3, BC4, BC5, BC6, BC7
+  ///   Images flipped in Y when loaded in OpenGL
+  ///   2D formats only, mipmaps are ignored
+  ///   No uncompressed formats are supported
+  ///   Endianness is not handled when reading file header
+  ///
+  H3DUTIL_API Image* loadDDSImage( const std::string &url );
 }
 
 #endif

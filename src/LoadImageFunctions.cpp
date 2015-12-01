@@ -1078,3 +1078,246 @@ H3DUTIL_API Image* H3DUtil::loadOpenEXRImage ( const string &url ) {
   }
 }
 #endif
+
+// Structures from DDS file format
+
+struct DDSPixelFormat {
+  int size;
+  int flags;
+  int fourCC;
+  int rGBBitCount;
+  int rBitMask, gBitMask, bBitMask;
+  int rGBAlphaBitMask;
+};
+
+struct DDSCaps {
+  int caps1;
+  int caps2;
+  int reserved[2];
+};
+
+struct DDSHeader {
+  int size;
+  int flags;
+  int height;
+  int width;
+  int pitchOrLinearSize;
+  int depth;
+  int mipMapCount;
+  int reserved1[11];
+  DDSPixelFormat pixelFormat;
+  DDSCaps caps;
+  int reserved2;
+};
+
+struct DDSHeaderDX10 {
+  int dxgiFormat;
+  int resourceDimension;
+  int miscFlag;
+  int arraySize;
+  int miscFlags2;
+};
+
+H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
+
+  // DDS contants
+
+  // Magic number
+  const unsigned int dds_magic_no = 0x20534444;
+  
+  // Flag indicating compression is used
+  const unsigned int dds_fourcc = 0x00000004;
+
+  // Various types of compression stored in fourcc flag
+  const unsigned int dds_fourcc_dxt1 = 0x31545844;
+  const unsigned int dds_fourcc_dxt3 = 0x33545844;
+  const unsigned int dds_fourcc_dxt5 = 0x35545844;
+  const unsigned int dds_fourcc_dx10 = 0x30315844;
+
+  // Pixel format flags
+  const unsigned int ddpf_alphapixels = 0x1;
+
+  // Varius types of compression used in DX10 header
+  const unsigned int dxgi_format_bc4_typeless = 79;
+  const unsigned int dxgi_format_bc4_unorm = 80;
+  const unsigned int dxgi_format_bc4_snorm = 81;
+    
+  const unsigned int dxgi_format_bc5_typeless = 82;
+  const unsigned int dxgi_format_bc5_unorm = 83;
+  const unsigned int dxgi_format_bc5_snorm = 84;
+
+  const unsigned int dxgi_format_bc6h_typeless = 94;
+  const unsigned int dxgi_format_bc6h_uf16 = 95;
+  const unsigned int dxgi_format_bc6h_sf16 = 96;
+    
+  const unsigned int dxgi_format_bc7_typeless = 97;
+  const unsigned int dxgi_format_bc7_unorm = 98;
+  const unsigned int dxgi_format_bc7_unorm_srgb = 99;
+
+  ifstream is( url.c_str(), ios::in | ios::binary );
+  if( !is ) {
+    Console( LogLevel::Error ) << "loadDDSImage(): Cannot open file!" << endl;
+    return NULL;
+  }
+
+  // Check magic number
+  int magic_no;
+  is.read( (char*)&magic_no, sizeof( magic_no ) );
+  if( !is || magic_no != dds_magic_no ) {
+    // Not a DDS file
+    Console( LogLevel::Error ) << "loadDDSImage(): Not a DSS file!" << endl;
+    return NULL;
+  }
+
+  // Read header
+  DDSHeader header;
+  is.read( (char*)&header, sizeof( header ) );
+
+  // Determine format
+  Image::CompressionType type = Image::NO_COMPRESSION;
+  Image::PixelType pixel_type = Image::RGBA;
+  Image::PixelComponentType pixel_component_type = Image::UNSIGNED;
+  int block_size = 0;
+
+  if( header.pixelFormat.flags & dds_fourcc ) {
+    switch( header.pixelFormat.fourCC ) {
+    
+    case dds_fourcc_dxt1:
+      type = Image::BC1;
+      if( header.pixelFormat.flags & ddpf_alphapixels ) {
+        pixel_type = Image::RGBA;
+      } else {
+        pixel_type = Image::RGB;
+      }
+      pixel_component_type = Image::UNSIGNED;
+      block_size = 8;
+      break;
+
+    case dds_fourcc_dxt3:
+      type = Image::BC2;
+      pixel_type = Image::RGBA;
+      pixel_component_type = Image::UNSIGNED;
+      block_size = 16;
+      break;
+
+    case dds_fourcc_dxt5:
+      type = Image::BC3;
+      pixel_type = Image::RGBA;
+      pixel_component_type = Image::UNSIGNED;
+      block_size = 16;
+      break;
+
+    case dds_fourcc_dx10:
+      // In this case we read the extra Dx10 header for more info
+      DDSHeaderDX10 dx10_header;
+      is.read( (char*)&dx10_header, sizeof( dx10_header ) );
+
+      if( 
+        dx10_header.dxgiFormat == dxgi_format_bc4_typeless ||
+        dx10_header.dxgiFormat == dxgi_format_bc4_unorm ) {
+        // BC4
+        type = Image::BC4;
+        pixel_type = Image::R;
+        pixel_component_type = Image::UNSIGNED;
+        block_size = 8;
+
+      } else if ( 
+        dx10_header.dxgiFormat == dxgi_format_bc4_snorm ) {
+        type = Image::BC4;
+        pixel_type = Image::R;
+        pixel_component_type = Image::SIGNED;
+        block_size = 8;
+
+      } else if(
+        dx10_header.dxgiFormat == dxgi_format_bc5_typeless ||
+        dx10_header.dxgiFormat == dxgi_format_bc5_unorm ) {
+        // BC5
+        type = Image::BC5;
+        pixel_type = Image::RG;
+        pixel_component_type = Image::UNSIGNED;
+        block_size = 16;
+
+      } else if(
+        dx10_header.dxgiFormat == dxgi_format_bc5_snorm ) {
+        type = Image::BC5;
+        pixel_type = Image::RG;
+        pixel_component_type = Image::SIGNED;
+        block_size = 16;
+
+      } else if(
+        dx10_header.dxgiFormat == dxgi_format_bc6h_typeless ||
+        dx10_header.dxgiFormat == dxgi_format_bc6h_uf16 ) {
+        // BC6
+        type = Image::BC6;
+        pixel_type = Image::RGB;
+        pixel_component_type = Image::RATIONAL_UNSIGNED;
+        block_size = 16;
+
+      } else if(
+        dx10_header.dxgiFormat == dxgi_format_bc6h_sf16 ) {
+        type = Image::BC6;
+        pixel_type = Image::RGB;
+        pixel_component_type = Image::RATIONAL;
+        block_size = 16;
+
+      } else if(
+        dx10_header.dxgiFormat == dxgi_format_bc7_typeless ||
+        dx10_header.dxgiFormat == dxgi_format_bc7_unorm ) {
+        // BC7
+        type = Image::BC7_RGB;
+        pixel_type = Image::RGB;
+        pixel_component_type = Image::RATIONAL_UNSIGNED;
+        block_size = 16;
+
+      } else if(
+        dx10_header.dxgiFormat == dxgi_format_bc7_unorm_srgb ) {
+        type = Image::BC7_SRGB;
+        if( header.pixelFormat.flags & ddpf_alphapixels ) {
+          pixel_type = Image::RGBA;
+        } else {
+          pixel_type = Image::RGB;
+        }
+        pixel_component_type = Image::RATIONAL;
+        block_size = 16;
+
+      } else {
+        Console( LogLevel::Error )
+          << "loadDDSImage(): Unhandled compressed DX10 format: " << dx10_header.dxgiFormat << "!" << endl;
+      }
+      break;
+    default:
+
+      char buf[5];
+      buf[0] = header.pixelFormat.fourCC & 255;
+      buf[1] = (header.pixelFormat.fourCC >> 8) & 255;
+      buf[2] = (header.pixelFormat.fourCC >> 16) & 255;
+      buf[3] = (header.pixelFormat.fourCC >> 24) & 255;
+      buf[4] = 0;
+
+      Console( LogLevel::Error ) 
+        << "loadDDSImage(): Unhandled compressed format: " << buf << " (0x" << hex << header.pixelFormat.fourCC << ")!" << endl;
+      return NULL;
+    }
+  } else {
+    // Only compressed formats are handled now
+    Console( LogLevel::Error ) << "Unhandled format!" << endl;
+    return NULL;
+  }
+
+  // Read pixel data
+  int size = ((header.width + 3) / 4)*((header.height + 3) / 4) * block_size;
+  char* buffer = new char [size];
+  is.read( buffer, size );
+
+  int bits_per_pixel = int ( 8 * ( float(size) / (header.width*header.height)) );
+
+  return new PixelImage (
+    header.width,
+    header.height,
+    1,
+    bits_per_pixel,
+    pixel_type,
+    pixel_component_type,
+    (unsigned char*)buffer,
+    false, Vec3f(0,0,0), type );
+}

@@ -49,7 +49,8 @@ namespace H3DUtil {
                 PixelComponentType _pixel_component_type,
                 unsigned char *data,
                 bool copy_data = false,
-                const Vec3f &_pixel_size = Vec3f( 0, 0, 0 ) );
+                const Vec3f &_pixel_size = Vec3f( 0, 0, 0 ),
+                CompressionType _compression_type = NO_COMPRESSION );
 
     /// Constructor. 
     /// An image of the size given will be created. The data will be 
@@ -60,7 +61,8 @@ namespace H3DUtil {
                 unsigned int _bits_per_pixel,
                 PixelType _pixel_type,
                 PixelComponentType _pixel_component_type,
-                const Vec3f &_pixel_size = Vec3f( 0, 0, 0 ) );
+                const Vec3f &_pixel_size = Vec3f( 0, 0, 0 ),
+                CompressionType _compression_type = NO_COMPRESSION );
 
     /// Constructor.
     /// A new PixelImage with the given dimensions is created by 
@@ -109,6 +111,11 @@ namespace H3DUtil {
     /// Returns the PixelComponentType of the image.
     virtual PixelComponentType pixelComponentType() {
       return pixel_component_type;
+    }
+
+    /// Returns compression type for image data
+    virtual CompressionType compressionType() { 
+      return compression_type; 
     }
         
     /// Returns a pointer to the raw image data. 
@@ -170,6 +177,7 @@ namespace H3DUtil {
     PixelType pixel_type;
     PixelComponentType pixel_component_type;
     Vec3f pixel_size;
+    CompressionType compression_type;
     unsigned char *image_data;
   };
 

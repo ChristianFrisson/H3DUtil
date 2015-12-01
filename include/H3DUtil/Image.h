@@ -56,7 +56,8 @@ namespace H3DUtil {
       BGR,
       BGRA,
       VEC3,
-      R
+      R,
+      RG
       // Color table bitmap??
     } PixelType;
         
@@ -64,7 +65,8 @@ namespace H3DUtil {
     typedef enum {
       SIGNED = 0,
       UNSIGNED,
-      RATIONAL
+      RATIONAL,
+      RATIONAL_UNSIGNED
     } PixelComponentType;
 
     /// Filter type.
@@ -72,6 +74,19 @@ namespace H3DUtil {
       NEAREST,
       LINEAR
     } FilterType;
+
+    /// Compression type.
+    typedef enum {
+      NO_COMPRESSION,
+      BC1,
+      BC2,
+      BC3,
+      BC4,
+      BC5,
+      BC6,
+      BC7_RGB,
+      BC7_SRGB,
+    } CompressionType;
 
     /// Returns the width of the image in pixels.
     virtual unsigned int width() = 0;
@@ -85,6 +100,11 @@ namespace H3DUtil {
     virtual PixelType pixelType() = 0;
     /// Returns the PixelComponentType of the image.
     virtual PixelComponentType pixelComponentType() = 0;
+
+    /// Returns compression type for image data, or NO_COMPRESSION if the 
+    /// data is not compressed
+    virtual CompressionType compressionType() { return NO_COMPRESSION; }
+
     /// Returns the size of the pixel in x, y and z direction in metres.
     /// By default all pixels have the size Vec3f( 1, 1, 1 ).
     virtual Vec3f pixelSize() {

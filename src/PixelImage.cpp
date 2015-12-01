@@ -40,14 +40,16 @@ using namespace H3DUtil;
                          PixelComponentType _pixel_component_type,
                          unsigned char *data,
                          bool copy_data,
-                         const Vec3f &_pixel_size ):
+                         const Vec3f &_pixel_size,
+                         CompressionType _compression_type ):
    w( _width ),
    h( _height ),
    d( _depth ),
    bits_per_pixel( _bits_per_pixel ),
    pixel_type( _pixel_type ),
    pixel_component_type( _pixel_component_type ),
-   pixel_size( _pixel_size ){
+   pixel_size( _pixel_size ),
+   compression_type( _compression_type ) {
    if( copy_data ) {
      unsigned int size = (w * h * d * bits_per_pixel)/8;
      image_data = new unsigned char[ size ];
@@ -64,14 +66,16 @@ PixelImage::PixelImage( unsigned int _width,
                         unsigned int _bits_per_pixel,
                         PixelType _pixel_type,
                         PixelComponentType _pixel_component_type,
-                        const Vec3f &_pixel_size ): 
+                        const Vec3f &_pixel_size,
+                        CompressionType _compression_type ):
   w( _width ),
   h( _height ),
   d( _depth ),
   bits_per_pixel( _bits_per_pixel ),
   pixel_type( _pixel_type ),
   pixel_component_type( _pixel_component_type ),
-  pixel_size( _pixel_size ){ 
+  pixel_size( _pixel_size ),
+  compression_type( _compression_type ) {
   unsigned int size = (w * h * d * bits_per_pixel)/8;
   image_data = new unsigned char[ size ];
 } 
@@ -81,7 +85,7 @@ PixelImage::PixelImage( Image *image,
                         unsigned int new_height,
                         unsigned int new_depth ) {
   
-  if( image ) {
+  if( image && image->compressionType() == NO_COMPRESSION ) {
     unsigned int width = image->width ();
     unsigned int height = image->height();
     unsigned int depth = image->depth();
@@ -127,6 +131,7 @@ PixelImage::PixelImage( Image *image,
       pixel_type = image->pixelType();
       pixel_component_type = image->pixelComponentType();
       pixel_size = image->pixelSize();
+      compression_type = image->compressionType();
       image_data = data;
     }
   }
