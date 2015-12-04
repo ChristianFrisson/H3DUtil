@@ -1133,6 +1133,7 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
   const unsigned int dds_fourcc_dxt3 = 0x33545844;
   const unsigned int dds_fourcc_dxt5 = 0x35545844;
   const unsigned int dds_fourcc_dx10 = 0x30315844;
+  const unsigned int dds_fourcc_ati1 = 0x31495441;
 
   // Pixel format flags
   const unsigned int ddpf_alphapixels = 0x1;
@@ -1205,6 +1206,14 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
       pixel_type = Image::RGBA;
       pixel_component_type = Image::UNSIGNED;
       block_size = 16;
+      break;
+
+    case dds_fourcc_ati1:
+      // BC4
+      type = Image::BC4;
+      pixel_type = Image::R;
+      pixel_component_type = Image::UNSIGNED;
+      block_size = 8;
       break;
 
     case dds_fourcc_dx10:
