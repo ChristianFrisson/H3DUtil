@@ -1156,7 +1156,7 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
 
   ifstream is( url.c_str(), ios::in | ios::binary );
   if( !is ) {
-    Console( LogLevel::Error ) << "loadDDSImage(): Cannot open file!" << endl;
+    Console( LogLevel::Error ) << "loadDDSImage(): Cannot open file " << url << endl;
     return NULL;
   }
 
@@ -1165,7 +1165,7 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
   is.read( (char*)&magic_no, sizeof( magic_no ) );
   if( !is || magic_no != dds_magic_no ) {
     // Not a DDS file
-    Console( LogLevel::Error ) << "loadDDSImage(): Not a DSS file!" << endl;
+    Console( LogLevel::Error ) << "loadDDSImage(): Not a DSS file " << url << endl;
     return NULL;
   }
 
@@ -1282,7 +1282,7 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
 
       } else {
         Console( LogLevel::Error )
-          << "loadDDSImage(): Unhandled compressed DX10 format: " << dx10_header.dxgiFormat << "!" << endl;
+          << "loadDDSImage(): Unhandled compressed DX10 format: " << dx10_header.dxgiFormat << " in " << url << endl;
       }
       break;
     default:
@@ -1295,12 +1295,12 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
       buf[4] = 0;
 
       Console( LogLevel::Error ) 
-        << "loadDDSImage(): Unhandled compressed format: " << buf << " (0x" << hex << header.pixelFormat.fourCC << ")!" << endl;
+        << "loadDDSImage(): Unhandled compressed format: " << buf << " (0x" << hex << header.pixelFormat.fourCC << ") in " << url << endl;
       return NULL;
     }
   } else {
     // Only compressed formats are handled now
-    Console( LogLevel::Error ) << "Unhandled format!" << endl;
+    Console( LogLevel::Error ) << "Unhandled format in " << url << endl;
     return NULL;
   }
 
