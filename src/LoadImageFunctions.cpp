@@ -430,32 +430,66 @@ Image *H3DUtil::loadNrrdFile( const string &url ) {
       bits_per_pixel *= 4;
     }
   }
-   
+  
+	const char* MM = "mm";
+	const char* CM = "cm";
+	const float mmFactor = 0.001f;
+	const float cmFactor = 0.01f;
+	// TODO: May be add support for m & km ?
+
   if( nin->dim >= 3 ) {
     depth = (unsigned int) nin->axis[d_axis].size;
-  if(!airIsNaN(nin->axis[d_axis].spacing))
-    spacing.z = (H3DFloat)( nin->axis[d_axis].spacing );
-  else
-    Console(LogLevel::Warning) << "Warning: NRRD file " << url
-         << " lacks spacing information in axis 2. Sets to default 0.0003\n";
+	if(!airIsNaN(nin->axis[d_axis].spacing))
+	  spacing.z = (H3DFloat)( nin->axis[d_axis].spacing );
+	else if( !airIsNaN(nin->axis[d_axis].spaceDirection[d_axis])){
+		// The space direction contains the spacings
+		spacing.z = (H3DFloat)( nin->axis[d_axis].spaceDirection[d_axis] );
+		// Check for space units
+		if(nin->spaceUnits[d_axis])
+			if(strcmp(nin->spaceUnits[d_axis],MM) == 0)
+				spacing.z *= mmFactor;
+			else if(strcmp(nin->spaceUnits[d_axis],CM) == 0)
+				spacing.z *= cmFactor;
+	}
+	else
+		Console(LogLevel::Warning) << "Warning: NRRD file " << url
+			 << " lacks spacing information in axis 2. Sets to default 0.0003\n";
   }
 
   if( nin->dim >= 2 ) {
     height = (unsigned int) nin->axis[h_axis].size;
-  if(!airIsNaN(nin->axis[h_axis].spacing))
-    spacing.y = (H3DFloat)( nin->axis[h_axis].spacing );
-  else
-    Console(LogLevel::Warning) << "Warning: NRRD file " << url
-         << " lacks spacing information in axis 1. Sets to default 0.0003\n";
+	if(!airIsNaN(nin->axis[h_axis].spacing))
+	  spacing.y = (H3DFloat)( nin->axis[h_axis].spacing );
+	else if( !airIsNaN(nin->axis[h_axis].spaceDirection[h_axis])) {
+		// The space direction contains the spacings
+		spacing.y = (H3DFloat)( nin->axis[h_axis].spaceDirection[h_axis] );
+		if(nin->spaceUnits[h_axis])
+			if(strcmp(nin->spaceUnits[h_axis],MM) == 0)
+				spacing.y *= mmFactor;
+			else if(strcmp(nin->spaceUnits[h_axis],CM) == 0)
+				spacing.y *= cmFactor;
+	}
+	else
+		Console(LogLevel::Warning) << "Warning: NRRD file " << url
+			 << " lacks spacing information in axis 1. Sets to default 0.0003\n";
   }
 
   if( nin->dim >= 1 ) {
     width = (unsigned int) nin->axis[w_axis].size;
-  if(!airIsNaN(nin->axis[w_axis].spacing))
-    spacing.x = (H3DFloat)( nin->axis[w_axis].spacing );
-  else
-    Console(LogLevel::Warning) << "Warning: NRRD file " << url
-         << " lacks spacing information in axis 0. Sets to default 0.0003\n";
+	if(!airIsNaN(nin->axis[w_axis].spacing))
+	  spacing.x = (H3DFloat)( nin->axis[w_axis].spacing );
+	else if( !airIsNaN(nin->axis[w_axis].spaceDirection[w_axis])) {
+		// The space direction contains the spacings
+		spacing.x = (H3DFloat)( nin->axis[w_axis].spaceDirection[w_axis] );
+		if(nin->spaceUnits[w_axis])
+			if(strcmp(nin->spaceUnits[w_axis],MM) == 0)
+				spacing.x *= mmFactor;
+			else if(strcmp(nin->spaceUnits[w_axis],CM) == 0)
+				spacing.x *= cmFactor;
+	}
+	else
+		Console(LogLevel::Warning) << "Warning: NRRD file " << url
+			 << " lacks spacing information in axis 0. Sets to default 0.0003\n";
   }
 
   // Allocate the data.
@@ -463,7 +497,11 @@ Image *H3DUtil::loadNrrdFile( const string &url ) {
   // letting the teem library take care of that is to make sure that there
   // are no problems with deleting data from H3DUtil that is allocated
   // in another shared library on a Windows system.
-  unsigned int size = (width * height * depth * bits_per_pixel)/8;
+  unsigned bytes_per_pixel = 
+  bits_per_pixel % 8 == 0 ? 
+  bits_per_pixel / 8 : bits_per_pixel / 8 + 1;
+
+  unsigned int size = (width * height * depth * bytes_per_pixel);
   unsigned char * data = new unsigned char[ size ];
   nin->data = data;
   if( nrrdLoad( nin, url.c_str(), NULL ) ) {
