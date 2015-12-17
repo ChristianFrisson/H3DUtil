@@ -443,7 +443,7 @@ Image *H3DUtil::loadNrrdFile( const string &url ) {
 	  spacing.z = (H3DFloat)( nin->axis[d_axis].spacing );
 	else if( !airIsNaN(nin->axis[d_axis].spaceDirection[d_axis])){
 		// The space direction contains the spacings
-		spacing.z = (H3DFloat)( nin->axis[d_axis].spaceDirection[d_axis] );
+		spacing.z = H3DAbs((H3DFloat)( nin->axis[d_axis].spaceDirection[d_axis] ));
 		// Check for space units
 		if(nin->spaceUnits[d_axis])
 			if(strcmp(nin->spaceUnits[d_axis],MM) == 0)
@@ -462,7 +462,7 @@ Image *H3DUtil::loadNrrdFile( const string &url ) {
 	  spacing.y = (H3DFloat)( nin->axis[h_axis].spacing );
 	else if( !airIsNaN(nin->axis[h_axis].spaceDirection[h_axis])) {
 		// The space direction contains the spacings
-		spacing.y = (H3DFloat)( nin->axis[h_axis].spaceDirection[h_axis] );
+		spacing.y = H3DAbs((H3DFloat)( nin->axis[h_axis].spaceDirection[h_axis] ));
 		if(nin->spaceUnits[h_axis])
 			if(strcmp(nin->spaceUnits[h_axis],MM) == 0)
 				spacing.y *= mmFactor;
@@ -480,7 +480,7 @@ Image *H3DUtil::loadNrrdFile( const string &url ) {
 	  spacing.x = (H3DFloat)( nin->axis[w_axis].spacing );
 	else if( !airIsNaN(nin->axis[w_axis].spaceDirection[w_axis])) {
 		// The space direction contains the spacings
-		spacing.x = (H3DFloat)( nin->axis[w_axis].spaceDirection[w_axis] );
+		spacing.x = H3DAbs((H3DFloat)( nin->axis[w_axis].spaceDirection[w_axis] ));
 		if(nin->spaceUnits[w_axis])
 			if(strcmp(nin->spaceUnits[w_axis],MM) == 0)
 				spacing.x *= mmFactor;

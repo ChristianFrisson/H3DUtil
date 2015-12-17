@@ -60,9 +60,10 @@ namespace H3DUtil {
   /// \ingroup ImageLoaderFunctions
   /// Loads a file in the Nrrd file format as an image.
   /// \param url The url of the image to load.
+  /// \param spacingsVec a pointer to The spacing ( voxel size of the model )
   /// \returns A pointer to and Image class containing the data
   /// of the loaded url. NULL if unsuccessful.
-  H3DUTIL_API Image *loadNrrdFile( const std::string &url );
+  H3DUTIL_API Image *loadNrrdFile( const std::string &url);
 
   /// \ingroup ImageLoaderFunctions
   /// Saves an image in the Nrrd file format.
