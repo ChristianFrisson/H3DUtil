@@ -202,6 +202,11 @@ namespace H3DUtil {
   ///   Endianness is not handled when reading file header
   ///
   H3DUTIL_API Image* loadDDSImage( const std::string &url );
+
+  /// \ingroup ImageLoaderFunctions
+  /// Load a DDS image from the specified input stream. The url parameter is used
+  /// only to make error output more identifiable.
+  H3DUTIL_API Image *loadDDSImage( std::istream &is, const std::string& url = "<unnamed stream>" );
 }
 
 #endif

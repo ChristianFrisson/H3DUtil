@@ -1157,12 +1157,21 @@ struct DDSHeaderDX10 {
 };
 
 H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
+  ifstream is( url.c_str(), ios::in | ios::binary );
+  if( !is ) {
+    Console( LogLevel::Error ) << "loadDDSImage(): Cannot open file " << url << endl;
+    return NULL;
+  }
 
+  return loadDDSImage( is, url );
+}
+
+H3DUTIL_API Image* H3DUtil::loadDDSImage( std::istream &is, const std::string& url ) {
   // DDS contants
 
   // Magic number
   const unsigned int dds_magic_no = 0x20534444;
-  
+
   // Flag indicating compression is used
   const unsigned int dds_fourcc = 0x00000004;
 
@@ -1180,7 +1189,7 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
   const unsigned int dxgi_format_bc4_typeless = 79;
   const unsigned int dxgi_format_bc4_unorm = 80;
   const unsigned int dxgi_format_bc4_snorm = 81;
-    
+
   const unsigned int dxgi_format_bc5_typeless = 82;
   const unsigned int dxgi_format_bc5_unorm = 83;
   const unsigned int dxgi_format_bc5_snorm = 84;
@@ -1188,16 +1197,10 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
   const unsigned int dxgi_format_bc6h_typeless = 94;
   const unsigned int dxgi_format_bc6h_uf16 = 95;
   const unsigned int dxgi_format_bc6h_sf16 = 96;
-    
+
   const unsigned int dxgi_format_bc7_typeless = 97;
   const unsigned int dxgi_format_bc7_unorm = 98;
   const unsigned int dxgi_format_bc7_unorm_srgb = 99;
-
-  ifstream is( url.c_str(), ios::in | ios::binary );
-  if( !is ) {
-    Console( LogLevel::Error ) << "loadDDSImage(): Cannot open file " << url << endl;
-    return NULL;
-  }
 
   // Check magic number
   int magic_no;
@@ -1220,7 +1223,7 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
 
   if( header.pixelFormat.flags & dds_fourcc ) {
     switch( header.pixelFormat.fourCC ) {
-    
+
     case dds_fourcc_dxt1:
       type = Image::BC1;
       if( header.pixelFormat.flags & ddpf_alphapixels ) {
@@ -1259,7 +1262,7 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
       DDSHeaderDX10 dx10_header;
       is.read( (char*)&dx10_header, sizeof( dx10_header ) );
 
-      if( 
+      if(
         dx10_header.dxgiFormat == dxgi_format_bc4_typeless ||
         dx10_header.dxgiFormat == dxgi_format_bc4_unorm ) {
         // BC4
@@ -1268,7 +1271,7 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
         pixel_component_type = Image::UNSIGNED;
         block_size = 8;
 
-      } else if ( 
+      } else if(
         dx10_header.dxgiFormat == dxgi_format_bc4_snorm ) {
         type = Image::BC4;
         pixel_type = Image::R;
@@ -1341,7 +1344,7 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
       buf[3] = (header.pixelFormat.fourCC >> 24) & 255;
       buf[4] = 0;
 
-      Console( LogLevel::Error ) 
+      Console( LogLevel::Error )
         << "loadDDSImage(): Unhandled compressed format: " << buf << " (0x" << hex << header.pixelFormat.fourCC << ") in " << url << endl;
       return NULL;
     }
@@ -1353,12 +1356,12 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
 
   // Read pixel data
   int size = ((header.width + 3) / 4)*((header.height + 3) / 4) * block_size;
-  char* buffer = new char [size];
+  char* buffer = new char[size];
   is.read( buffer, size );
 
-  int bits_per_pixel = int ( 8 * ( float(size) / (header.width*header.height)) );
+  int bits_per_pixel = int( 8 * (float( size ) / (header.width*header.height)) );
 
-  return new PixelImage (
+  return new PixelImage(
     header.width,
     header.height,
     1,
@@ -1366,5 +1369,5 @@ H3DUTIL_API Image* H3DUtil::loadDDSImage( const std::string &url ) {
     pixel_type,
     pixel_component_type,
     (unsigned char*)buffer,
-    false, Vec3f(0,0,0), type );
+    false, Vec3f( 0, 0, 0 ), type );
 }
