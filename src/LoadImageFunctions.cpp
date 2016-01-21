@@ -123,15 +123,17 @@ Image *loadFreeImageInternal( FIBITMAP* bm, const string& url= "" ) {
       }
     }
 
+    FreeImage_Unload( bm );
+
     return new PixelImage( width,
-                            height,
-                            depth,
-                            bytes_per_pixel * 8,
-                            pixel_type,
-                            pixel_component_type,
-                            data,
-                            false,
-                            Vec3f( 1, 1, 1 ) );
+                           height,
+                           depth,
+                           bytes_per_pixel * 8,
+                           pixel_type,
+                           pixel_component_type,
+                           data,
+                           false,
+                           Vec3f( 1, 1, 1 ) );
 
   }
   case FIC_MINISBLACK: 
